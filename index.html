@@ -756,7 +756,7 @@
   const CLOUD_CONFIG_KEY = "delivery_jsonbin_config_v1";
 
   // يمكنك وضع Bin ID ثابت هنا ليظهر التحديث تلقائياً في كل الأجهزة مباشرة
-  const DEFAULT_BIN_ID = "";
+  const DEFAULT_BIN_ID = "6aff7506ac6210605a95f27d";
 
   const isAdminParam = new URLSearchParams(window.location.search).get("admin") === "1";
   let isAdminUnlocked = isAdminParam;
@@ -997,15 +997,16 @@
       return;
     }
     try {
-      const headers = { "Accept": "application/json" };
-      if (apiKey) headers["X-Access-Key"] = apiKey;
-      const res = await fetch(`https://api.jsonbin.io/v3/b/${encodeURIComponent(binId)}/latest`, {
+      const headers = {};
+      if (apiKey) headers["X-Master-Key"] = apiKey;
+      const res = await fetch(`https://api.jsonbin.io/v3/b/${encodeURIComponent(binId)}/latest?meta=false`, {
         headers,
         cache: "no-store"
       });
       if (!res.ok) throw new Error("Fetch failed");
       const json = await res.json();
-      const rawItems = Array.isArray(json.record) ? json.record : (Array.isArray(json.record?.items) ? json.record.items : []);
+      const payload = json && json.record !== undefined ? json.record : json;
+      const rawItems = Array.isArray(payload) ? payload : (Array.isArray(payload?.items) ? payload.items : []);
       const cleaned = normalizeEntries(rawItems);
       if (!cleaned.length) throw new Error("Empty cloud record");
       activeData = cleaned;
