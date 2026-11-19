@@ -6,20 +6,27 @@
   <title>نظام تسعيرة التوصيل وتحديد الأفرع</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #f4f6f9;
+      --bg: #f1f5f9;
       --surface: #ffffff;
-      --primary: #1e293b;
-      --accent: #0f766e;
-      --accent-light: #f0fdfa;
-      --accent-border: #99f6e4;
+      --dark-pill: #0f172a;
       --text-main: #0f172a;
       --text-muted: #64748b;
       --border: #e2e8f0;
-      --shadow: 0 4px 20px rgba(15, 23, 42, 0.06);
-      --radius: 16px;
+      --green: #10b981;
+      --green-bg: #ecfdf5;
+      --green-border: #34d399;
+      --blue: #2563eb;
+      --amber: #f59e0b;
+      --rose: #f43f5e;
+      --purple: #8b5cf6;
+      --teal: #0d9488;
+      --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.04);
+      --shadow-md: 0 6px 20px rgba(15, 23, 42, 0.06);
+      --radius-lg: 18px;
+      --radius-md: 12px;
     }
 
     * {
@@ -33,294 +40,369 @@
       background-color: var(--bg);
       color: var(--text-main);
       min-height: 100vh;
-      padding: 20px 16px 60px;
+      padding: 18px 16px 60px;
     }
 
     .container {
-      max-width: 780px;
+      max-width: 1120px;
       margin: 0 auto;
     }
 
-    header {
+    /* Top Search Bar */
+    .search-wrapper {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 14px;
+    }
+
+    .search-icon {
+      color: #64748b;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+    }
+
+    .search-input {
+      flex: 1;
+      border: none;
+      outline: none;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text-main);
+      background: transparent;
+      padding: 6px 4px;
+    }
+
+    .search-input::placeholder {
+      color: #94a3b8;
+      font-weight: 600;
+    }
+
+    .esc-btn {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      color: #475569;
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+
+    .esc-btn:hover {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+
+    .admin-gear-btn {
+      display: none;
+      background: #0f172a;
+      color: #fff;
+      border: none;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 6px 12px;
+      border-radius: 9px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .admin-gear-btn.visible {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    /* Filter Chips Bar */
+    .filters-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 12px;
+      margin-bottom: 10px;
+      scrollbar-width: none;
+    }
+
+    .filters-bar::-webkit-scrollbar {
+      display: none;
+    }
+
+    .chip {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 6px 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: #1e293b;
+      cursor: pointer;
+      white-space: nowrap;
+      box-shadow: 0 1px 3px rgba(15, 23, 42, 0.03);
+      transition: all 0.15s;
+    }
+
+    .chip:hover {
+      border-color: #94a3b8;
+    }
+
+    .chip.active {
+      background: var(--dark-pill);
+      color: #ffffff;
+      border-color: var(--dark-pill);
+    }
+
+    .chip.active .chip-count {
+      color: #cbd5e1;
+    }
+
+    .chip-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      display: inline-block;
+      flex-shrink: 0;
+    }
+
+    .chip-count {
+      font-weight: 700;
+      color: #64748b;
+      font-size: 0.8rem;
+    }
+
+    /* Info Strip */
+    .info-strip {
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 12px;
-      margin-bottom: 24px;
-      background: var(--surface);
-      padding: 16px 20px;
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      border: 1px solid var(--border);
-    }
-
-    .brand h1 {
-      font-size: 1.35rem;
-      font-weight: 800;
-      color: var(--primary);
-    }
-
-    .brand p {
-      font-size: 0.85rem;
-      color: var(--text-muted);
-    }
-
-    .header-actions {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-    }
-
-    .btn {
-      border: none;
-      border-radius: 10px;
-      padding: 9px 14px;
-      font-size: 0.85rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .btn-outline {
-      background: #f8fafc;
-      color: var(--primary);
-      border: 1px solid var(--border);
-    }
-
-    .btn-outline:hover {
-      background: #e2e8f0;
-    }
-
-    .btn-primary {
-      background: var(--accent);
-      color: #fff;
-    }
-
-    .btn-primary:hover {
-      background: #115e59;
-    }
-
-    .search-box {
-      position: relative;
+      gap: 10px;
       margin-bottom: 16px;
-    }
-
-    .search-input {
-      width: 100%;
-      padding: 18px 22px;
-      padding-left: 52px;
-      font-size: 1.2rem;
-      font-weight: 700;
-      border: 2px solid var(--border);
-      border-radius: var(--radius);
-      background: var(--surface);
-      color: var(--text-main);
-      box-shadow: var(--shadow);
-      outline: none;
-      transition: border-color 0.2s;
-    }
-
-    .search-input:focus {
-      border-color: var(--accent);
-    }
-
-    .clear-btn {
-      position: absolute;
-      left: 16px;
-      top: 50%;
-      transform: translateY(-50%);
-      background: #e2e8f0;
-      color: #475569;
-      border: none;
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      font-size: 1rem;
-      font-weight: bold;
-      cursor: pointer;
-      display: none;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .clear-btn.visible {
-      display: flex;
-    }
-
-    .branch-filters {
-      display: flex;
-      gap: 8px;
-      overflow-x: auto;
-      padding-bottom: 8px;
-      margin-bottom: 20px;
-      scrollbar-width: none;
-    }
-
-    .branch-filters::-webkit-scrollbar {
-      display: none;
-    }
-
-    .filter-chip {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      color: var(--text-muted);
-      padding: 7px 14px;
-      border-radius: 999px;
       font-size: 0.85rem;
+      color: #64748b;
       font-weight: 700;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: all 0.2s;
     }
 
-    .filter-chip.active {
-      background: var(--primary);
-      color: #ffffff;
-      border-color: var(--primary);
-    }
-
-    .stats-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 14px;
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      font-weight: 600;
-    }
-
-    .sync-badge {
+    .info-note {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      padding: 4px 10px;
-      border-radius: 999px;
-      font-size: 0.78rem;
+    }
+
+    .info-note-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      display: inline-block;
+    }
+
+    .count-summary {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: #475569;
+    }
+
+    .count-badge {
       background: #e2e8f0;
-      color: #334155;
+      color: #0f172a;
+      font-weight: 800;
+      font-size: 0.78rem;
+      padding: 2px 8px;
+      border-radius: 7px;
     }
 
-    .sync-badge.live {
-      background: #dcfce7;
-      color: #166534;
-    }
-
-    .results-list {
-      display: flex;
-      flex-direction: column;
+    /* Cards Grid */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 14px;
+    }
+
+    @media (max-width: 760px) {
+      .cards-grid {
+        grid-template-columns: 1fr;
+      }
     }
 
     .area-card {
       background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-lg);
       padding: 18px 20px;
-      box-shadow: var(--shadow);
-    }
-
-    .area-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 12px;
-      padding-bottom: 10px;
-      border-bottom: 1px dashed var(--border);
-    }
-
-    .area-title {
-      font-size: 1.25rem;
-      font-weight: 800;
-      color: var(--primary);
-    }
-
-    .multi-tag {
-      font-size: 0.75rem;
-      background: #fef3c7;
-      color: #92400e;
-      padding: 3px 10px;
-      border-radius: 999px;
-      font-weight: 700;
-    }
-
-    .branch-options {
+      box-shadow: var(--shadow-sm);
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      justify-content: space-between;
+      gap: 16px;
+      transition: transform 0.15s, box-shadow 0.15s;
     }
 
-    .branch-row {
+    .area-card.recommended {
+      border-color: var(--green-border);
+      box-shadow: 0 4px 16px rgba(16, 185, 129, 0.08);
+    }
+
+    .card-top {
       display: flex;
       justify-content: space-between;
-      align-items: center;
-      padding: 12px 16px;
-      border-radius: 12px;
-      background: #f8fafc;
-      border: 1px solid var(--border);
+      align-items: flex-start;
+      gap: 14px;
     }
 
-    .branch-row.best {
-      background: var(--accent-light);
-      border: 2px solid var(--accent-border);
+    .card-info {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 6px;
+      min-width: 0;
     }
 
-    .branch-info {
+    .tags-row {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 6px;
       flex-wrap: wrap;
     }
 
-    .branch-name {
-      font-size: 1.05rem;
+    .branch-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 999px;
+      padding: 3px 10px;
+      font-size: 0.78rem;
       font-weight: 800;
-      color: var(--text-main);
+      color: #1e293b;
     }
 
-    .best-badge {
-      background: var(--accent);
-      color: #fff;
+    .best-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: #10b981;
+      color: #ffffff;
+      border-radius: 999px;
+      padding: 3px 10px;
+      font-size: 0.75rem;
+      font-weight: 800;
+    }
+
+    .alt-pill {
+      display: inline-flex;
+      align-items: center;
+      background: #f1f5f9;
+      color: #64748b;
+      border-radius: 999px;
+      padding: 3px 10px;
       font-size: 0.75rem;
       font-weight: 700;
-      padding: 2px 10px;
-      border-radius: 999px;
     }
 
-    .alt-badge {
-      background: #e2e8f0;
-      color: #475569;
-      font-size: 0.75rem;
-      font-weight: 700;
-      padding: 2px 10px;
-      border-radius: 999px;
+    .area-name {
+      font-size: 1.3rem;
+      font-weight: 900;
+      color: #0f172a;
+      line-height: 1.25;
+      margin-top: 2px;
     }
 
-    .price-tag {
+    /* Dark Price Box */
+    .price-box {
+      background: #0f172a;
+      color: #ffffff;
+      border-radius: 14px;
+      min-width: 86px;
+      padding: 10px 14px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .price-num {
       font-size: 1.35rem;
-      font-weight: 800;
-      color: var(--accent);
-      white-space: nowrap;
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: -0.3px;
     }
 
-    .branch-row:not(.best) .price-tag {
-      color: var(--primary);
-      font-size: 1.15rem;
+    .price-currency {
+      font-size: 0.76rem;
+      font-weight: 700;
+      color: #cbd5e1;
+      margin-top: 2px;
+    }
+
+    /* Card Bottom */
+    .card-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 12px;
+      border-top: 1px solid #f1f5f9;
+      gap: 10px;
+    }
+
+    .copy-btn {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      color: #334155;
+      border-radius: 10px;
+      padding: 6px 12px;
+      font-size: 0.8rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s;
+    }
+
+    .copy-btn:hover {
+      background: #f1f5f9;
+      color: #0f172a;
+    }
+
+    .copy-btn.copied {
+      background: #ecfdf5;
+      border-color: #34d399;
+      color: #047857;
+    }
+
+    .coverage-text {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #94a3b8;
     }
 
     .empty-state {
-      text-align: center;
-      padding: 48px 20px;
+      grid-column: 1 / -1;
       background: var(--surface);
-      border-radius: var(--radius);
       border: 1px solid var(--border);
-      color: var(--text-muted);
+      border-radius: var(--radius-lg);
+      padding: 44px 20px;
+      text-align: center;
+      color: #64748b;
     }
 
-    /* Modal Styles */
+    /* Admin Modal */
     .modal-backdrop {
       position: fixed;
       inset: 0;
@@ -329,7 +411,7 @@
       align-items: center;
       justify-content: center;
       padding: 16px;
-      z-index: 100;
+      z-index: 200;
     }
 
     .modal-backdrop.open {
@@ -337,289 +419,290 @@
     }
 
     .modal {
-      background: var(--surface);
+      background: #fff;
       width: 100%;
-      max-width: 540px;
-      border-radius: var(--radius);
-      padding: 24px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
-      max-height: 90vh;
-      overflow-y: auto;
+      max-width: 520px;
+      border-radius: 18px;
+      padding: 22px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
     }
 
     .modal-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 16px;
+      margin-bottom: 14px;
     }
 
     .modal-header h2 {
-      font-size: 1.15rem;
+      font-size: 1.1rem;
       font-weight: 800;
-    }
-
-    .form-group {
-      margin-bottom: 16px;
-    }
-
-    .form-group label {
-      display: block;
-      font-size: 0.9rem;
-      font-weight: 700;
-      margin-bottom: 6px;
     }
 
     .form-control {
       width: 100%;
-      padding: 10px 14px;
-      border: 1px solid var(--border);
+      padding: 10px 12px;
+      border: 1px solid #cbd5e1;
       border-radius: 10px;
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       direction: ltr;
-    }
-
-    .help-text {
-      font-size: 0.8rem;
-      color: var(--text-muted);
-      margin-top: 6px;
-      line-height: 1.5;
+      margin-top: 8px;
     }
 
     .modal-actions {
       display: flex;
-      gap: 10px;
+      gap: 8px;
       flex-wrap: wrap;
-      margin-top: 18px;
+      margin-top: 16px;
+    }
+
+    .btn-m {
+      border: none;
+      border-radius: 10px;
+      padding: 9px 14px;
+      font-size: 0.84rem;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .btn-m-primary {
+      background: #0f172a;
+      color: #fff;
+    }
+
+    .btn-m-light {
+      background: #f1f5f9;
+      color: #0f172a;
     }
   </style>
 </head>
 <body>
 
 <div class="container">
-  <header>
-    <div class="brand">
-      <h1>📍 دليل التوصيل والأفرع</h1>
-      <p>ابحث باسم المنطقة لمعرفة الفرع المسؤول وقيمة التوصيل فوراً</p>
-    </div>
-    <div class="header-actions">
-      <button class="btn btn-outline" onclick="openModal()">⚙️ ربط Google Sheets / تحديث</button>
-    </div>
-  </header>
-
-  <div class="search-box">
+  <!-- Search Box -->
+  <div class="search-wrapper">
+    <span class="search-icon">🔍</span>
     <input
       type="text"
       id="searchInput"
       class="search-input"
-      placeholder="اكتب اسم المنطقة (مثلاً: خلدا، عبدون، الجاردنز...)"
+      placeholder="اكتب اسم المنطقة هنا... (مثلاً: خلدا، عبدون، مرج الحمام، الرابية)"
       autocomplete="off"
       autofocus
     />
-    <button id="clearBtn" class="clear-btn" onclick="clearSearch()" title="مسح البحث">✕</button>
+    <button class="esc-btn" id="escBtn" onclick="clearSearch()" title="مسح البحث">ESC للمسح</button>
+    <button class="admin-gear-btn" id="adminGearBtn" onclick="openModal()">⚙️ ربط الشيت</button>
   </div>
 
-  <div class="branch-filters" id="branchFilters"></div>
+  <!-- Branch Filter Chips -->
+  <div class="filters-bar" id="filtersBar"></div>
 
-  <div class="stats-bar">
-    <span id="resultsCount">جاري التحميل...</span>
-    <span id="syncStatus" class="sync-badge">البيانات المدمجة (149 سجل)</span>
+  <!-- Info Strip -->
+  <div class="info-strip">
+    <div class="info-note">
+      <span class="info-note-dot"></span>
+      <span>يتم ترتيب المناطق المشتركة تلقائياً حسب الأقل تكلفة / الأقرب أولاً</span>
+    </div>
+    <div class="count-summary">
+      <span class="count-badge" id="totalBadge">149</span>
+      <span id="countLabel">منطقة في جميع الأفرع</span>
+    </div>
   </div>
 
-  <div class="results-list" id="resultsList"></div>
+  <!-- Results Grid -->
+  <div class="cards-grid" id="cardsGrid"></div>
 </div>
 
-<!-- Settings / Google Sheets Sync Modal -->
-<div class="modal-backdrop" id="settingsModal">
+<!-- Admin Modal (?admin=1) -->
+<div class="modal-backdrop" id="adminModal">
   <div class="modal">
     <div class="modal-header">
-      <h2>⚙️ ربط وتحديث البيانات مع Google Sheets</h2>
-      <button class="btn btn-outline" onclick="closeModal()">إغلاق</button>
+      <h2>⚙️ ربط وتحديث البيانات (Google Sheets CSV)</h2>
+      <button class="btn-m btn-m-light" onclick="closeModal()">إغلاق</button>
     </div>
-
-    <div class="form-group">
-      <label>1. رابط ملف Google Sheets المنشور بصيغة CSV:</label>
-      <input
-        type="url"
-        id="csvUrlInput"
-        class="form-control"
-        placeholder="https://docs.google.com/spreadsheets/d/e/.../pub?output=csv"
-      />
-      <p class="help-text">
-        من Google Sheets: اختر <strong>ملف (File) ← مشاركة (Share) ← النشر على الويب (Publish to web)</strong>، اختر صيغة <strong>CSV</strong>، انسخ الرابط والصقه هنا.
-      </p>
-    </div>
-
+    <label style="font-size: 0.88rem; font-weight: 700;">رابط النشر بصيغة CSV من Google Sheets:</label>
+    <input type="url" id="csvInput" class="form-control" placeholder="https://docs.google.com/spreadsheets/d/e/.../pub?output=csv" />
     <div class="modal-actions">
-      <button class="btn btn-primary" onclick="saveAndSyncSheet()">💾 حفظ وتحديث البيانات الآن</button>
-      <button class="btn btn-outline" onclick="downloadCSV()">📥 تحميل ملف CSV جاهز للرفع</button>
-      <button class="btn btn-outline" onclick="resetToDefault()">🔄 استعادة البيانات الافتراضية</button>
+      <button class="btn-m btn-m-primary" onclick="syncSheet()">حفظ ومزامنة</button>
+      <button class="btn-m btn-m-light" onclick="exportCSV()">تحميل CSV</button>
+      <button class="btn-m btn-m-light" onclick="resetData()">استعادة الافتراضي</button>
     </div>
   </div>
 </div>
 
 <script>
+  const isAdmin = new URLSearchParams(window.location.search).get("admin") === "1";
+
+  const BRANCH_COLORS = {
+    "المدينة المنورة": "#2563eb",
+    "غوشة": "#f59e0b",
+    "دابوق": "#f43f5e",
+    "جبيهة": "#8b5cf6",
+    "صويفية": "#0d9488",
+    "المقابلين": "#ec4899"
+  };
+
   const DEFAULT_DATA = [
-    // فرع المدينة المنورة
-    { area: "الجاردنز", branch: "فرع المدينة المنورة", price: 2.00 },
-    { area: "تلاع العلي", branch: "فرع المدينة المنورة", price: 2.00 },
-    { area: "المدينة الرياضية", branch: "فرع المدينة المنورة", price: 2.50 },
-    { area: "ضاحية الرشيد", branch: "فرع المدينة المنورة", price: 2.00 },
-    { area: "شارع الجامعة", branch: "فرع المدينة المنورة", price: 2.50 },
-    { area: "خلدا", branch: "فرع المدينة المنورة", price: 3.00 },
-    { area: "العبدلي", branch: "فرع المدينة المنورة", price: 3.00 },
-    { area: "ضاحية الروضة", branch: "فرع المدينة المنورة", price: 2.00 },
-    { area: "عرجان", branch: "فرع المدينة المنورة", price: 2.00 },
-    { area: "طلوع نفين", branch: "فرع المدينة المنورة", price: 2.50 },
-    { area: "جبل الحسين", branch: "فرع المدينة المنورة", price: 3.00 },
-    { area: "شميساني", branch: "فرع المدينة المنورة", price: 2.50 },
-    { area: "الرابية", branch: "فرع المدينة المنورة", price: 2.50 },
-    { area: "ضاحية الاستقلال", branch: "فرع المدينة المنورة", price: 4.00 },
-    { area: "ضاحية الأقصى", branch: "فرع المدينة المنورة", price: 4.00 },
-    { area: "ضاحية الأمير حسن", branch: "فرع المدينة المنورة", price: 4.00 },
-    { area: "ماركا الشمالية", branch: "فرع المدينة المنورة", price: 5.00 },
-    { area: "ماركا الجنوبية", branch: "فرع المدينة المنورة", price: 5.00 },
-    { area: "الهاشمي", branch: "فرع المدينة المنورة", price: 4.00 },
-    { area: "طلوع هافانا", branch: "فرع المدينة المنورة", price: 3.00 },
-    { area: "جبل النزهة", branch: "فرع المدينة المنورة", price: 4.00 },
+    // المدينة المنورة (21)
+    { area: "الجاردنز", branch: "المدينة المنورة", price: 2.00 },
+    { area: "تلاع العلي", branch: "المدينة المنورة", price: 2.00 },
+    { area: "المدينة الرياضية", branch: "المدينة المنورة", price: 2.50 },
+    { area: "ضاحية الرشيد", branch: "المدينة المنورة", price: 2.00 },
+    { area: "شارع الجامعة", branch: "المدينة المنورة", price: 2.50 },
+    { area: "خلدا", branch: "المدينة المنورة", price: 3.00 },
+    { area: "العبدلي", branch: "المدينة المنورة", price: 3.00 },
+    { area: "ضاحية الروضة", branch: "المدينة المنورة", price: 2.00 },
+    { area: "عرجان", branch: "المدينة المنورة", price: 2.00 },
+    { area: "طلوع نفين", branch: "المدينة المنورة", price: 2.50 },
+    { area: "جبل الحسين", branch: "المدينة المنورة", price: 3.00 },
+    { area: "شميساني", branch: "المدينة المنورة", price: 2.50 },
+    { area: "الرابية", branch: "المدينة المنورة", price: 2.50 },
+    { area: "ضاحية الاستقلال", branch: "المدينة المنورة", price: 4.00 },
+    { area: "ضاحية الأقصى", branch: "المدينة المنورة", price: 4.00 },
+    { area: "ضاحية الأمير حسن", branch: "المدينة المنورة", price: 4.00 },
+    { area: "ماركا الشمالية", branch: "المدينة المنورة", price: 5.00 },
+    { area: "ماركا الجنوبية", branch: "المدينة المنورة", price: 5.00 },
+    { area: "الهاشمي", branch: "المدينة المنورة", price: 4.00 },
+    { area: "طلوع هافانا", branch: "المدينة المنورة", price: 3.00 },
+    { area: "جبل النزهة", branch: "المدينة المنورة", price: 4.00 },
 
-    // فرع غوشة
-    { area: "السابع", branch: "فرع غوشة", price: 2.00 },
-    { area: "دير غبار", branch: "فرع غوشة", price: 2.50 },
-    { area: "ام أذينة", branch: "فرع غوشة", price: 2.00 },
-    { area: "الثامن", branch: "فرع غوشة", price: 2.00 },
-    { area: "الجندويل", branch: "فرع غوشة", price: 2.00 },
-    { area: "العبدلي", branch: "فرع غوشة", price: 3.00 },
-    { area: "عبدون", branch: "فرع غوشة", price: 2.50 },
-    { area: "جبل عمان", branch: "فرع غوشة", price: 3.00 },
-    { area: "الرابع", branch: "فرع غوشة", price: 2.00 },
-    { area: "الخامس", branch: "فرع غوشة", price: 2.00 },
-    { area: "الكرسي", branch: "فرع غوشة", price: 2.50 },
-    { area: "مرج الحمام", branch: "فرع غوشة", price: 3.50 },
-    { area: "اللويبدة", branch: "فرع غوشة", price: 3.00 },
-    { area: "البيادر", branch: "فرع غوشة", price: 2.50 },
-    { area: "البيادر الصناعة", branch: "فرع غوشة", price: 3.00 },
-    { area: "الرابية", branch: "فرع غوشة", price: 3.00 },
-    { area: "الامير راشد", branch: "فرع غوشة", price: 2.00 },
-    { area: "ام السماق", branch: "فرع غوشة", price: 2.00 },
-    { area: "الروابي", branch: "فرع غوشة", price: 2.00 },
-    { area: "شارع مكة", branch: "فرع غوشة", price: 2.00 },
-    { area: "وادي صقرة", branch: "فرع غوشة", price: 3.00 },
+    // غوشة (21)
+    { area: "السابع", branch: "غوشة", price: 2.00 },
+    { area: "دير غبار", branch: "غوشة", price: 2.50 },
+    { area: "ام أذينة", branch: "غوشة", price: 2.00 },
+    { area: "الثامن", branch: "غوشة", price: 2.00 },
+    { area: "الجندويل", branch: "غوشة", price: 2.00 },
+    { area: "العبدلي", branch: "غوشة", price: 3.00 },
+    { area: "عبدون", branch: "غوشة", price: 2.50 },
+    { area: "جبل عمان", branch: "غوشة", price: 3.00 },
+    { area: "الرابع", branch: "غوشة", price: 2.00 },
+    { area: "الخامس", branch: "غوشة", price: 2.00 },
+    { area: "الكرسي", branch: "غوشة", price: 2.50 },
+    { area: "مرج الحمام", branch: "غوشة", price: 3.50 },
+    { area: "اللويبدة", branch: "غوشة", price: 3.00 },
+    { area: "البيادر", branch: "غوشة", price: 2.50 },
+    { area: "البيادر الصناعة", branch: "غوشة", price: 3.00 },
+    { area: "الرابية", branch: "غوشة", price: 3.00 },
+    { area: "الامير راشد", branch: "غوشة", price: 2.00 },
+    { area: "ام السماق", branch: "غوشة", price: 2.00 },
+    { area: "الروابي", branch: "غوشة", price: 2.00 },
+    { area: "شارع مكة", branch: "غوشة", price: 2.00 },
+    { area: "وادي صقرة", branch: "غوشة", price: 3.00 },
 
-    // فرع دابوق
-    { area: "خلدا", branch: "فرع دابوق", price: 2.00 },
-    { area: "ماحص", branch: "فرع دابوق", price: 3.50 },
-    { area: "الفحيص", branch: "فرع دابوق", price: 3.50 },
-    { area: "الفردوس", branch: "فرع دابوق", price: 3.50 },
-    { area: "ام الاسود", branch: "فرع دابوق", price: 3.50 },
-    { area: "الرباحية الشمالية", branch: "فرع دابوق", price: 3.00 },
-    { area: "الرباحية الجنوبية", branch: "فرع دابوق", price: 3.00 },
-    { area: "مرج الحمام", branch: "فرع دابوق", price: 5.00 },
-    { area: "صافوط", branch: "فرع دابوق", price: 3.50 },
-    { area: "الحمر", branch: "فرع دابوق", price: 3.50 },
-    { area: "صويلح", branch: "فرع دابوق", price: 3.00 },
-    { area: "الكمالية", branch: "فرع دابوق", price: 3.00 },
-    { area: "ديرة هلي", branch: "فرع دابوق", price: 3.00 },
-    { area: "المشرق", branch: "فرع دابوق", price: 3.00 },
-    { area: "المدينة الطبية", branch: "فرع دابوق", price: 2.00 },
-    { area: "باب الهوا", branch: "فرع دابوق", price: 5.00 },
-    { area: "بدر الجديدة", branch: "فرع دابوق", price: 3.50 },
-    { area: "السرو", branch: "فرع دابوق", price: 4.00 },
-    { area: "عين الباشا", branch: "فرع دابوق", price: 5.00 },
-    { area: "البقعة", branch: "فرع دابوق", price: 5.00 },
+    // دابوق (20)
+    { area: "خلدا", branch: "دابوق", price: 2.00 },
+    { area: "ماحص", branch: "دابوق", price: 3.50 },
+    { area: "الفحيص", branch: "دابوق", price: 3.50 },
+    { area: "الفردوس", branch: "دابوق", price: 3.50 },
+    { area: "ام الاسود", branch: "دابوق", price: 3.50 },
+    { area: "الرباحية الشمالية", branch: "دابوق", price: 3.00 },
+    { area: "الرباحية الجنوبية", branch: "دابوق", price: 3.00 },
+    { area: "مرج الحمام", branch: "دابوق", price: 5.00 },
+    { area: "صافوط", branch: "دابوق", price: 3.50 },
+    { area: "الحمر", branch: "دابوق", price: 3.50 },
+    { area: "صويلح", branch: "دابوق", price: 3.00 },
+    { area: "الكمالية", branch: "دابوق", price: 3.00 },
+    { area: "ديرة هلي", branch: "دابوق", price: 3.00 },
+    { area: "المشرق", branch: "دابوق", price: 3.00 },
+    { area: "المدينة الطبية", branch: "دابوق", price: 2.00 },
+    { area: "باب الهوا", branch: "دابوق", price: 5.00 },
+    { area: "بدر الجديدة", branch: "دابوق", price: 3.50 },
+    { area: "السرو", branch: "دابوق", price: 4.00 },
+    { area: "عين الباشا", branch: "دابوق", price: 5.00 },
+    { area: "البقعة", branch: "دابوق", price: 5.00 },
 
-    // فرع جبيهة
-    { area: "ابو نصير", branch: "فرع جبيهة", price: 2.50 },
-    { area: "ضاحية الرشيد", branch: "فرع جبيهة", price: 2.00 },
-    { area: "شفابدران", branch: "فرع جبيهة", price: 2.50 },
-    { area: "الكوم", branch: "فرع جبيهة", price: 3.00 },
-    { area: "حي المنصور", branch: "فرع جبيهة", price: 2.50 },
-    { area: "صويلح", branch: "فرع جبيهة", price: 3.00 },
-    { area: "طلوع نفين", branch: "فرع جبيهة", price: 2.50 },
-    { area: "إشارة النبعة", branch: "فرع جبيهة", price: 3.00 },
-    { area: "حي الخزنة", branch: "فرع جبيهة", price: 3.50 },
-    { area: "ضاحية الامام الغزالي", branch: "فرع جبيهة", price: 2.50 },
-    { area: "حي ام زويتينة", branch: "فرع جبيهة", price: 2.00 },
-    { area: "صافوط", branch: "فرع جبيهة", price: 4.00 },
-    { area: "طبربور", branch: "فرع جبيهة", price: 3.50 },
-    { area: "بيرين", branch: "فرع جبيهة", price: 4.00 },
-    { area: "قرية أبو نصير", branch: "فرع جبيهة", price: 3.50 },
+    // جبيهة (15)
+    { area: "ابو نصير", branch: "جبيهة", price: 2.50 },
+    { area: "ضاحية الرشيد", branch: "جبيهة", price: 2.00 },
+    { area: "شفابدران", branch: "جبيهة", price: 2.50 },
+    { area: "الكوم", branch: "جبيهة", price: 3.00 },
+    { area: "حي المنصور", branch: "جبيهة", price: 2.50 },
+    { area: "صويلح", branch: "جبيهة", price: 3.00 },
+    { area: "طلوع نفين", branch: "جبيهة", price: 2.50 },
+    { area: "إشارة النبعة", branch: "جبيهة", price: 3.00 },
+    { area: "حي الخزنة", branch: "جبيهة", price: 3.50 },
+    { area: "ضاحية الامام الغزالي", branch: "جبيهة", price: 2.50 },
+    { area: "حي ام زويتينة", branch: "جبيهة", price: 2.00 },
+    { area: "صافوط", branch: "جبيهة", price: 4.00 },
+    { area: "طبربور", branch: "جبيهة", price: 3.50 },
+    { area: "بيرين", branch: "جبيهة", price: 4.00 },
+    { area: "قرية أبو نصير", branch: "جبيهة", price: 3.50 },
 
-    // فرع صويفية
-    { area: "عبدون", branch: "فرع صويفية", price: 2.00 },
-    { area: "دير غبار", branch: "فرع صويفية", price: 2.00 },
-    { area: "ام أذينة", branch: "فرع صويفية", price: 2.00 },
-    { area: "الرابية", branch: "فرع صويفية", price: 2.50 },
-    { area: "وادي عبدون", branch: "فرع صويفية", price: 2.50 },
-    { area: "جبل عمان", branch: "فرع صويفية", price: 3.00 },
-    { area: "حي الصحابة", branch: "فرع صويفية", price: 3.00 },
-    { area: "جبل اللويبدة", branch: "فرع صويفية", price: 3.00 },
-    { area: "حي الرونق", branch: "فرع صويفية", price: 2.50 },
-    { area: "ابو السوس", branch: "فرع صويفية", price: 3.00 },
-    { area: "كردور عبدون", branch: "فرع صويفية", price: 3.00 },
-    { area: "ضاحية الحسين", branch: "فرع صويفية", price: 2.50 },
-    { area: "الظهير", branch: "فرع صويفية", price: 3.00 },
-    { area: "ربوة عبدون", branch: "فرع صويفية", price: 3.00 },
-    { area: "حي السهل", branch: "فرع صويفية", price: 2.00 },
-    { area: "العبدلي", branch: "فرع صويفية", price: 3.00 },
-    { area: "وادي السير", branch: "فرع صويفية", price: 3.00 },
-    { area: "البيادر", branch: "فرع صويفية", price: 2.50 },
-    { area: "البيادر الصناعة", branch: "فرع صويفية", price: 3.00 },
-    { area: "الثامن", branch: "فرع صويفية", price: 2.00 },
-    { area: "السابع", branch: "فرع صويفية", price: 2.00 },
-    { area: "السادس", branch: "فرع صويفية", price: 2.00 },
-    { area: "الخامس", branch: "فرع صويفية", price: 2.00 },
-    { area: "الرابع", branch: "فرع صويفية", price: 2.00 },
-    { area: "مرج الحمام", branch: "فرع صويفية", price: 3.50 },
+    // صويفية (25)
+    { area: "عبدون", branch: "صويفية", price: 2.00 },
+    { area: "دير غبار", branch: "صويفية", price: 2.00 },
+    { area: "ام أذينة", branch: "صويفية", price: 2.00 },
+    { area: "الرابية", branch: "صويفية", price: 2.50 },
+    { area: "وادي عبدون", branch: "صويفية", price: 2.50 },
+    { area: "جبل عمان", branch: "صويفية", price: 3.00 },
+    { area: "حي الصحابة", branch: "صويفية", price: 3.00 },
+    { area: "جبل اللويبدة", branch: "صويفية", price: 3.00 },
+    { area: "حي الرونق", branch: "صويفية", price: 2.50 },
+    { area: "ابو السوس", branch: "صويفية", price: 3.00 },
+    { area: "كردور عبدون", branch: "صويفية", price: 3.00 },
+    { area: "ضاحية الحسين", branch: "صويفية", price: 2.50 },
+    { area: "الظهير", branch: "صويفية", price: 3.00 },
+    { area: "ربوة عبدون", branch: "صويفية", price: 3.00 },
+    { area: "حي السهل", branch: "صويفية", price: 2.00 },
+    { area: "العبدلي", branch: "صويفية", price: 3.00 },
+    { area: "وادي السير", branch: "صويفية", price: 3.00 },
+    { area: "البيادر", branch: "صويفية", price: 2.50 },
+    { area: "البيادر الصناعة", branch: "صويفية", price: 3.00 },
+    { area: "الثامن", branch: "صويفية", price: 2.00 },
+    { area: "السابع", branch: "صويفية", price: 2.00 },
+    { area: "السادس", branch: "صويفية", price: 2.00 },
+    { area: "الخامس", branch: "صويفية", price: 2.00 },
+    { area: "الرابع", branch: "صويفية", price: 2.00 },
+    { area: "مرج الحمام", branch: "صويفية", price: 3.50 },
 
-    // فرع المقابلين
-    { area: "ضاحية الحاج حسن", branch: "فرع المقابلين", price: 2.00 },
-    { area: "جبل الزهور", branch: "فرع المقابلين", price: 2.00 },
-    { area: "ضاحية الياسمين", branch: "فرع المقابلين", price: 2.00 },
-    { area: "شارع الإذاعة", branch: "فرع المقابلين", price: 2.00 },
-    { area: "الوحدات", branch: "فرع المقابلين", price: 2.50 },
-    { area: "دوار الشرق الأوسط", branch: "فرع المقابلين", price: 2.50 },
-    { area: "الدبايبة", branch: "فرع المقابلين", price: 2.50 },
-    { area: "الأشرفية", branch: "فرع المقابلين", price: 3.00 },
-    { area: "جبل الجوفة", branch: "فرع المقابلين", price: 3.00 },
-    { area: "ابو علندا", branch: "فرع المقابلين", price: 3.50 },
-    { area: "جبل الحديد", branch: "فرع المقابلين", price: 2.50 },
-    { area: "القويسمة", branch: "فرع المقابلين", price: 3.00 },
-    { area: "ام قصير", branch: "فرع المقابلين", price: 2.50 },
-    { area: "كلية ناعور", branch: "فرع المقابلين", price: 2.50 },
-    { area: "ناعور", branch: "فرع المقابلين", price: 5.00 },
-    { area: "جبل المريخ", branch: "فرع المقابلين", price: 3.00 },
-    { area: "مرج الحمام", branch: "فرع المقابلين", price: 3.50 },
-    { area: "البنيات", branch: "فرع المقابلين", price: 2.50 },
-    { area: "الجمرك", branch: "فرع المقابلين", price: 2.50 },
-    { area: "الحويان", branch: "فرع المقابلين", price: 2.50 },
-    { area: "الحمايدة", branch: "فرع المقابلين", price: 2.50 },
-    { area: "كلية حطين", branch: "فرع المقابلين", price: 2.50 },
-    { area: "ام الحيران", branch: "فرع المقابلين", price: 2.50 },
-    { area: "العلكومية", branch: "فرع المقابلين", price: 2.50 },
-    { area: "اليادودة", branch: "فرع المقابلين", price: 4.00 },
-    { area: "حي الباير", branch: "فرع المقابلين", price: 2.50 },
-    { area: "حي نزال", branch: "فرع المقابلين", price: 2.50 },
-    { area: "جبل الاخضر", branch: "فرع المقابلين", price: 2.50 },
-    { area: "الذراع", branch: "فرع المقابلين", price: 2.50 },
-    { area: "ضاحية الفاروق", branch: "فرع المقابلين", price: 3.00 },
-    { area: "ضاحية الأمير علي", branch: "فرع المقابلين", price: 3.00 },
-    { area: "الجويدة", branch: "فرع المقابلين", price: 2.50 },
-    { area: "خريبة السوق", branch: "فرع المقابلين", price: 3.00 },
-    { area: "المهاجرين", branch: "فرع المقابلين", price: 3.00 },
-    { area: "راس العين", branch: "فرع المقابلين", price: 3.00 },
-    { area: "طلوع المصدار", branch: "فرع المقابلين", price: 3.00 },
-    { area: "جبل النظيف", branch: "فرع المقابلين", price: 3.00 },
-    { area: "جاوا", branch: "فرع المقابلين", price: 3.50 },
-    { area: "نادي الجواد العربي", branch: "فرع المقابلين", price: 3.50 },
-    { area: "غمدان", branch: "فرع المقابلين", price: 3.50 },
-    { area: "منتزه عمان", branch: "فرع المقابلين", price: 3.50 },
-    { area: "وادي الرمم", branch: "فرع المقابلين", price: 3.00 },
-    { area: "القسطل", branch: "فرع المقابلين", price: 10.00 },
-    { area: "المدارس العالمية", branch: "فرع المقابلين", price: 3.50 },
-    { area: "أم العمد", branch: "فرع المقابلين", price: 7.00 },
-    { area: "ام الكندم", branch: "فرع المقابلين", price: 3.50 },
-    { area: "الأندلسية", branch: "فرع المقابلين", price: 7.00 }
+    // المقابلين (47)
+    { area: "ضاحية الحاج حسن", branch: "المقابلين", price: 2.00 },
+    { area: "جبل الزهور", branch: "المقابلين", price: 2.00 },
+    { area: "ضاحية الياسمين", branch: "المقابلين", price: 2.00 },
+    { area: "شارع الإذاعة", branch: "المقابلين", price: 2.00 },
+    { area: "الوحدات", branch: "المقابلين", price: 2.50 },
+    { area: "دوار الشرق الأوسط", branch: "المقابلين", price: 2.50 },
+    { area: "الدبايبة", branch: "المقابلين", price: 2.50 },
+    { area: "الأشرفية", branch: "المقابلين", price: 3.00 },
+    { area: "جبل الجوفة", branch: "المقابلين", price: 3.00 },
+    { area: "ابو علندا", branch: "المقابلين", price: 3.50 },
+    { area: "جبل الحديد", branch: "المقابلين", price: 2.50 },
+    { area: "القويسمة", branch: "المقابلين", price: 3.00 },
+    { area: "ام قصير", branch: "المقابلين", price: 2.50 },
+    { area: "كلية ناعور", branch: "المقابلين", price: 2.50 },
+    { area: "ناعور", branch: "المقابلين", price: 5.00 },
+    { area: "جبل المريخ", branch: "المقابلين", price: 3.00 },
+    { area: "مرج الحمام", branch: "المقابلين", price: 3.50 },
+    { area: "البنيات", branch: "المقابلين", price: 2.50 },
+    { area: "الجمرك", branch: "المقابلين", price: 2.50 },
+    { area: "الحويان", branch: "المقابلين", price: 2.50 },
+    { area: "الحمايدة", branch: "المقابلين", price: 2.50 },
+    { area: "كلية حطين", branch: "المقابلين", price: 2.50 },
+    { area: "ام الحيران", branch: "المقابلين", price: 2.50 },
+    { area: "العلكومية", branch: "المقابلين", price: 2.50 },
+    { area: "اليادودة", branch: "المقابلين", price: 4.00 },
+    { area: "حي الباير", branch: "المقابلين", price: 2.50 },
+    { area: "حي نزال", branch: "المقابلين", price: 2.50 },
+    { area: "جبل الاخضر", branch: "المقابلين", price: 2.50 },
+    { area: "الذراع", branch: "المقابلين", price: 2.50 },
+    { area: "ضاحية الفاروق", branch: "المقابلين", price: 3.00 },
+    { area: "ضاحية الأمير علي", branch: "المقابلين", price: 3.00 },
+    { area: "الجويدة", branch: "المقابلين", price: 2.50 },
+    { area: "خريبة السوق", branch: "المقابلين", price: 3.00 },
+    { area: "المهاجرين", branch: "المقابلين", price: 3.00 },
+    { area: "راس العين", branch: "المقابلين", price: 3.00 },
+    { area: "طلوع المصدار", branch: "المقابلين", price: 3.00 },
+    { area: "جبل النظيف", branch: "المقابلين", price: 3.00 },
+    { area: "جاوا", branch: "المقابلين", price: 3.50 },
+    { area: "نادي الجواد العربي", branch: "المقابلين", price: 3.50 },
+    { area: "غمدان", branch: "المقابلين", price: 3.50 },
+    { area: "منتزه عمان", branch: "المقابلين", price: 3.50 },
+    { area: "وادي الرمم", branch: "المقابلين", price: 3.00 },
+    { area: "القسطل", branch: "المقابلين", price: 10.00 },
+    { area: "المدارس العالمية", branch: "المقابلين", price: 3.50 },
+    { area: "أم العمد", branch: "المقابلين", price: 7.00 },
+    { area: "ام الكندم", branch: "المقابلين", price: 3.50 },
+    { area: "الأندلسية", branch: "المقابلين", price: 7.00 }
   ];
 
   let activeData = [...DEFAULT_DATA];
@@ -639,129 +722,184 @@
       .replace(/\s+/g, " ");
   }
 
-  function renderBranchFilters() {
-    const branches = ["الكل", ...new Set(activeData.map(item => item.branch))];
-    const container = document.getElementById("branchFilters");
-    container.innerHTML = branches.map(branch => `
-      <button
-        class="filter-chip ${selectedBranch === branch ? "active" : ""}"
-        onclick="selectBranch('${branch}')"
-      >
-        ${branch}
+  function cleanBranchName(name) {
+    return (name || "").replace(/^فرع\s+/, "").trim();
+  }
+
+  function getBranchColor(branch) {
+    const clean = cleanBranchName(branch);
+    return BRANCH_COLORS[clean] || "#0f766e";
+  }
+
+  function getBranchCounts(data) {
+    const counts = {};
+    data.forEach(item => {
+      const b = cleanBranchName(item.branch);
+      counts[b] = (counts[b] || 0) + 1;
+    });
+    return counts;
+  }
+
+  function renderChips() {
+    const counts = getBranchCounts(activeData);
+    const branchOrder = ["المدينة المنورة", "غوشة", "دابوق", "جبيهة", "صويفية", "المقابلين"];
+    const extraBranches = Object.keys(counts).filter(b => !branchOrder.includes(b));
+    const allBranches = [...branchOrder.filter(b => counts[b] > 0), ...extraBranches];
+
+    const bar = document.getElementById("filtersBar");
+    let html = `
+      <button class="chip ${selectedBranch === "الكل" ? "active" : ""}" onclick="selectBranch('الكل')">
+        <span>الكل</span>
+        <span class="chip-count">(${activeData.length})</span>
       </button>
-    `).join("");
+    `;
+
+    allBranches.forEach(b => {
+      const isActive = selectedBranch === b;
+      const color = getBranchColor(b);
+      html += `
+        <button class="chip ${isActive ? "active" : ""}" onclick="selectBranch('${b.replace(/'/g, "\'")}')">
+          <span class="chip-dot" style="background:${color}"></span>
+          <span>${b}</span>
+          <span class="chip-count">(${counts[b]})</span>
+        </button>
+      `;
+    });
+
+    bar.innerHTML = html;
   }
 
   function selectBranch(branch) {
     selectedBranch = branch;
-    renderBranchFilters();
-    renderResults();
+    renderChips();
+    renderCards();
   }
 
   function clearSearch() {
     const input = document.getElementById("searchInput");
     input.value = "";
     input.focus();
-    document.getElementById("clearBtn").classList.remove("visible");
-    renderResults();
+    renderCards();
   }
 
-  function renderResults() {
+  function copyCardDetails(btn, text) {
+    navigator.clipboard.writeText(text).then(() => {
+      const orig = btn.innerHTML;
+      btn.classList.add("copied");
+      btn.innerHTML = "✓ تم النسخ";
+      setTimeout(() => {
+        btn.classList.remove("copied");
+        btn.innerHTML = orig;
+      }, 1500);
+    });
+  }
+
+  function renderCards() {
     const query = document.getElementById("searchInput").value;
     const normQuery = normalizeArabic(query);
-    const clearBtn = document.getElementById("clearBtn");
 
-    if (query.trim().length > 0) {
-      clearBtn.classList.add("visible");
-    } else {
-      clearBtn.classList.remove("visible");
-    }
+    // Count how many branches cover each normalized area across ALL activeData
+    const areaBranchCount = new Map();
+    const areaMinPrice = new Map();
+    activeData.forEach(item => {
+      const key = normalizeArabic(item.area);
+      if (!areaBranchCount.has(key)) areaBranchCount.set(key, new Set());
+      areaBranchCount.get(key).add(cleanBranchName(item.branch));
+
+      const p = Number(item.price);
+      if (!areaMinPrice.has(key) || p < areaMinPrice.get(key)) {
+        areaMinPrice.set(key, p);
+      }
+    });
 
     const filtered = activeData.filter(item => {
-      const matchBranch = selectedBranch === "الكل" || item.branch === selectedBranch;
+      const bName = cleanBranchName(item.branch);
+      const matchBranch = selectedBranch === "الكل" || bName === selectedBranch;
       const matchQuery = !normQuery || normalizeArabic(item.area).includes(normQuery);
       return matchBranch && matchQuery;
     });
 
-    // Group by normalized area name
-    const groupedMap = new Map();
-    filtered.forEach(item => {
-      const key = normalizeArabic(item.area);
-      if (!groupedMap.has(key)) {
-        groupedMap.set(key, {
-          displayName: item.area,
-          options: []
-        });
-      }
-      groupedMap.get(key).options.push(item);
-    });
+    // Sort best / lowest price first
+    filtered.sort((a, b) => Number(a.price) - Number(b.price));
 
-    const groups = Array.from(groupedMap.values());
-    groups.forEach(group => {
-      group.options.sort((a, b) => a.price - b.price);
-    });
+    document.getElementById("totalBadge").textContent = filtered.length;
+    document.getElementById("countLabel").textContent =
+      selectedBranch === "الكل" ? "منطقة في جميع الأفرع" : `منطقة في فرع ${selectedBranch}`;
 
-    document.getElementById("resultsCount").textContent = `عدد المناطق المطابقة: ${groups.length}`;
-    const listEl = document.getElementById("resultsList");
+    const grid = document.getElementById("cardsGrid");
 
-    if (groups.length === 0) {
-      listEl.innerHTML = `
+    if (filtered.length === 0) {
+      grid.innerHTML = `
         <div class="empty-state">
-          <h3>لا توجد نتائج مطابقة لـ "${query}"</h3>
-          <p>تأكد من كتابة اسم المنطقة أو اختر "الكل" من الأفرع في الأعلى</p>
+          <h3>لا توجد نتائج مطابقة</h3>
+          <p style="margin-top:6px;">جرّب البحث باسم منطقة أخرى أو اضغط على "الكل"</p>
         </div>
       `;
       return;
     }
 
-    listEl.innerHTML = groups.map(group => {
-      const isMulti = group.options.length > 1;
-      const minPrice = group.options[0].price;
+    grid.innerHTML = filtered.map(item => {
+      const bName = cleanBranchName(item.branch);
+      const color = getBranchColor(bName);
+      const key = normalizeArabic(item.area);
+      const totalBranchesForArea = areaBranchCount.get(key)?.size || 1;
+      const minPrice = areaMinPrice.get(key);
+      const priceNum = Number(item.price);
+      const isLowest = totalBranchesForArea > 1 && priceNum === minPrice;
+      const isMulti = totalBranchesForArea > 1;
 
-      const optionsHtml = group.options.map((opt, idx) => {
-        const isBest = idx === 0;
-        return `
-          <div class="branch-row ${isBest ? "best" : ""}">
-            <div class="branch-info">
-              <span class="branch-name">${opt.branch}</span>
-              ${isBest
-                ? `<span class="best-badge">${isMulti ? "الأقل تكلفة / الموصى به" : "الفرع المسؤول"}</span>`
-                : `<span class="alt-badge">فرع بديل</span>`
-              }
-            </div>
-            <div class="price-tag">${Number(opt.price).toFixed(2)} د.أ</div>
-          </div>
-        `;
-      }).join("");
+      const copyText = `المنطقة: ${item.area} | الفرع: ${bName} | التوصيل: ${priceNum.toFixed(2)} دينار`;
+      const safeCopyText = copyText.replace(/'/g, "\'");
 
       return `
-        <div class="area-card">
-          <div class="area-header">
-            <span class="area-title">${group.displayName}</span>
-            ${isMulti ? `<span class="multi-tag">مشتركة بين ${group.options.length} أفرع</span>` : ""}
+        <div class="area-card ${isLowest ? "recommended" : ""}">
+          <div class="card-top">
+            <div class="card-info">
+              <div class="tags-row">
+                <span class="branch-pill">
+                  <span class="chip-dot" style="background:${color}"></span>
+                  <span>${bName}</span>
+                </span>
+                ${isLowest ? `<span class="best-pill">★ الأقرب / الأقل تكلفة</span>` : ""}
+              </div>
+              <div class="area-name">${item.area}</div>
+            </div>
+
+            <div class="price-box">
+              <span class="price-num">${priceNum.toFixed(2)}</span>
+              <span class="price-currency">دينار</span>
+            </div>
           </div>
-          <div class="branch-options">
-            ${optionsHtml}
+
+          <div class="card-bottom">
+            <button class="copy-btn" onclick="copyCardDetails(this, '${safeCopyText}')">
+              <span>📋</span>
+              <span>نسخ التفاصيل</span>
+            </button>
+            <span class="coverage-text">
+              ${isMulti ? `متوفرة في ${totalBranchesForArea} أفرع` : "تغطية حصرية لهذا الفرع"}
+            </span>
           </div>
         </div>
       `;
     }).join("");
   }
 
-  // Modal & Google Sheets Sync
+  // Admin Modal Functions
   function openModal() {
-    document.getElementById("csvUrlInput").value = localStorage.getItem("sheets_csv_url") || "";
-    document.getElementById("settingsModal").classList.add("open");
+    if (!isAdmin) return;
+    document.getElementById("csvInput").value = localStorage.getItem("sheets_csv_url") || "";
+    document.getElementById("adminModal").classList.add("open");
   }
 
   function closeModal() {
-    document.getElementById("settingsModal").classList.remove("open");
+    document.getElementById("adminModal").classList.remove("open");
   }
 
   function parseCSV(text) {
     const lines = text.split(/\r?\n/).filter(l => l.trim().length > 0);
     if (lines.length < 2) return [];
-    const result = [];
+    const out = [];
     for (let i = 1; i < lines.length; i++) {
       const parts = lines[i].split(",").map(p => p.replace(/^"|"$/g, "").trim());
       if (parts.length >= 3) {
@@ -769,95 +907,90 @@
         const branch = parts[1];
         const price = parseFloat(parts[2]);
         if (area && branch && !isNaN(price)) {
-          result.push({ area, branch, price });
+          out.push({ area, branch, price });
         }
       }
     }
-    return result;
+    return out;
   }
 
-  async function fetchSheetData(url) {
-    const statusEl = document.getElementById("syncStatus");
-    statusEl.textContent = "جاري المزامنة مع Google Sheets...";
-    statusEl.classList.remove("live");
-
+  async function syncSheet() {
+    if (!isAdmin) return;
+    const url = document.getElementById("csvInput").value.trim();
+    if (!url) return alert("يرجى إدخال رابط CSV");
     try {
-      const response = await fetch(url);
-      if (!response.ok) throw new Error("Network error");
-      const csvText = await response.text();
-      const parsed = parseCSV(csvText);
-      if (parsed.length > 0) {
-        activeData = parsed;
-        localStorage.setItem("cached_delivery_data", JSON.stringify(parsed));
-        statusEl.textContent = `مربوط مع Google Sheets (${parsed.length} سجل)`;
-        statusEl.classList.add("live");
-        renderBranchFilters();
-        renderResults();
-        return true;
-      } else {
-        throw new Error("Empty or invalid CSV format");
-      }
-    } catch (err) {
-      statusEl.textContent = "تعذر الاتصال (يعمل بالبيانات المحفوظة)";
-      return false;
-    }
-  }
-
-  async function saveAndSyncSheet() {
-    const url = document.getElementById("csvUrlInput").value.trim();
-    if (!url) {
-      alert("يرجى إدخال رابط CSV الصحيح من Google Sheets.");
-      return;
-    }
-    localStorage.setItem("sheets_csv_url", url);
-    const ok = await fetchSheetData(url);
-    if (ok) {
-      alert("تم الربط وتحديث البيانات بنجاح!");
+      const res = await fetch(url);
+      const csv = await res.text();
+      const parsed = parseCSV(csv);
+      if (!parsed.length) throw new Error("Empty");
+      activeData = parsed;
+      localStorage.setItem("sheets_csv_url", url);
+      localStorage.setItem("cached_delivery_data", JSON.stringify(parsed));
+      selectedBranch = "الكل";
+      renderChips();
+      renderCards();
       closeModal();
-    } else {
-      alert("تعذر قراءة البيانات من الرابط. تأكد من نشر الملف بصيغة CSV وتطابق الأعمدة (المنطقة، الفرع، السعر).");
+      alert("تم تحديث البيانات بنجاح!");
+    } catch (e) {
+      alert("تعذر قراءة الرابط، تأكد من نشر الشيت بصيغة CSV.");
     }
   }
 
-  function resetToDefault() {
+  function exportCSV() {
+    if (!isAdmin) return;
+    const bom = "\uFEFF";
+    const header = "المنطقة,الفرع,السعر\n";
+    const rows = activeData.map(r => `"${r.area}","${cleanBranchName(r.branch)}",${Number(r.price).toFixed(2)}`).join("\n");
+    const blob = new Blob([bom + header + rows], { type: "text/csv;charset=utf-8;" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "delivery_rates.csv";
+    a.click();
+  }
+
+  function resetData() {
+    if (!isAdmin) return;
     localStorage.removeItem("sheets_csv_url");
     localStorage.removeItem("cached_delivery_data");
     activeData = [...DEFAULT_DATA];
-    document.getElementById("csvUrlInput").value = "";
-    document.getElementById("syncStatus").textContent = `البيانات المدمجة (${activeData.length} سجل)`;
-    document.getElementById("syncStatus").classList.remove("live");
-    renderBranchFilters();
-    renderResults();
-    alert("تمت استعادة البيانات الافتراضية بنجاح.");
+    selectedBranch = "الكل";
+    renderChips();
+    renderCards();
+    closeModal();
   }
 
-  function downloadCSV() {
-    const bom = "\uFEFF";
-    const header = "المنطقة,الفرع,السعر\n";
-    const rows = activeData.map(r => `"${r.area}","${r.branch}",${Number(r.price).toFixed(2)}`).join("\n");
-    const blob = new Blob([bom + header + rows], { type: "text/csv;charset=utf-8;" });
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = "delivery_rates.csv";
-    link.click();
-  }
-
-  // Initialization
-  document.getElementById("searchInput").addEventListener("input", renderResults);
+  document.getElementById("searchInput").addEventListener("input", renderCards);
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape") clearSearch();
+  });
 
   window.addEventListener("DOMContentLoaded", () => {
+    if (isAdmin) {
+      document.getElementById("adminGearBtn").classList.add("visible");
+    }
     const cached = localStorage.getItem("cached_delivery_data");
     if (cached) {
       try {
         activeData = JSON.parse(cached);
       } catch (e) {}
     }
-    renderBranchFilters();
-    renderResults();
+    renderChips();
+    renderCards();
 
     const savedUrl = localStorage.getItem("sheets_csv_url");
     if (savedUrl) {
-      fetchSheetData(savedUrl);
+      fetch(savedUrl)
+        .then(r => r.text())
+        .then(txt => {
+          const parsed = parseCSV(txt);
+          if (parsed.length) {
+            activeData = parsed;
+            localStorage.setItem("cached_delivery_data", JSON.stringify(parsed));
+            renderChips();
+            renderCards();
+          }
+        })
+        .catch(() => {});
     }
   });
 </script>
