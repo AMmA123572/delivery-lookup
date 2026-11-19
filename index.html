@@ -222,6 +222,13 @@
       font-size: 0.78rem;
       padding: 2px 8px;
       border-radius: 7px;
+      cursor: pointer;
+      user-select: none;
+      transition: transform 0.12s, background-color 0.15s;
+    }
+
+    .count-badge:active {
+      transform: scale(0.95);
     }
 
     /* Cards Grid */
@@ -300,17 +307,6 @@
       padding: 3px 10px;
       font-size: 0.75rem;
       font-weight: 800;
-    }
-
-    .alt-pill {
-      display: inline-flex;
-      align-items: center;
-      background: #f1f5f9;
-      color: #64748b;
-      border-radius: 999px;
-      padding: 3px 10px;
-      font-size: 0.75rem;
-      font-weight: 700;
     }
 
     .area-name {
@@ -400,6 +396,30 @@
       padding: 44px 20px;
       text-align: center;
       color: #64748b;
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: #0f172a;
+      color: #fff;
+      padding: 8px 16px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.2s ease;
+      z-index: 300;
+      box-shadow: 0 8px 24px rgba(15, 23, 42, 0.2);
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
     }
 
     /* Admin Modal */
@@ -504,7 +524,7 @@
       <span>يتم ترتيب المناطق المشتركة تلقائياً حسب الأقل تكلفة / الأقرب أولاً</span>
     </div>
     <div class="count-summary">
-      <span class="count-badge" id="totalBadge">149</span>
+      <span class="count-badge" id="totalBadge" onclick="handleSecretTap()" title="العداد">149</span>
       <span id="countLabel">منطقة في جميع الأفرع</span>
     </div>
   </div>
@@ -513,7 +533,9 @@
   <div class="cards-grid" id="cardsGrid"></div>
 </div>
 
-<!-- Admin Modal (?admin=1) -->
+<div class="toast" id="toast"></div>
+
+<!-- Admin Modal -->
 <div class="modal-backdrop" id="adminModal">
   <div class="modal">
     <div class="modal-header">
@@ -531,7 +553,10 @@
 </div>
 
 <script>
-  const isAdmin = new URLSearchParams(window.location.search).get("admin") === "1";
+  const isAdminParam = new URLSearchParams(window.location.search).get("admin") === "1";
+  let isAdminUnlocked = isAdminParam;
+  let secretTapCount = 0;
+  let secretTapTimer = null;
 
   const BRANCH_COLORS = {
     "المدينة المنورة": "#2563eb",
@@ -708,6 +733,35 @@
   let activeData = [...DEFAULT_DATA];
   let selectedBranch = "الكل";
 
+  function showToast(msg) {
+    const t = document.getElementById("toast");
+    t.textContent = msg;
+    t.classList.add("show");
+    clearTimeout(window.__toastTimer);
+    window.__toastTimer = setTimeout(() => t.classList.remove("show"), 2000);
+  }
+
+  function handleSecretTap() {
+    secretTapCount++;
+    clearTimeout(secretTapTimer);
+    secretTapTimer = setTimeout(() => {
+      secretTapCount = 0;
+    }, 1800);
+
+    if (secretTapCount >= 5) {
+      secretTapCount = 0;
+      isAdminUnlocked = !isAdminUnlocked;
+      const btn = document.getElementById("adminGearBtn");
+      if (isAdminUnlocked) {
+        btn.classList.add("visible");
+        showToast("تم إظهار خيار ربط الشيت");
+      } else {
+        btn.classList.remove("visible");
+        showToast("تم إخفاء خيار ربط الشيت");
+      }
+    }
+  }
+
   function normalizeArabic(text) {
     if (!text) return "";
     return text
@@ -798,7 +852,6 @@
     const query = document.getElementById("searchInput").value;
     const normQuery = normalizeArabic(query);
 
-    // Count how many branches cover each normalized area across ALL activeData
     const areaBranchCount = new Map();
     const areaMinPrice = new Map();
     activeData.forEach(item => {
@@ -819,7 +872,6 @@
       return matchBranch && matchQuery;
     });
 
-    // Sort best / lowest price first
     filtered.sort((a, b) => Number(a.price) - Number(b.price));
 
     document.getElementById("totalBadge").textContent = filtered.length;
@@ -885,9 +937,8 @@
     }).join("");
   }
 
-  // Admin Modal Functions
   function openModal() {
-    if (!isAdmin) return;
+    if (!isAdminUnlocked) return;
     document.getElementById("csvInput").value = localStorage.getItem("sheets_csv_url") || "";
     document.getElementById("adminModal").classList.add("open");
   }
@@ -915,7 +966,7 @@
   }
 
   async function syncSheet() {
-    if (!isAdmin) return;
+    if (!isAdminUnlocked) return;
     const url = document.getElementById("csvInput").value.trim();
     if (!url) return alert("يرجى إدخال رابط CSV");
     try {
@@ -937,7 +988,7 @@
   }
 
   function exportCSV() {
-    if (!isAdmin) return;
+    if (!isAdminUnlocked) return;
     const bom = "\uFEFF";
     const header = "المنطقة,الفرع,السعر\n";
     const rows = activeData.map(r => `"${r.area}","${cleanBranchName(r.branch)}",${Number(r.price).toFixed(2)}`).join("\n");
@@ -949,7 +1000,7 @@
   }
 
   function resetData() {
-    if (!isAdmin) return;
+    if (!isAdminUnlocked) return;
     localStorage.removeItem("sheets_csv_url");
     localStorage.removeItem("cached_delivery_data");
     activeData = [...DEFAULT_DATA];
@@ -965,7 +1016,7 @@
   });
 
   window.addEventListener("DOMContentLoaded", () => {
-    if (isAdmin) {
+    if (isAdminUnlocked) {
       document.getElementById("adminGearBtn").classList.add("visible");
     }
     const cached = localStorage.getItem("cached_delivery_data");
