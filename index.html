@@ -24,9 +24,7 @@
       --purple: #8b5cf6;
       --teal: #0d9488;
       --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.04);
-      --shadow-md: 0 6px 20px rgba(15, 23, 42, 0.06);
       --radius-lg: 18px;
-      --radius-md: 12px;
     }
 
     * {
@@ -40,7 +38,7 @@
       background-color: var(--bg);
       color: var(--text-main);
       min-height: 100vh;
-      padding: 18px 16px 60px;
+      padding: 18px 16px 70px;
     }
 
     .container {
@@ -56,9 +54,10 @@
       padding: 10px 16px;
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       box-shadow: var(--shadow-sm);
       margin-bottom: 14px;
+      flex-wrap: wrap;
     }
 
     .search-icon {
@@ -70,6 +69,7 @@
 
     .search-input {
       flex: 1;
+      min-width: 180px;
       border: none;
       outline: none;
       font-size: 1.05rem;
@@ -90,7 +90,7 @@
       color: #475569;
       font-size: 0.78rem;
       font-weight: 700;
-      padding: 4px 10px;
+      padding: 5px 10px;
       border-radius: 8px;
       cursor: pointer;
       transition: all 0.15s;
@@ -102,23 +102,31 @@
       color: #0f172a;
     }
 
-    .admin-gear-btn {
+    .admin-toolbar-btn {
       display: none;
-      background: #0f172a;
-      color: #fff;
       border: none;
       font-size: 0.8rem;
-      font-weight: 700;
+      font-weight: 800;
       padding: 6px 12px;
       border-radius: 9px;
       cursor: pointer;
       white-space: nowrap;
-    }
-
-    .admin-gear-btn.visible {
-      display: inline-flex;
       align-items: center;
       gap: 5px;
+    }
+
+    .admin-toolbar-btn.visible {
+      display: inline-flex;
+    }
+
+    .btn-add-top {
+      background: #059669;
+      color: #ffffff;
+    }
+
+    .btn-manage-top {
+      background: #0f172a;
+      color: #ffffff;
     }
 
     /* Filter Chips Bar */
@@ -353,21 +361,29 @@
       align-items: center;
       padding-top: 12px;
       border-top: 1px solid #f1f5f9;
-      gap: 10px;
+      gap: 8px;
+      flex-wrap: wrap;
     }
 
-    .copy-btn {
+    .card-actions-left {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .copy-btn, .card-edit-btn, .card-del-btn {
       background: #f8fafc;
       border: 1px solid #e2e8f0;
       color: #334155;
       border-radius: 10px;
-      padding: 6px 12px;
-      font-size: 0.8rem;
+      padding: 6px 11px;
+      font-size: 0.78rem;
       font-weight: 800;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
       transition: all 0.15s;
     }
 
@@ -380,6 +396,25 @@
       background: #ecfdf5;
       border-color: #34d399;
       color: #047857;
+    }
+
+    .card-edit-btn {
+      display: none;
+      background: #eff6ff;
+      border-color: #bfdbfe;
+      color: #1d4ed8;
+    }
+
+    .card-del-btn {
+      display: none;
+      background: #fef2f2;
+      border-color: #fecaca;
+      color: #b91c1c;
+    }
+
+    body.admin-mode .card-edit-btn,
+    body.admin-mode .card-del-btn {
+      display: inline-flex;
     }
 
     .coverage-text {
@@ -413,7 +448,7 @@
       opacity: 0;
       pointer-events: none;
       transition: all 0.2s ease;
-      z-index: 300;
+      z-index: 400;
       box-shadow: 0 8px 24px rgba(15, 23, 42, 0.2);
     }
 
@@ -422,7 +457,7 @@
       transform: translateX(-50%) translateY(0);
     }
 
-    /* Admin Modal */
+    /* Modals */
     .modal-backdrop {
       position: fixed;
       inset: 0;
@@ -431,7 +466,7 @@
       align-items: center;
       justify-content: center;
       padding: 16px;
-      z-index: 200;
+      z-index: 300;
     }
 
     .modal-backdrop.open {
@@ -441,10 +476,12 @@
     .modal {
       background: #fff;
       width: 100%;
-      max-width: 520px;
+      max-width: 560px;
       border-radius: 18px;
       padding: 22px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.22);
+      max-height: 90vh;
+      overflow-y: auto;
     }
 
     .modal-header {
@@ -452,21 +489,36 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #f1f5f9;
     }
 
     .modal-header h2 {
-      font-size: 1.1rem;
+      font-size: 1.08rem;
+      font-weight: 900;
+    }
+
+    .form-group {
+      margin-bottom: 12px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.85rem;
       font-weight: 800;
+      color: #1e293b;
+      margin-bottom: 5px;
     }
 
     .form-control {
       width: 100%;
       padding: 10px 12px;
-      border: 1px solid #cbd5e1;
+      border: 1.5px solid #cbd5e1;
       border-radius: 10px;
-      font-size: 0.88rem;
-      direction: ltr;
-      margin-top: 8px;
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: #0f172a;
+      background: #fff;
     }
 
     .modal-actions {
@@ -483,6 +535,9 @@
       font-size: 0.84rem;
       font-weight: 800;
       cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
     }
 
     .btn-m-primary {
@@ -490,9 +545,52 @@
       color: #fff;
     }
 
+    .btn-m-success {
+      background: #059669;
+      color: #fff;
+    }
+
+    .btn-m-danger {
+      background: #dc2626;
+      color: #fff;
+    }
+
     .btn-m-light {
       background: #f1f5f9;
       color: #0f172a;
+    }
+
+    .manage-list {
+      margin-top: 14px;
+      max-height: 290px;
+      overflow-y: auto;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+    }
+
+    .manage-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 9px 12px;
+      border-bottom: 1px solid #f1f5f9;
+      gap: 8px;
+      font-size: 0.85rem;
+    }
+
+    .manage-row:last-child {
+      border-bottom: none;
+    }
+
+    .manage-meta {
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .manage-sub {
+      font-size: 0.78rem;
+      color: #64748b;
+      font-weight: 700;
     }
   </style>
 </head>
@@ -511,7 +609,8 @@
       autofocus
     />
     <button class="esc-btn" id="escBtn" onclick="clearSearch()" title="مسح البحث">ESC للمسح</button>
-    <button class="admin-gear-btn" id="adminGearBtn" onclick="openModal()">⚙️ ربط الشيت</button>
+    <button class="admin-toolbar-btn btn-add-top" id="addAreaTopBtn" onclick="openAreaModal(-1)">+ إضافة منطقة</button>
+    <button class="admin-toolbar-btn btn-manage-top" id="manageTopBtn" onclick="openManageModal()">✏️ إدارة المناطق</button>
   </div>
 
   <!-- Branch Filter Chips -->
@@ -535,28 +634,77 @@
 
 <div class="toast" id="toast"></div>
 
-<!-- Admin Modal -->
-<div class="modal-backdrop" id="adminModal">
+<!-- Add / Edit Area Modal -->
+<div class="modal-backdrop" id="areaModal">
   <div class="modal">
     <div class="modal-header">
-      <h2>⚙️ ربط وتحديث البيانات (Google Sheets CSV)</h2>
-      <button class="btn-m btn-m-light" onclick="closeModal()">إغلاق</button>
+      <h2 id="areaModalTitle">➕ إضافة منطقة جديدة</h2>
+      <button class="btn-m btn-m-light" onclick="closeAreaModal()">إغلاق</button>
     </div>
-    <label style="font-size: 0.88rem; font-weight: 700;">رابط النشر بصيغة CSV من Google Sheets:</label>
-    <input type="url" id="csvInput" class="form-control" placeholder="https://docs.google.com/spreadsheets/d/e/.../pub?output=csv" />
+
+    <div class="form-group">
+      <label class="form-label" for="areaNameInput">اسم المنطقة</label>
+      <input type="text" id="areaNameInput" class="form-control" placeholder="مثال: خلدا أو طلوع هافانا" />
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="areaBranchSelect">الفرع</label>
+      <select id="areaBranchSelect" class="form-control">
+        <option value="المدينة المنورة">المدينة المنورة</option>
+        <option value="غوشة">غوشة</option>
+        <option value="دابوق">دابوق</option>
+        <option value="جبيهة">جبيهة</option>
+        <option value="صويفية">صويفية</option>
+        <option value="المقابلين">المقابلين</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="areaPriceInput">سعر التوصيل (دينار)</label>
+      <input type="number" id="areaPriceInput" class="form-control" step="0.25" min="0" placeholder="مثال: 2.50" />
+    </div>
+
     <div class="modal-actions">
-      <button class="btn-m btn-m-primary" onclick="syncSheet()">حفظ ومزامنة</button>
-      <button class="btn-m btn-m-light" onclick="exportCSV()">تحميل CSV</button>
-      <button class="btn-m btn-m-light" onclick="resetData()">استعادة الافتراضي</button>
+      <button class="btn-m btn-m-success" onclick="saveAreaForm()">💾 حفظ التغيير</button>
+      <button class="btn-m btn-m-light" onclick="closeAreaModal()">إلغاء</button>
     </div>
   </div>
 </div>
 
+<!-- Manage All Areas Modal -->
+<div class="modal-backdrop" id="manageModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>✏️ إدارة المناطق والأسعار مباشرة</h2>
+      <button class="btn-m btn-m-light" onclick="closeManageModal()">إغلاق</button>
+    </div>
+
+    <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px;">
+      <button class="btn-m btn-m-success" onclick="openAreaModal(-1)">+ إضافة منطقة جديدة</button>
+      <button class="btn-m btn-m-light" onclick="exportCSV()">⬇️ تصدير CSV</button>
+      <button class="btn-m btn-m-light" onclick="copyUpdatedDataJson()">📋 نسخ البيانات المحدثة</button>
+      <button class="btn-m btn-m-danger" onclick="resetDefaultData()">↩️ استعادة الافتراضي</button>
+    </div>
+
+    <input
+      type="text"
+      id="manageFilterInput"
+      class="form-control"
+      placeholder="ابحث داخل قائمة المناطق للتعديل أو الحذف السريع..."
+      oninput="renderManageList()"
+    />
+
+    <div class="manage-list" id="manageList"></div>
+  </div>
+</div>
+
 <script>
+  const STORAGE_KEY = "delivery_rates_custom_v1";
   const isAdminParam = new URLSearchParams(window.location.search).get("admin") === "1";
   let isAdminUnlocked = isAdminParam;
   let secretTapCount = 0;
   let secretTapTimer = null;
+  let editingIndex = -1;
 
   const BRANCH_COLORS = {
     "المدينة المنورة": "#2563eb",
@@ -730,15 +878,38 @@
     { area: "الأندلسية", branch: "المقابلين", price: 7.00 }
   ];
 
-  let activeData = [...DEFAULT_DATA];
+  let activeData = loadSavedData();
   let selectedBranch = "الكل";
+
+  function loadSavedData() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed;
+        }
+      }
+    } catch (e) {}
+    return DEFAULT_DATA.map(d => ({ ...d }));
+  }
+
+  function saveDataToStorage() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(activeData));
+  }
+
+  function applyAdminUI() {
+    document.body.classList.toggle("admin-mode", isAdminUnlocked);
+    document.getElementById("addAreaTopBtn").classList.toggle("visible", isAdminUnlocked);
+    document.getElementById("manageTopBtn").classList.toggle("visible", isAdminUnlocked);
+  }
 
   function showToast(msg) {
     const t = document.getElementById("toast");
     t.textContent = msg;
     t.classList.add("show");
     clearTimeout(window.__toastTimer);
-    window.__toastTimer = setTimeout(() => t.classList.remove("show"), 2000);
+    window.__toastTimer = setTimeout(() => t.classList.remove("show"), 2200);
   }
 
   function handleSecretTap() {
@@ -751,14 +922,8 @@
     if (secretTapCount >= 5) {
       secretTapCount = 0;
       isAdminUnlocked = !isAdminUnlocked;
-      const btn = document.getElementById("adminGearBtn");
-      if (isAdminUnlocked) {
-        btn.classList.add("visible");
-        showToast("تم إظهار خيار ربط الشيت");
-      } else {
-        btn.classList.remove("visible");
-        showToast("تم إخفاء خيار ربط الشيت");
-      }
+      applyAdminUI();
+      showToast(isAdminUnlocked ? "تم تفعيل وضع التعديل والإضافة والحذف" : "تم إخفاء أدوات التعديل");
     }
   }
 
@@ -812,7 +977,7 @@
       const isActive = selectedBranch === b;
       const color = getBranchColor(b);
       html += `
-        <button class="chip ${isActive ? "active" : ""}" onclick="selectBranch('${b.replace(/'/g, "\'")}')">
+        <button class="chip ${isActive ? "active" : ""}" onclick="selectBranch('${b.replace(/'/g, "\\'")}')">
           <span class="chip-dot" style="background:${color}"></span>
           <span>${b}</span>
           <span class="chip-count">(${counts[b]})</span>
@@ -846,6 +1011,14 @@
         btn.innerHTML = orig;
       }, 1500);
     });
+  }
+
+  function findDataIndex(targetItem) {
+    return activeData.findIndex(
+      d => d.area === targetItem.area &&
+           cleanBranchName(d.branch) === cleanBranchName(targetItem.branch) &&
+           Number(d.price) === Number(targetItem.price)
+    );
   }
 
   function renderCards() {
@@ -899,9 +1072,10 @@
       const priceNum = Number(item.price);
       const isLowest = totalBranchesForArea > 1 && priceNum === minPrice;
       const isMulti = totalBranchesForArea > 1;
+      const realIdx = findDataIndex(item);
 
       const copyText = `المنطقة: ${item.area} | الفرع: ${bName} | التوصيل: ${priceNum.toFixed(2)} دينار`;
-      const safeCopyText = copyText.replace(/'/g, "\'");
+      const safeCopyText = copyText.replace(/'/g, "\\'");
 
       return `
         <div class="area-card ${isLowest ? "recommended" : ""}">
@@ -924,10 +1098,14 @@
           </div>
 
           <div class="card-bottom">
-            <button class="copy-btn" onclick="copyCardDetails(this, '${safeCopyText}')">
-              <span>📋</span>
-              <span>نسخ التفاصيل</span>
-            </button>
+            <div class="card-actions-left">
+              <button class="copy-btn" onclick="copyCardDetails(this, '${safeCopyText}')">
+                <span>📋</span>
+                <span>نسخ التفاصيل</span>
+              </button>
+              <button class="card-edit-btn" onclick="openAreaModal(${realIdx})">✏️ تعديل</button>
+              <button class="card-del-btn" onclick="deleteAreaAt(${realIdx})">🗑️ حذف</button>
+            </div>
             <span class="coverage-text">
               ${isMulti ? `متوفرة في ${totalBranchesForArea} أفرع` : "تغطية حصرية لهذا الفرع"}
             </span>
@@ -937,101 +1115,116 @@
     }).join("");
   }
 
-  function openModal() {
+  function openAreaModal(idx) {
     if (!isAdminUnlocked) return;
-    document.getElementById("csvInput").value = localStorage.getItem("sheets_csv_url") || "";
-    document.getElementById("adminModal").classList.add("open");
-  }
+    editingIndex = idx;
+    const titleEl = document.getElementById("areaModalTitle");
+    const areaInput = document.getElementById("areaNameInput");
+    const branchSelect = document.getElementById("areaBranchSelect");
+    const priceInput = document.getElementById("areaPriceInput");
 
-  function closeModal() {
-    document.getElementById("adminModal").classList.remove("open");
-  }
-
-  function parseCSVLine(line) {
-    const result = [];
-    let current = "";
-    let inQuotes = false;
-    for (let i = 0; i < line.length; i++) {
-      const ch = line[i];
-      if (ch === '"') {
-        if (inQuotes && line[i + 1] === '"') {
-          current += '"';
-          i++;
-        } else {
-          inQuotes = !inQuotes;
-        }
-      } else if (ch === "," && !inQuotes) {
-        result.push(current.trim());
-        current = "";
-      } else {
-        current += ch;
-      }
+    if (idx >= 0 && activeData[idx]) {
+      const item = activeData[idx];
+      titleEl.textContent = "✏️ تعديل المنطقة والسعر";
+      areaInput.value = item.area;
+      branchSelect.value = cleanBranchName(item.branch);
+      priceInput.value = Number(item.price);
+    } else {
+      titleEl.textContent = "➕ إضافة منطقة جديدة";
+      areaInput.value = "";
+      branchSelect.value = selectedBranch !== "الكل" ? selectedBranch : "المدينة المنورة";
+      priceInput.value = "";
     }
-    result.push(current.trim());
-    return result;
+
+    document.getElementById("areaModal").classList.add("open");
+    areaInput.focus();
   }
 
-  function parseCSV(text) {
-    const cleanText = (text || "").replace(/^\uFEFF/, "");
-    const lines = cleanText.split(/\r?\n/).filter(l => l.trim().length > 0);
-    if (lines.length < 2) return [];
-    const out = [];
-    for (let i = 1; i < lines.length; i++) {
-      const parts = parseCSVLine(lines[i]);
-      if (parts.length >= 3) {
-        const area = parts[0];
-        const branch = parts[1];
-        const rawPrice = parts[2].replace(/[^0-9.]/g, "");
-        const price = parseFloat(rawPrice);
-        if (area && branch && !isNaN(price)) {
-          out.push({ area, branch, price });
-        }
-      }
-    }
-    return out;
+  function closeAreaModal() {
+    document.getElementById("areaModal").classList.remove("open");
+    editingIndex = -1;
   }
 
-  async function fetchCSVWithFallback(url) {
-    const bustUrl = url + (url.includes("?") ? "&" : "?") + "_t=" + Date.now();
-    const candidates = [
-      bustUrl,
-      "https://corsproxy.io/?" + encodeURIComponent(bustUrl),
-      "https://api.allorigins.win/raw?url=" + encodeURIComponent(bustUrl)
-    ];
-    for (const target of candidates) {
-      try {
-        const res = await fetch(target, { cache: "no-store" });
-        if (!res.ok) continue;
-        const txt = await res.text();
-        if (txt && !txt.trim().startsWith("<!DOCTYPE") && !txt.trim().startsWith("<html")) {
-          const parsed = parseCSV(txt);
-          if (parsed.length > 0) return parsed;
-        }
-      } catch (err) {}
-    }
-    return [];
-  }
-
-  async function syncSheet() {
+  function saveAreaForm() {
     if (!isAdminUnlocked) return;
-    const url = document.getElementById("csvInput").value.trim();
-    if (!url) return alert("يرجى إدخال رابط CSV");
-    const parsed = await fetchCSVWithFallback(url);
-    if (!parsed.length) {
-      return alert("تعذر قراءة الرابط، تأكد أنه رابط CSV منشور لورقة in وأنه يفتح في المتصفح.");
+    const area = document.getElementById("areaNameInput").value.trim();
+    const branch = document.getElementById("areaBranchSelect").value.trim();
+    const price = parseFloat(document.getElementById("areaPriceInput").value);
+
+    if (!area) return alert("يرجى إدخال اسم المنطقة");
+    if (!branch) return alert("يرجى اختيار الفرع");
+    if (isNaN(price) || price < 0) return alert("يرجى إدخال سعر صحيح");
+
+    const entry = { area, branch, price };
+    if (editingIndex >= 0 && editingIndex < activeData.length) {
+      activeData[editingIndex] = entry;
+      showToast("تم تحديث المنطقة والسعر");
+    } else {
+      activeData.push(entry);
+      showToast("تمت إضافة المنطقة الجديدة");
     }
-    activeData = parsed;
-    localStorage.setItem("sheets_csv_url", url);
-    localStorage.setItem("cached_delivery_data", JSON.stringify(parsed));
-    selectedBranch = "الكل";
+
+    saveDataToStorage();
     renderChips();
     renderCards();
-    closeModal();
-    alert("تم تحديث البيانات بنجاح!");
+    renderManageList();
+    closeAreaModal();
+  }
+
+  function deleteAreaAt(idx) {
+    if (!isAdminUnlocked || idx < 0 || idx >= activeData.length) return;
+    const item = activeData[idx];
+    if (!confirm(`هل أنت متأكد من حذف "${item.area}" (${cleanBranchName(item.branch)})؟`)) return;
+    activeData.splice(idx, 1);
+    saveDataToStorage();
+    renderChips();
+    renderCards();
+    renderManageList();
+    showToast("تم حذف المنطقة");
+  }
+
+  function openManageModal() {
+    if (!isAdminUnlocked) return;
+    document.getElementById("manageFilterInput").value = "";
+    renderManageList();
+    document.getElementById("manageModal").classList.add("open");
+  }
+
+  function closeManageModal() {
+    document.getElementById("manageModal").classList.remove("open");
+  }
+
+  function renderManageList() {
+    const q = normalizeArabic(document.getElementById("manageFilterInput").value);
+    const listEl = document.getElementById("manageList");
+
+    const rows = activeData
+      .map((item, idx) => ({ item, idx }))
+      .filter(({ item }) => {
+        if (!q) return true;
+        return normalizeArabic(item.area).includes(q) || normalizeArabic(item.branch).includes(q);
+      });
+
+    if (rows.length === 0) {
+      listEl.innerHTML = `<div class="manage-row"><span class="manage-sub">لا توجد مناطق مطابقة</span></div>`;
+      return;
+    }
+
+    listEl.innerHTML = rows.map(({ item, idx }) => `
+      <div class="manage-row">
+        <div>
+          <div class="manage-meta">${item.area} — ${Number(item.price).toFixed(2)} دينار</div>
+          <div class="manage-sub">فرع: ${cleanBranchName(item.branch)}</div>
+        </div>
+        <div style="display:flex; gap:6px;">
+          <button class="btn-m btn-m-light" onclick="openAreaModal(${idx})">تعديل</button>
+          <button class="btn-m btn-m-danger" onclick="deleteAreaAt(${idx})">حذف</button>
+        </div>
+      </div>
+    `).join("");
   }
 
   function exportCSV() {
-    if (!isAdminUnlocked) return;
     const bom = "\uFEFF";
     const header = "المنطقة,الفرع,السعر\n";
     const rows = activeData.map(r => `"${r.area}","${cleanBranchName(r.branch)}",${Number(r.price).toFixed(2)}`).join("\n");
@@ -1040,17 +1233,28 @@
     a.href = URL.createObjectURL(blob);
     a.download = "delivery_rates.csv";
     a.click();
+    showToast("تم تحميل ملف CSV");
   }
 
-  function resetData() {
+  function copyUpdatedDataJson() {
+    const formatted = activeData
+      .map(d => `    { area: "${d.area}", branch: "${cleanBranchName(d.branch)}", price: ${Number(d.price).toFixed(2)} }`)
+      .join(",\n");
+    navigator.clipboard.writeText(formatted).then(() => {
+      showToast("تم نسخ البيانات المحدثة إلى الحافظة");
+    });
+  }
+
+  function resetDefaultData() {
     if (!isAdminUnlocked) return;
-    localStorage.removeItem("sheets_csv_url");
-    localStorage.removeItem("cached_delivery_data");
-    activeData = [...DEFAULT_DATA];
+    if (!confirm("هل تريد استعادة البيانات الافتراضية وحذف أي تعديلات محلية؟")) return;
+    localStorage.removeItem(STORAGE_KEY);
+    activeData = DEFAULT_DATA.map(d => ({ ...d }));
     selectedBranch = "الكل";
     renderChips();
     renderCards();
-    closeModal();
+    renderManageList();
+    showToast("تمت استعادة البيانات الافتراضية");
   }
 
   document.getElementById("searchInput").addEventListener("input", renderCards);
@@ -1059,33 +1263,9 @@
   });
 
   window.addEventListener("DOMContentLoaded", () => {
-    if (isAdminUnlocked) {
-      document.getElementById("adminGearBtn").classList.add("visible");
-    }
-    const cached = localStorage.getItem("cached_delivery_data");
-    if (cached) {
-      try {
-        activeData = JSON.parse(cached);
-      } catch (e) {}
-    }
+    applyAdminUI();
     renderChips();
     renderCards();
-
-    const savedUrl = localStorage.getItem("sheets_csv_url");
-    if (savedUrl) {
-      fetch(savedUrl)
-        .then(r => r.text())
-        .then(txt => {
-          const parsed = parseCSV(txt);
-          if (parsed.length) {
-            activeData = parsed;
-            localStorage.setItem("cached_delivery_data", JSON.stringify(parsed));
-            renderChips();
-            renderCards();
-          }
-        })
-        .catch(() => {});
-    }
   });
 </script>
 
