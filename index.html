@@ -16,13 +16,7 @@
       --text-muted: #64748b;
       --border: #e2e8f0;
       --green: #10b981;
-      --green-bg: #ecfdf5;
       --green-border: #34d399;
-      --blue: #2563eb;
-      --amber: #f59e0b;
-      --rose: #f43f5e;
-      --purple: #8b5cf6;
-      --teal: #0d9488;
       --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.04);
       --radius-lg: 18px;
     }
@@ -38,7 +32,7 @@
       background-color: var(--bg);
       color: var(--text-main);
       min-height: 100vh;
-      padding: 18px 16px 70px;
+      padding: 18px 16px 75px;
     }
 
     .container {
@@ -46,7 +40,6 @@
       margin: 0 auto;
     }
 
-    /* Top Search Bar */
     .search-wrapper {
       background: var(--surface);
       border: 1.5px solid var(--border);
@@ -107,7 +100,7 @@
       border: none;
       font-size: 0.8rem;
       font-weight: 800;
-      padding: 6px 12px;
+      padding: 7px 13px;
       border-radius: 9px;
       cursor: pointer;
       white-space: nowrap;
@@ -129,7 +122,6 @@
       color: #ffffff;
     }
 
-    /* Filter Chips Bar */
     .filters-bar {
       display: flex;
       align-items: center;
@@ -189,7 +181,6 @@
       font-size: 0.8rem;
     }
 
-    /* Info Strip */
     .info-strip {
       display: flex;
       justify-content: space-between;
@@ -239,7 +230,6 @@
       transform: scale(0.95);
     }
 
-    /* Cards Grid */
     .cards-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -325,7 +315,6 @@
       margin-top: 2px;
     }
 
-    /* Dark Price Box */
     .price-box {
       background: #0f172a;
       color: #ffffff;
@@ -354,7 +343,6 @@
       margin-top: 2px;
     }
 
-    /* Card Bottom */
     .card-bottom {
       display: flex;
       justify-content: space-between;
@@ -433,7 +421,6 @@
       color: #64748b;
     }
 
-    /* Toast */
     .toast {
       position: fixed;
       bottom: 20px;
@@ -448,7 +435,7 @@
       opacity: 0;
       pointer-events: none;
       transition: all 0.2s ease;
-      z-index: 400;
+      z-index: 600;
       box-shadow: 0 8px 24px rgba(15, 23, 42, 0.2);
     }
 
@@ -457,29 +444,32 @@
       transform: translateX(-50%) translateY(0);
     }
 
-    /* Modals */
     .modal-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(15, 23, 42, 0.55);
+      background: rgba(15, 23, 42, 0.58);
       display: none;
       align-items: center;
       justify-content: center;
       padding: 16px;
-      z-index: 300;
+      z-index: 400;
     }
 
     .modal-backdrop.open {
       display: flex;
     }
 
+    #areaModal {
+      z-index: 500;
+    }
+
     .modal {
       background: #fff;
       width: 100%;
-      max-width: 560px;
+      max-width: 540px;
       border-radius: 18px;
       padding: 22px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.22);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.24);
       max-height: 90vh;
       overflow-y: auto;
     }
@@ -488,7 +478,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 14px;
+      margin-bottom: 16px;
       padding-bottom: 10px;
       border-bottom: 1px solid #f1f5f9;
     }
@@ -499,33 +489,38 @@
     }
 
     .form-group {
-      margin-bottom: 12px;
+      margin-bottom: 14px;
     }
 
     .form-label {
       display: block;
-      font-size: 0.85rem;
+      font-size: 0.88rem;
       font-weight: 800;
       color: #1e293b;
-      margin-bottom: 5px;
+      margin-bottom: 6px;
     }
 
     .form-control {
       width: 100%;
-      padding: 10px 12px;
+      padding: 11px 13px;
       border: 1.5px solid #cbd5e1;
-      border-radius: 10px;
-      font-size: 0.92rem;
+      border-radius: 11px;
+      font-size: 0.95rem;
       font-weight: 700;
       color: #0f172a;
       background: #fff;
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: #0f172a;
     }
 
     .modal-actions {
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
-      margin-top: 16px;
+      margin-top: 18px;
     }
 
     .btn-m {
@@ -538,11 +533,6 @@
       display: inline-flex;
       align-items: center;
       gap: 5px;
-    }
-
-    .btn-m-primary {
-      background: #0f172a;
-      color: #fff;
     }
 
     .btn-m-success {
@@ -562,7 +552,7 @@
 
     .manage-list {
       margin-top: 14px;
-      max-height: 290px;
+      max-height: 300px;
       overflow-y: auto;
       border: 1px solid #e2e8f0;
       border-radius: 12px;
@@ -572,7 +562,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 9px 12px;
+      padding: 10px 12px;
       border-bottom: 1px solid #f1f5f9;
       gap: 8px;
       font-size: 0.85rem;
@@ -583,7 +573,7 @@
     }
 
     .manage-meta {
-      font-weight: 700;
+      font-weight: 800;
       color: #0f172a;
     }
 
@@ -608,9 +598,9 @@
       autocomplete="off"
       autofocus
     />
-    <button class="esc-btn" id="escBtn" onclick="clearSearch()" title="مسح البحث">ESC للمسح</button>
-    <button class="admin-toolbar-btn btn-add-top" id="addAreaTopBtn" onclick="openAreaModal(-1)">+ إضافة منطقة</button>
-    <button class="admin-toolbar-btn btn-manage-top" id="manageTopBtn" onclick="openManageModal()">✏️ إدارة المناطق</button>
+    <button type="button" class="esc-btn" id="escBtn" onclick="clearSearch()" title="مسح البحث">ESC للمسح</button>
+    <button type="button" class="admin-toolbar-btn btn-add-top" id="addAreaTopBtn" onclick="openAddAreaModal()">+ إضافة منطقة</button>
+    <button type="button" class="admin-toolbar-btn btn-manage-top" id="manageTopBtn" onclick="openManageModal()">✏️ إدارة المناطق</button>
   </div>
 
   <!-- Branch Filter Chips -->
@@ -639,35 +629,37 @@
   <div class="modal">
     <div class="modal-header">
       <h2 id="areaModalTitle">➕ إضافة منطقة جديدة</h2>
-      <button class="btn-m btn-m-light" onclick="closeAreaModal()">إغلاق</button>
+      <button type="button" class="btn-m btn-m-light" onclick="closeAreaModal()">إغلاق</button>
     </div>
 
-    <div class="form-group">
-      <label class="form-label" for="areaNameInput">اسم المنطقة</label>
-      <input type="text" id="areaNameInput" class="form-control" placeholder="مثال: خلدا أو طلوع هافانا" />
-    </div>
+    <form id="areaForm" onsubmit="saveAreaForm(event)">
+      <div class="form-group">
+        <label class="form-label" for="areaNameInput">اسم المنطقة</label>
+        <input type="text" id="areaNameInput" class="form-control" placeholder="مثال: خلدا أو طلوع هافانا" required />
+      </div>
 
-    <div class="form-group">
-      <label class="form-label" for="areaBranchSelect">الفرع</label>
-      <select id="areaBranchSelect" class="form-control">
-        <option value="المدينة المنورة">المدينة المنورة</option>
-        <option value="غوشة">غوشة</option>
-        <option value="دابوق">دابوق</option>
-        <option value="جبيهة">جبيهة</option>
-        <option value="صويفية">صويفية</option>
-        <option value="المقابلين">المقابلين</option>
-      </select>
-    </div>
+      <div class="form-group">
+        <label class="form-label" for="areaBranchSelect">الفرع التابع له المنطقة</label>
+        <select id="areaBranchSelect" class="form-control" required>
+          <option value="المدينة المنورة">المدينة المنورة</option>
+          <option value="غوشة">غوشة</option>
+          <option value="دابوق">دابوق</option>
+          <option value="جبيهة">جبيهة</option>
+          <option value="صويفية">صويفية</option>
+          <option value="المقابلين">المقابلين</option>
+        </select>
+      </div>
 
-    <div class="form-group">
-      <label class="form-label" for="areaPriceInput">سعر التوصيل (دينار)</label>
-      <input type="number" id="areaPriceInput" class="form-control" step="0.25" min="0" placeholder="مثال: 2.50" />
-    </div>
+      <div class="form-group">
+        <label class="form-label" for="areaPriceInput">قيمة توصيل المنطقة (دينار)</label>
+        <input type="number" id="areaPriceInput" class="form-control" step="0.05" min="0" placeholder="مثال: 2.50" required />
+      </div>
 
-    <div class="modal-actions">
-      <button class="btn-m btn-m-success" onclick="saveAreaForm()">💾 حفظ التغيير</button>
-      <button class="btn-m btn-m-light" onclick="closeAreaModal()">إلغاء</button>
-    </div>
+      <div class="modal-actions">
+        <button type="submit" class="btn-m btn-m-success">💾 حفظ التغيير</button>
+        <button type="button" class="btn-m btn-m-light" onclick="closeAreaModal()">إلغاء</button>
+      </div>
+    </form>
   </div>
 </div>
 
@@ -676,14 +668,13 @@
   <div class="modal">
     <div class="modal-header">
       <h2>✏️ إدارة المناطق والأسعار مباشرة</h2>
-      <button class="btn-m btn-m-light" onclick="closeManageModal()">إغلاق</button>
+      <button type="button" class="btn-m btn-m-light" onclick="closeManageModal()">إغلاق</button>
     </div>
 
     <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px;">
-      <button class="btn-m btn-m-success" onclick="openAreaModal(-1)">+ إضافة منطقة جديدة</button>
-      <button class="btn-m btn-m-light" onclick="exportCSV()">⬇️ تصدير CSV</button>
-      <button class="btn-m btn-m-light" onclick="copyUpdatedDataJson()">📋 نسخ البيانات المحدثة</button>
-      <button class="btn-m btn-m-danger" onclick="resetDefaultData()">↩️ استعادة الافتراضي</button>
+      <button type="button" class="btn-m btn-m-success" onclick="openAddAreaModal()">+ إضافة منطقة جديدة</button>
+      <button type="button" class="btn-m btn-m-light" onclick="exportCSV()">⬇️ تصدير CSV</button>
+      <button type="button" class="btn-m btn-m-danger" onclick="resetDefaultData()">↩️ استعادة الافتراضي</button>
     </div>
 
     <input
@@ -704,7 +695,7 @@
   let isAdminUnlocked = isAdminParam;
   let secretTapCount = 0;
   let secretTapTimer = null;
-  let editingIndex = -1;
+  let editingItemRef = null;
 
   const BRANCH_COLORS = {
     "المدينة المنورة": "#2563eb",
@@ -887,11 +878,15 @@
       if (raw) {
         const parsed = JSON.parse(raw);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          return parsed;
+          return parsed.map(item => ({
+            area: String(item.area || "").trim(),
+            branch: cleanBranchName(String(item.branch || "")),
+            price: Number(item.price) || 0
+          }));
         }
       }
     } catch (e) {}
-    return DEFAULT_DATA.map(d => ({ ...d }));
+    return DEFAULT_DATA.map(d => ({ ...d, branch: cleanBranchName(d.branch), price: Number(d.price) }));
   }
 
   function saveDataToStorage() {
@@ -923,7 +918,7 @@
       secretTapCount = 0;
       isAdminUnlocked = !isAdminUnlocked;
       applyAdminUI();
-      showToast(isAdminUnlocked ? "تم تفعيل وضع التعديل والإضافة والحذف" : "تم إخفاء أدوات التعديل");
+      showToast(isAdminUnlocked ? "تم تفعيل وضع الإضافة والتعديل والحذف" : "تم إخفاء خيارات التعديل");
     }
   }
 
@@ -967,7 +962,7 @@
 
     const bar = document.getElementById("filtersBar");
     let html = `
-      <button class="chip ${selectedBranch === "الكل" ? "active" : ""}" onclick="selectBranch('الكل')">
+      <button type="button" class="chip ${selectedBranch === "الكل" ? "active" : ""}" onclick="selectBranch('الكل')">
         <span>الكل</span>
         <span class="chip-count">(${activeData.length})</span>
       </button>
@@ -977,7 +972,7 @@
       const isActive = selectedBranch === b;
       const color = getBranchColor(b);
       html += `
-        <button class="chip ${isActive ? "active" : ""}" onclick="selectBranch('${b.replace(/'/g, "\\'")}')">
+        <button type="button" class="chip ${isActive ? "active" : ""}" onclick="selectBranch('${b.replace(/'/g, "\\'")}')">
           <span class="chip-dot" style="background:${color}"></span>
           <span>${b}</span>
           <span class="chip-count">(${counts[b]})</span>
@@ -1011,14 +1006,6 @@
         btn.innerHTML = orig;
       }, 1500);
     });
-  }
-
-  function findDataIndex(targetItem) {
-    return activeData.findIndex(
-      d => d.area === targetItem.area &&
-           cleanBranchName(d.branch) === cleanBranchName(targetItem.branch) &&
-           Number(d.price) === Number(targetItem.price)
-    );
   }
 
   function renderCards() {
@@ -1072,7 +1059,7 @@
       const priceNum = Number(item.price);
       const isLowest = totalBranchesForArea > 1 && priceNum === minPrice;
       const isMulti = totalBranchesForArea > 1;
-      const realIdx = findDataIndex(item);
+      const dataIdx = activeData.indexOf(item);
 
       const copyText = `المنطقة: ${item.area} | الفرع: ${bName} | التوصيل: ${priceNum.toFixed(2)} دينار`;
       const safeCopyText = copyText.replace(/'/g, "\\'");
@@ -1099,12 +1086,12 @@
 
           <div class="card-bottom">
             <div class="card-actions-left">
-              <button class="copy-btn" onclick="copyCardDetails(this, '${safeCopyText}')">
+              <button type="button" class="copy-btn" onclick="copyCardDetails(this, '${safeCopyText}')">
                 <span>📋</span>
                 <span>نسخ التفاصيل</span>
               </button>
-              <button class="card-edit-btn" onclick="openAreaModal(${realIdx})">✏️ تعديل</button>
-              <button class="card-del-btn" onclick="deleteAreaAt(${realIdx})">🗑️ حذف</button>
+              <button type="button" class="card-edit-btn" onclick="openEditAreaByIndex(${dataIdx})">✏️ تعديل</button>
+              <button type="button" class="card-del-btn" onclick="deleteAreaByIndex(${dataIdx})">🗑️ حذف</button>
             </div>
             <span class="coverage-text">
               ${isMulti ? `متوفرة في ${totalBranchesForArea} أفرع` : "تغطية حصرية لهذا الفرع"}
@@ -1115,76 +1102,117 @@
     }).join("");
   }
 
-  function openAreaModal(idx) {
-    if (!isAdminUnlocked) return;
-    editingIndex = idx;
-    const titleEl = document.getElementById("areaModalTitle");
-    const areaInput = document.getElementById("areaNameInput");
-    const branchSelect = document.getElementById("areaBranchSelect");
-    const priceInput = document.getElementById("areaPriceInput");
-
-    if (idx >= 0 && activeData[idx]) {
-      const item = activeData[idx];
-      titleEl.textContent = "✏️ تعديل المنطقة والسعر";
-      areaInput.value = item.area;
-      branchSelect.value = cleanBranchName(item.branch);
-      priceInput.value = Number(item.price);
-    } else {
-      titleEl.textContent = "➕ إضافة منطقة جديدة";
-      areaInput.value = "";
-      branchSelect.value = selectedBranch !== "الكل" ? selectedBranch : "المدينة المنورة";
-      priceInput.value = "";
+  function ensureBranchOption(branchName) {
+    const selectEl = document.getElementById("areaBranchSelect");
+    const exists = Array.from(selectEl.options).some(opt => opt.value === branchName);
+    if (!exists && branchName) {
+      const opt = document.createElement("option");
+      opt.value = branchName;
+      opt.textContent = branchName;
+      selectEl.appendChild(opt);
     }
+  }
+
+  function openAddAreaModal() {
+    isAdminUnlocked = true;
+    applyAdminUI();
+    editingItemRef = null;
+
+    document.getElementById("areaModalTitle").textContent = "➕ إضافة منطقة جديدة";
+    document.getElementById("areaNameInput").value = "";
+    const defaultBranch = selectedBranch !== "الكل" ? selectedBranch : "المدينة المنورة";
+    ensureBranchOption(defaultBranch);
+    document.getElementById("areaBranchSelect").value = defaultBranch;
+    document.getElementById("areaPriceInput").value = "";
 
     document.getElementById("areaModal").classList.add("open");
-    areaInput.focus();
+    setTimeout(() => document.getElementById("areaNameInput").focus(), 40);
+  }
+
+  function openEditAreaByIndex(idx) {
+    if (idx < 0 || idx >= activeData.length) return;
+    isAdminUnlocked = true;
+    applyAdminUI();
+
+    const item = activeData[idx];
+    editingItemRef = item;
+    const branchClean = cleanBranchName(item.branch);
+    ensureBranchOption(branchClean);
+
+    document.getElementById("areaModalTitle").textContent = "✏️ تعديل بيانات المنطقة";
+    document.getElementById("areaNameInput").value = item.area;
+    document.getElementById("areaBranchSelect").value = branchClean;
+    document.getElementById("areaPriceInput").value = Number(item.price);
+
+    document.getElementById("areaModal").classList.add("open");
+    setTimeout(() => document.getElementById("areaNameInput").focus(), 40);
   }
 
   function closeAreaModal() {
     document.getElementById("areaModal").classList.remove("open");
-    editingIndex = -1;
+    editingItemRef = null;
   }
 
-  function saveAreaForm() {
-    if (!isAdminUnlocked) return;
+  function saveAreaForm(event) {
+    if (event) event.preventDefault();
+
     const area = document.getElementById("areaNameInput").value.trim();
-    const branch = document.getElementById("areaBranchSelect").value.trim();
+    const branch = cleanBranchName(document.getElementById("areaBranchSelect").value);
     const price = parseFloat(document.getElementById("areaPriceInput").value);
 
-    if (!area) return alert("يرجى إدخال اسم المنطقة");
-    if (!branch) return alert("يرجى اختيار الفرع");
-    if (isNaN(price) || price < 0) return alert("يرجى إدخال سعر صحيح");
+    if (!area) {
+      alert("يرجى إدخال اسم المنطقة");
+      return;
+    }
+    if (!branch) {
+      alert("يرجى اختيار الفرع التابع له المنطقة");
+      return;
+    }
+    if (isNaN(price) || price < 0) {
+      alert("يرجى إدخال قيمة توصيل صحيحة");
+      return;
+    }
 
-    const entry = { area, branch, price };
-    if (editingIndex >= 0 && editingIndex < activeData.length) {
-      activeData[editingIndex] = entry;
-      showToast("تم تحديث المنطقة والسعر");
+    if (editingItemRef) {
+      const targetIdx = activeData.indexOf(editingItemRef);
+      if (targetIdx !== -1) {
+        activeData[targetIdx] = { area, branch, price };
+        showToast("تم حفظ التعديلات على المنطقة");
+      } else {
+        activeData.push({ area, branch, price });
+        showToast("تمت إضافة المنطقة");
+      }
     } else {
-      activeData.push(entry);
+      activeData.push({ area, branch, price });
       showToast("تمت إضافة المنطقة الجديدة");
     }
 
     saveDataToStorage();
     renderChips();
     renderCards();
-    renderManageList();
+    if (document.getElementById("manageModal").classList.contains("open")) {
+      renderManageList();
+    }
     closeAreaModal();
   }
 
-  function deleteAreaAt(idx) {
-    if (!isAdminUnlocked || idx < 0 || idx >= activeData.length) return;
+  function deleteAreaByIndex(idx) {
+    if (idx < 0 || idx >= activeData.length) return;
     const item = activeData[idx];
-    if (!confirm(`هل أنت متأكد من حذف "${item.area}" (${cleanBranchName(item.branch)})؟`)) return;
+    if (!confirm(`هل تريد حذف "${item.area}" (${cleanBranchName(item.branch)})؟`)) return;
     activeData.splice(idx, 1);
     saveDataToStorage();
     renderChips();
     renderCards();
-    renderManageList();
+    if (document.getElementById("manageModal").classList.contains("open")) {
+      renderManageList();
+    }
     showToast("تم حذف المنطقة");
   }
 
   function openManageModal() {
-    if (!isAdminUnlocked) return;
+    isAdminUnlocked = true;
+    applyAdminUI();
     document.getElementById("manageFilterInput").value = "";
     renderManageList();
     document.getElementById("manageModal").classList.add("open");
@@ -1214,11 +1242,11 @@
       <div class="manage-row">
         <div>
           <div class="manage-meta">${item.area} — ${Number(item.price).toFixed(2)} دينار</div>
-          <div class="manage-sub">فرع: ${cleanBranchName(item.branch)}</div>
+          <div class="manage-sub">الفرع: ${cleanBranchName(item.branch)}</div>
         </div>
         <div style="display:flex; gap:6px;">
-          <button class="btn-m btn-m-light" onclick="openAreaModal(${idx})">تعديل</button>
-          <button class="btn-m btn-m-danger" onclick="deleteAreaAt(${idx})">حذف</button>
+          <button type="button" class="btn-m btn-m-light" onclick="openEditAreaByIndex(${idx})">✏️ تعديل</button>
+          <button type="button" class="btn-m btn-m-danger" onclick="deleteAreaByIndex(${idx})">🗑️ حذف</button>
         </div>
       </div>
     `).join("");
@@ -1236,20 +1264,10 @@
     showToast("تم تحميل ملف CSV");
   }
 
-  function copyUpdatedDataJson() {
-    const formatted = activeData
-      .map(d => `    { area: "${d.area}", branch: "${cleanBranchName(d.branch)}", price: ${Number(d.price).toFixed(2)} }`)
-      .join(",\n");
-    navigator.clipboard.writeText(formatted).then(() => {
-      showToast("تم نسخ البيانات المحدثة إلى الحافظة");
-    });
-  }
-
   function resetDefaultData() {
-    if (!isAdminUnlocked) return;
-    if (!confirm("هل تريد استعادة البيانات الافتراضية وحذف أي تعديلات محلية؟")) return;
+    if (!confirm("هل تريد استعادة القائمة الافتراضية ومسح التعديلات المحفوظة؟")) return;
     localStorage.removeItem(STORAGE_KEY);
-    activeData = DEFAULT_DATA.map(d => ({ ...d }));
+    activeData = DEFAULT_DATA.map(d => ({ ...d, branch: cleanBranchName(d.branch), price: Number(d.price) }));
     selectedBranch = "الكل";
     renderChips();
     renderCards();
@@ -1259,7 +1277,15 @@
 
   document.getElementById("searchInput").addEventListener("input", renderCards);
   document.addEventListener("keydown", e => {
-    if (e.key === "Escape") clearSearch();
+    if (e.key === "Escape") {
+      if (document.getElementById("areaModal").classList.contains("open")) {
+        closeAreaModal();
+      } else if (document.getElementById("manageModal").classList.contains("open")) {
+        closeManageModal();
+      } else {
+        clearSearch();
+      }
+    }
   });
 
   window.addEventListener("DOMContentLoaded", () => {
