@@ -122,6 +122,11 @@
       color: #ffffff;
     }
 
+    .btn-cloud-top {
+      background: #1d4ed8;
+      color: #ffffff;
+    }
+
     .filters-bar {
       display: flex;
       align-items: center;
@@ -466,7 +471,7 @@
     .modal {
       background: #fff;
       width: 100%;
-      max-width: 540px;
+      max-width: 550px;
       border-radius: 18px;
       padding: 22px;
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.24);
@@ -511,9 +516,27 @@
       background: #fff;
     }
 
+    .form-control.ltr {
+      direction: ltr;
+      text-align: left;
+      font-size: 0.86rem;
+    }
+
     .form-control:focus {
       outline: none;
       border-color: #0f172a;
+    }
+
+    .help-note {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #475569;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 10px 12px;
+      line-height: 1.6;
+      margin-bottom: 12px;
     }
 
     .modal-actions {
@@ -533,6 +556,11 @@
       display: inline-flex;
       align-items: center;
       gap: 5px;
+    }
+
+    .btn-m-primary {
+      background: #0f172a;
+      color: #fff;
     }
 
     .btn-m-success {
@@ -601,6 +629,7 @@
     <button type="button" class="esc-btn" id="escBtn" onclick="clearSearch()" title="مسح البحث">ESC للمسح</button>
     <button type="button" class="admin-toolbar-btn btn-add-top" id="addAreaTopBtn" onclick="openAddAreaModal()">+ إضافة منطقة</button>
     <button type="button" class="admin-toolbar-btn btn-manage-top" id="manageTopBtn" onclick="openManageModal()">✏️ إدارة المناطق</button>
+    <button type="button" class="admin-toolbar-btn btn-cloud-top" id="cloudTopBtn" onclick="openCloudModal()">☁️ إعداد JSONBin</button>
   </div>
 
   <!-- Branch Filter Chips -->
@@ -673,6 +702,7 @@
 
     <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px;">
       <button type="button" class="btn-m btn-m-success" onclick="openAddAreaModal()">+ إضافة منطقة جديدة</button>
+      <button type="button" class="btn-m btn-m-primary" onclick="pushDataToCloud(true)">☁️ مزامنة الكل الآن</button>
       <button type="button" class="btn-m btn-m-light" onclick="exportCSV()">⬇️ تصدير CSV</button>
       <button type="button" class="btn-m btn-m-danger" onclick="resetDefaultData()">↩️ استعادة الافتراضي</button>
     </div>
@@ -689,8 +719,45 @@
   </div>
 </div>
 
+<!-- JSONBin Cloud Settings Modal -->
+<div class="modal-backdrop" id="cloudModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>☁️ إعدادات المزامنة السحابية (JSONBin.io)</h2>
+      <button type="button" class="btn-m btn-m-light" onclick="closeCloudModal()">إغلاق</button>
+    </div>
+
+    <div class="help-note">
+      إذا أدخلت <strong>Bin ID</strong> فقط، سيقرأ جميع المستخدمين التعديلات تلقائياً. وإذا أدخلت أيضاً <strong>X-Master-Key</strong> (أو <strong>X-Access-Key</strong>)، فسيقوم الموقع بحفظ وتحديث بيانات <strong>JSONBin</strong> مباشرة لكل الأجهزة عند أي إضافة أو تعديل أو حذف.
+    </div>
+
+    <form id="cloudForm" onsubmit="saveCloudConfig(event)">
+      <div class="form-group">
+        <label class="form-label" for="binIdInput">Bin ID (معرّف السلة في JSONBin)</label>
+        <input type="text" id="binIdInput" class="form-control ltr" placeholder="مثال: 6741a2b3acd3cb34a8a12345" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="apiKeyInput">API Key للكتابة والتحديث (اختياري للمشاهدين، مطلوب للتعديل من هذا الجهاز)</label>
+        <input type="password" id="apiKeyInput" class="form-control ltr" placeholder="$2a$10$..." autocomplete="off" />
+      </div>
+
+      <div class="modal-actions">
+        <button type="submit" class="btn-m btn-m-success">💾 حفظ الإعدادات</button>
+        <button type="button" class="btn-m btn-m-primary" onclick="pushDataToCloud(true)">⬆️ رفع البيانات الحالية إلى JSONBin</button>
+        <button type="button" class="btn-m btn-m-light" onclick="pullDataFromCloud(true)">⬇️ جلب أحدث بيانات من JSONBin</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <script>
   const STORAGE_KEY = "delivery_rates_custom_v1";
+  const CLOUD_CONFIG_KEY = "delivery_jsonbin_config_v1";
+
+  // يمكنك وضع Bin ID ثابت هنا ليظهر التحديث تلقائياً في كل الأجهزة مباشرة
+  const DEFAULT_BIN_ID = "";
+
   const isAdminParam = new URLSearchParams(window.location.search).get("admin") === "1";
   let isAdminUnlocked = isAdminParam;
   let secretTapCount = 0;
@@ -872,6 +939,26 @@
   let activeData = loadSavedData();
   let selectedBranch = "الكل";
 
+  function getCloudConfig() {
+    try {
+      const raw = localStorage.getItem(CLOUD_CONFIG_KEY);
+      const parsed = raw ? JSON.parse(raw) : {};
+      return {
+        binId: (parsed.binId || DEFAULT_BIN_ID || "").trim(),
+        apiKey: (parsed.apiKey || "").trim()
+      };
+    } catch (e) {
+      return { binId: DEFAULT_BIN_ID || "", apiKey: "" };
+    }
+  }
+
+  function setCloudConfig(cfg) {
+    localStorage.setItem(CLOUD_CONFIG_KEY, JSON.stringify({
+      binId: (cfg.binId || "").trim(),
+      apiKey: (cfg.apiKey || "").trim()
+    }));
+  }
+
   function loadSavedData() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
@@ -893,10 +980,80 @@
     localStorage.setItem(STORAGE_KEY, JSON.stringify(activeData));
   }
 
+  function normalizeEntries(arr) {
+    return arr
+      .map(item => ({
+        area: String(item.area || "").trim(),
+        branch: cleanBranchName(String(item.branch || "")),
+        price: Number(item.price)
+      }))
+      .filter(item => item.area && item.branch && !isNaN(item.price));
+  }
+
+  async function pullDataFromCloud(showFeedback = false) {
+    const { binId, apiKey } = getCloudConfig();
+    if (!binId) {
+      if (showFeedback) alert("يرجى إدخال Bin ID أولاً من إعدادات JSONBin");
+      return;
+    }
+    try {
+      const headers = { "Accept": "application/json" };
+      if (apiKey) headers["X-Access-Key"] = apiKey;
+      const res = await fetch(`https://api.jsonbin.io/v3/b/${encodeURIComponent(binId)}/latest`, {
+        headers,
+        cache: "no-store"
+      });
+      if (!res.ok) throw new Error("Fetch failed");
+      const json = await res.json();
+      const rawItems = Array.isArray(json.record) ? json.record : (Array.isArray(json.record?.items) ? json.record.items : []);
+      const cleaned = normalizeEntries(rawItems);
+      if (!cleaned.length) throw new Error("Empty cloud record");
+      activeData = cleaned;
+      saveDataToStorage();
+      renderChips();
+      renderCards();
+      if (document.getElementById("manageModal").classList.contains("open")) {
+        renderManageList();
+      }
+      if (showFeedback) showToast("تم جلب أحدث البيانات من JSONBin");
+    } catch (e) {
+      if (showFeedback) alert("تعذر جلب البيانات من JSONBin، تأكد من صحة Bin ID وأن السلة متاحة للقراءة.");
+    }
+  }
+
+  async function pushDataToCloud(showFeedback = false) {
+    const { binId, apiKey } = getCloudConfig();
+    if (!binId) {
+      if (showFeedback) openCloudModal();
+      return false;
+    }
+    if (!apiKey) {
+      if (showFeedback) alert("تم الحفظ على هذا الجهاز، ولإرساله لباقي الأجهزة أدخل API Key في إعدادات JSONBin.");
+      return false;
+    }
+    try {
+      const res = await fetch(`https://api.jsonbin.io/v3/b/${encodeURIComponent(binId)}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Master-Key": apiKey
+        },
+        body: JSON.stringify(activeData)
+      });
+      if (!res.ok) throw new Error("Update failed");
+      if (showFeedback) showToast("تم نشر التعديلات لجميع الأجهزة عبر JSONBin");
+      return true;
+    } catch (e) {
+      if (showFeedback) alert("تم الحفظ محلياً، لكن تعذر تحديث JSONBin. تأكد من صحة API Key و Bin ID.");
+      return false;
+    }
+  }
+
   function applyAdminUI() {
     document.body.classList.toggle("admin-mode", isAdminUnlocked);
     document.getElementById("addAreaTopBtn").classList.toggle("visible", isAdminUnlocked);
     document.getElementById("manageTopBtn").classList.toggle("visible", isAdminUnlocked);
+    document.getElementById("cloudTopBtn").classList.toggle("visible", isAdminUnlocked);
   }
 
   function showToast(msg) {
@@ -904,7 +1061,7 @@
     t.textContent = msg;
     t.classList.add("show");
     clearTimeout(window.__toastTimer);
-    window.__toastTimer = setTimeout(() => t.classList.remove("show"), 2200);
+    window.__toastTimer = setTimeout(() => t.classList.remove("show"), 2300);
   }
 
   function handleSecretTap() {
@@ -1153,7 +1310,18 @@
     editingItemRef = null;
   }
 
-  function saveAreaForm(event) {
+  async function persistAndSync(successMsg) {
+    saveDataToStorage();
+    renderChips();
+    renderCards();
+    if (document.getElementById("manageModal").classList.contains("open")) {
+      renderManageList();
+    }
+    const synced = await pushDataToCloud(false);
+    showToast(synced ? `${successMsg} وتم تحديث جميع الأجهزة` : successMsg);
+  }
+
+  async function saveAreaForm(event) {
     if (event) event.preventDefault();
 
     const area = document.getElementById("areaNameInput").value.trim();
@@ -1173,41 +1341,29 @@
       return;
     }
 
+    let msg = "تمت إضافة المنطقة الجديدة";
     if (editingItemRef) {
       const targetIdx = activeData.indexOf(editingItemRef);
       if (targetIdx !== -1) {
         activeData[targetIdx] = { area, branch, price };
-        showToast("تم حفظ التعديلات على المنطقة");
+        msg = "تم حفظ التعديلات على المنطقة";
       } else {
         activeData.push({ area, branch, price });
-        showToast("تمت إضافة المنطقة");
       }
     } else {
       activeData.push({ area, branch, price });
-      showToast("تمت إضافة المنطقة الجديدة");
     }
 
-    saveDataToStorage();
-    renderChips();
-    renderCards();
-    if (document.getElementById("manageModal").classList.contains("open")) {
-      renderManageList();
-    }
     closeAreaModal();
+    await persistAndSync(msg);
   }
 
-  function deleteAreaByIndex(idx) {
+  async function deleteAreaByIndex(idx) {
     if (idx < 0 || idx >= activeData.length) return;
     const item = activeData[idx];
     if (!confirm(`هل تريد حذف "${item.area}" (${cleanBranchName(item.branch)})؟`)) return;
     activeData.splice(idx, 1);
-    saveDataToStorage();
-    renderChips();
-    renderCards();
-    if (document.getElementById("manageModal").classList.contains("open")) {
-      renderManageList();
-    }
-    showToast("تم حذف المنطقة");
+    await persistAndSync("تم حذف المنطقة");
   }
 
   function openManageModal() {
@@ -1220,6 +1376,31 @@
 
   function closeManageModal() {
     document.getElementById("manageModal").classList.remove("open");
+  }
+
+  function openCloudModal() {
+    isAdminUnlocked = true;
+    applyAdminUI();
+    const cfg = getCloudConfig();
+    document.getElementById("binIdInput").value = cfg.binId;
+    document.getElementById("apiKeyInput").value = cfg.apiKey;
+    document.getElementById("cloudModal").classList.add("open");
+  }
+
+  function closeCloudModal() {
+    document.getElementById("cloudModal").classList.remove("open");
+  }
+
+  async function saveCloudConfig(event) {
+    if (event) event.preventDefault();
+    const binId = document.getElementById("binIdInput").value.trim();
+    const apiKey = document.getElementById("apiKeyInput").value.trim();
+    setCloudConfig({ binId, apiKey });
+    closeCloudModal();
+    showToast("تم حفظ إعدادات JSONBin");
+    if (binId && !apiKey) {
+      await pullDataFromCloud(true);
+    }
   }
 
   function renderManageList() {
@@ -1264,15 +1445,12 @@
     showToast("تم تحميل ملف CSV");
   }
 
-  function resetDefaultData() {
+  async function resetDefaultData() {
     if (!confirm("هل تريد استعادة القائمة الافتراضية ومسح التعديلات المحفوظة؟")) return;
     localStorage.removeItem(STORAGE_KEY);
     activeData = DEFAULT_DATA.map(d => ({ ...d, branch: cleanBranchName(d.branch), price: Number(d.price) }));
     selectedBranch = "الكل";
-    renderChips();
-    renderCards();
-    renderManageList();
-    showToast("تمت استعادة البيانات الافتراضية");
+    await persistAndSync("تمت استعادة البيانات الافتراضية");
   }
 
   document.getElementById("searchInput").addEventListener("input", renderCards);
@@ -1280,6 +1458,8 @@
     if (e.key === "Escape") {
       if (document.getElementById("areaModal").classList.contains("open")) {
         closeAreaModal();
+      } else if (document.getElementById("cloudModal").classList.contains("open")) {
+        closeCloudModal();
       } else if (document.getElementById("manageModal").classList.contains("open")) {
         closeManageModal();
       } else {
@@ -1292,6 +1472,7 @@
     applyAdminUI();
     renderChips();
     renderCards();
+    pullDataFromCloud(false);
   });
 </script>
 
