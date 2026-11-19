@@ -757,6 +757,7 @@
 
   // يمكنك وضع Bin ID ثابت هنا ليظهر التحديث تلقائياً في كل الأجهزة مباشرة
   const DEFAULT_BIN_ID = "6aff7506ac6210605a95f27d";
+  const DEFAULT_READ_KEY = "$2a$10$2YW6zv5BSHWd6W6.9UZ0xeq/rUVg6hZweZo5ngPZZ8dOuDVkAFJGi";
 
   const isAdminParam = new URLSearchParams(window.location.search).get("admin") === "1";
   let isAdminUnlocked = isAdminParam;
@@ -945,10 +946,10 @@
       const parsed = raw ? JSON.parse(raw) : {};
       return {
         binId: (parsed.binId || DEFAULT_BIN_ID || "").trim(),
-        apiKey: (parsed.apiKey || "").trim()
+        apiKey: (parsed.apiKey || DEFAULT_READ_KEY || "").trim()
       };
     } catch (e) {
-      return { binId: DEFAULT_BIN_ID || "", apiKey: "" };
+      return { binId: DEFAULT_BIN_ID || "", apiKey: DEFAULT_READ_KEY || "" };
     }
   }
 
@@ -997,8 +998,9 @@
       return;
     }
     try {
+      const readKey = apiKey || DEFAULT_READ_KEY;
       const headers = {};
-      if (apiKey) headers["X-Master-Key"] = apiKey;
+      if (readKey) headers["X-Master-Key"] = readKey;
       const res = await fetch(`https://api.jsonbin.io/v3/b/${encodeURIComponent(binId)}/latest?meta=false`, {
         headers,
         cache: "no-store"
