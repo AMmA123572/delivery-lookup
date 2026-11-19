@@ -947,16 +947,42 @@
     document.getElementById("adminModal").classList.remove("open");
   }
 
+  function parseCSVLine(line) {
+    const result = [];
+    let current = "";
+    let inQuotes = false;
+    for (let i = 0; i < line.length; i++) {
+      const ch = line[i];
+      if (ch === '"') {
+        if (inQuotes && line[i + 1] === '"') {
+          current += '"';
+          i++;
+        } else {
+          inQuotes = !inQuotes;
+        }
+      } else if (ch === "," && !inQuotes) {
+        result.push(current.trim());
+        current = "";
+      } else {
+        current += ch;
+      }
+    }
+    result.push(current.trim());
+    return result;
+  }
+
   function parseCSV(text) {
-    const lines = text.split(/\r?\n/).filter(l => l.trim().length > 0);
+    const cleanText = (text || "").replace(/^\uFEFF/, "");
+    const lines = cleanText.split(/\r?\n/).filter(l => l.trim().length > 0);
     if (lines.length < 2) return [];
     const out = [];
     for (let i = 1; i < lines.length; i++) {
-      const parts = lines[i].split(",").map(p => p.replace(/^"|"$/g, "").trim());
+      const parts = parseCSVLine(lines[i]);
       if (parts.length >= 3) {
         const area = parts[0];
         const branch = parts[1];
-        const price = parseFloat(parts[2]);
+        const rawPrice = parts[2].replace(/[^0-9.]/g, "");
+        const price = parseFloat(rawPrice);
         if (area && branch && !isNaN(price)) {
           out.push({ area, branch, price });
         }
@@ -965,26 +991,43 @@
     return out;
   }
 
+  async function fetchCSVWithFallback(url) {
+    const bustUrl = url + (url.includes("?") ? "&" : "?") + "_t=" + Date.now();
+    const candidates = [
+      bustUrl,
+      "https://corsproxy.io/?" + encodeURIComponent(bustUrl),
+      "https://api.allorigins.win/raw?url=" + encodeURIComponent(bustUrl)
+    ];
+    for (const target of candidates) {
+      try {
+        const res = await fetch(target, { cache: "no-store" });
+        if (!res.ok) continue;
+        const txt = await res.text();
+        if (txt && !txt.trim().startsWith("<!DOCTYPE") && !txt.trim().startsWith("<html")) {
+          const parsed = parseCSV(txt);
+          if (parsed.length > 0) return parsed;
+        }
+      } catch (err) {}
+    }
+    return [];
+  }
+
   async function syncSheet() {
     if (!isAdminUnlocked) return;
     const url = document.getElementById("csvInput").value.trim();
     if (!url) return alert("يرجى إدخال رابط CSV");
-    try {
-      const res = await fetch(url);
-      const csv = await res.text();
-      const parsed = parseCSV(csv);
-      if (!parsed.length) throw new Error("Empty");
-      activeData = parsed;
-      localStorage.setItem("sheets_csv_url", url);
-      localStorage.setItem("cached_delivery_data", JSON.stringify(parsed));
-      selectedBranch = "الكل";
-      renderChips();
-      renderCards();
-      closeModal();
-      alert("تم تحديث البيانات بنجاح!");
-    } catch (e) {
-      alert("تعذر قراءة الرابط، تأكد من نشر الشيت بصيغة CSV.");
+    const parsed = await fetchCSVWithFallback(url);
+    if (!parsed.length) {
+      return alert("تعذر قراءة الرابط، تأكد أنه رابط CSV منشور لورقة in وأنه يفتح في المتصفح.");
     }
+    activeData = parsed;
+    localStorage.setItem("sheets_csv_url", url);
+    localStorage.setItem("cached_delivery_data", JSON.stringify(parsed));
+    selectedBranch = "الكل";
+    renderChips();
+    renderCards();
+    closeModal();
+    alert("تم تحديث البيانات بنجاح!");
   }
 
   function exportCSV() {
