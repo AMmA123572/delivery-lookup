@@ -1028,8 +1028,8 @@
   const CLOUD_CONFIG_KEY = "delivery_github_sync_config_v1";
 
   // Open free storage via GitHub repository JSON file (e.g. data/store.json)
-  const DEFAULT_GH_OWNER = "";
-  const DEFAULT_GH_REPO = "";
+  const DEFAULT_GH_OWNER = "AMmA123572";
+  const DEFAULT_GH_REPO = "delivery-lookup";
   const DEFAULT_GH_BRANCH = "main";
   const DEFAULT_GH_PATH = "data/store.json";
   const DEFAULT_GH_TOKEN = "";
@@ -2261,6 +2261,78 @@
     }
   });
 
+  async function fetchPublicStoreForVisitors() {
+    const cfg = getCloudConfig();
+    const owner = cfg.owner || "AMmA123572";
+    const repo = cfg.repo || "delivery-lookup";
+    const branch = cfg.branch || "main";
+    const filePath = (cfg.path || "data/store.json").replace(/^\/+/, "");
+    const cacheBust = `t=${Date.now()}`;
+
+    const candidateUrls = [
+      `./${filePath}?${cacheBust}`,
+      `https://raw.githubusercontent.com/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/${encodeURIComponent(branch)}/${filePath.split("/").map(encodeURIComponent).join("/")}?${cacheBust}`
+    ];
+
+    for (const url of candidateUrls) {
+      try {
+        const res = await fetch(url, { cache: "no-store" });
+        if (!res.ok) continue;
+        const payload = await res.json();
+
+        let rawAreas = [];
+        let rawMenu = null;
+
+        if (Array.isArray(payload)) {
+          rawAreas = payload;
+        } else if (payload && typeof payload === "object") {
+          rawAreas = Array.isArray(payload.areas) ? payload.areas : (Array.isArray(payload.items) ? payload.items : []);
+          if (Array.isArray(payload.menuItems)) {
+            rawMenu = payload.menuItems;
+          }
+        }
+
+        const cleanedAreas = normalizeEntries(rawAreas);
+        let applied = false;
+        if (cleanedAreas.length > 0) {
+          activeData = cleanedAreas;
+          saveDataToStorage();
+          applied = true;
+        }
+
+        if (rawMenu !== null) {
+          menuItems = normalizeMenuEntries(rawMenu);
+          saveMenuToStorage();
+          applied = true;
+        }
+
+        if (applied) {
+          updateTopTabCounts();
+          renderChips();
+          renderCards();
+          renderMenuChips();
+          renderMenuCards();
+          if (document.getElementById("manageModal").classList.contains("open")) {
+            renderManageList();
+          }
+          if (document.getElementById("manageMenuModal").classList.contains("open")) {
+            renderManageMenuList();
+          }
+          setSyncIndicator(true, "محدّث تلقائياً للجميع");
+          return true;
+        }
+      } catch (err) {
+        // Try next source URL
+      }
+    }
+
+    // Fallback to GitHub API if needed (e.g., private repo with token)
+    if (cfg.owner && cfg.repo) {
+      await pullDataFromCloud(false);
+    }
+    return false;
+  }
+
   window.addEventListener("DOMContentLoaded", async () => {
     applyAdminUI();
     updateTopTabCounts();
@@ -2268,7 +2340,8 @@
     renderCards();
     renderMenuChips();
     renderMenuCards();
-    setSyncIndicator(true, "مجاني ومفتوح");
+    setSyncIndicator(true, "جاري التحقق من أحدث البيانات...");
+    await fetchPublicStoreForVisitors();
   });
 </script>
 
