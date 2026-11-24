@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>نظام تسعيرة التوصيل وتحديد الأفرع</title>
+  <title>نظام تسعيرة التوصيل وقائمة الأصناف</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
@@ -38,6 +38,87 @@
     .container {
       max-width: 1120px;
       margin: 0 auto;
+    }
+
+    /* Main Mode Switcher Tabs */
+    .main-tabs-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 14px;
+      flex-wrap: wrap;
+    }
+
+    .main-tabs {
+      display: inline-flex;
+      background: #e2e8f0;
+      padding: 5px;
+      border-radius: 14px;
+      gap: 6px;
+      box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.06);
+    }
+
+    .main-tab-btn {
+      border: none;
+      background: transparent;
+      color: #475569;
+      font-size: 0.95rem;
+      font-weight: 800;
+      padding: 9px 20px;
+      border-radius: 10px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.18s ease;
+      white-space: nowrap;
+    }
+
+    .main-tab-btn:hover {
+      color: #0f172a;
+    }
+
+    .main-tab-btn.active {
+      background: #0f172a;
+      color: #ffffff;
+      box-shadow: 0 3px 10px rgba(15, 23, 42, 0.18);
+    }
+
+    .tab-pill-count {
+      background: rgba(255, 255, 255, 0.16);
+      color: inherit;
+      font-size: 0.78rem;
+      padding: 1px 8px;
+      border-radius: 999px;
+      font-weight: 800;
+    }
+
+    .main-tab-btn:not(.active) .tab-pill-count {
+      background: #cbd5e1;
+      color: #1e293b;
+    }
+
+    .sync-status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: #475569;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .sync-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #10b981;
     }
 
     .search-wrapper {
@@ -278,6 +359,7 @@
       align-items: flex-start;
       gap: 6px;
       min-width: 0;
+      flex: 1;
     }
 
     .tags-row {
@@ -318,6 +400,48 @@
       color: #0f172a;
       line-height: 1.25;
       margin-top: 2px;
+    }
+
+    /* Menu item contents / ingredients */
+    .item-contents-box {
+      margin-top: 6px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 10px 12px;
+      width: 100%;
+    }
+
+    .item-contents-title {
+      font-size: 0.76rem;
+      font-weight: 800;
+      color: #64748b;
+      margin-bottom: 5px;
+      display: block;
+    }
+
+    .ingredients-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .ingredient-tag {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      color: #1e293b;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 8px;
+    }
+
+    .item-notes-text {
+      font-size: 0.84rem;
+      font-weight: 700;
+      color: #334155;
+      line-height: 1.6;
+      white-space: pre-line;
     }
 
     .price-box {
@@ -464,7 +588,7 @@
       display: flex;
     }
 
-    #areaModal {
+    #areaModal, #menuItemModal {
       z-index: 500;
     }
 
@@ -514,6 +638,12 @@
       font-weight: 700;
       color: #0f172a;
       background: #fff;
+    }
+
+    textarea.form-control {
+      min-height: 96px;
+      resize: vertical;
+      line-height: 1.6;
     }
 
     .form-control.ltr {
@@ -610,45 +740,102 @@
       color: #64748b;
       font-weight: 700;
     }
+
+    .view-section.hidden {
+      display: none;
+    }
   </style>
 </head>
 <body>
 
 <div class="container">
-  <!-- Search Box -->
-  <div class="search-wrapper">
-    <span class="search-icon">🔍</span>
-    <input
-      type="text"
-      id="searchInput"
-      class="search-input"
-      placeholder="اكتب اسم المنطقة هنا... (مثلاً: خلدا، عبدون، مرج الحمام، الرابية)"
-      autocomplete="off"
-      autofocus
-    />
-    <button type="button" class="esc-btn" id="escBtn" onclick="clearSearch()" title="مسح البحث">ESC للمسح</button>
-    <button type="button" class="admin-toolbar-btn btn-add-top" id="addAreaTopBtn" onclick="openAddAreaModal()">+ إضافة منطقة</button>
-    <button type="button" class="admin-toolbar-btn btn-manage-top" id="manageTopBtn" onclick="openManageModal()">✏️ إدارة المناطق</button>
-    <button type="button" class="admin-toolbar-btn btn-cloud-top" id="cloudTopBtn" onclick="openCloudModal()">☁️ إعداد JSONBin</button>
-  </div>
-
-  <!-- Branch Filter Chips -->
-  <div class="filters-bar" id="filtersBar"></div>
-
-  <!-- Info Strip -->
-  <div class="info-strip">
-    <div class="info-note">
-      <span class="info-note-dot"></span>
-      <span>يتم ترتيب المناطق المشتركة تلقائياً حسب الأقل تكلفة / الأقرب أولاً</span>
+  <!-- Main Section Switcher -->
+  <div class="main-tabs-bar">
+    <div class="main-tabs" role="tablist">
+      <button type="button" class="main-tab-btn active" id="tabDeliveryBtn" onclick="switchMainSection('delivery')">
+        <span>🛵</span>
+        <span>التوصيل والأفرع</span>
+        <span class="tab-pill-count" id="deliveryTabCount">149</span>
+      </button>
+      <button type="button" class="main-tab-btn" id="tabMenuBtn" onclick="switchMainSection('menu')">
+        <span>🍽️</span>
+        <span>الأصناف ومحتوياتها</span>
+        <span class="tab-pill-count" id="menuTabCount">0</span>
+      </button>
     </div>
-    <div class="count-summary">
-      <span class="count-badge" id="totalBadge" onclick="handleSecretTap()" title="العداد">149</span>
-      <span id="countLabel">منطقة في جميع الأفرع</span>
+
+    <div class="sync-status-pill" onclick="handleSecretTap()" title="انقر 5 مرات لتفعيل وضع الإدارة">
+      <span class="sync-dot" id="syncDot"></span>
+      <span id="syncStatusText">متصل بالسحابة</span>
     </div>
   </div>
 
-  <!-- Results Grid -->
-  <div class="cards-grid" id="cardsGrid"></div>
+  <!-- ==================== SECTION 1: DELIVERY ==================== -->
+  <div id="deliverySection" class="view-section">
+    <div class="search-wrapper">
+      <span class="search-icon">🔍</span>
+      <input
+        type="text"
+        id="searchInput"
+        class="search-input"
+        placeholder="اكتب اسم المنطقة هنا... (مثلاً: خلدا، عبدون، مرج الحمام، الرابية)"
+        autocomplete="off"
+        autofocus
+      />
+      <button type="button" class="esc-btn" onclick="clearSearch()" title="مسح البحث">ESC للمسح</button>
+      <button type="button" class="admin-toolbar-btn btn-add-top" id="addAreaTopBtn" onclick="openAddAreaModal()">+ إضافة منطقة</button>
+      <button type="button" class="admin-toolbar-btn btn-manage-top" id="manageTopBtn" onclick="openManageModal()">✏️ إدارة المناطق</button>
+      <button type="button" class="admin-toolbar-btn btn-cloud-top" id="cloudTopBtn" onclick="openCloudModal()">☁️ إعداد JSONBin</button>
+    </div>
+
+    <div class="filters-bar" id="filtersBar"></div>
+
+    <div class="info-strip">
+      <div class="info-note">
+        <span class="info-note-dot"></span>
+        <span>يتم ترتيب المناطق المشتركة تلقائياً حسب الأقل تكلفة / الأقرب أولاً</span>
+      </div>
+      <div class="count-summary">
+        <span class="count-badge" id="totalBadge" onclick="handleSecretTap()" title="العداد">149</span>
+        <span id="countLabel">منطقة في جميع الأفرع</span>
+      </div>
+    </div>
+
+    <div class="cards-grid" id="cardsGrid"></div>
+  </div>
+
+  <!-- ==================== SECTION 2: MENU ITEMS ==================== -->
+  <div id="menuSection" class="view-section hidden">
+    <div class="search-wrapper">
+      <span class="search-icon">🍽️</span>
+      <input
+        type="text"
+        id="menuSearchInput"
+        class="search-input"
+        placeholder="ابحث باسم الصنف أو أحد مكوناته... (مثلاً: وجبة، صوص، بطاطا، دجاج)"
+        autocomplete="off"
+      />
+      <button type="button" class="esc-btn" onclick="clearMenuSearch()" title="مسح البحث">ESC للمسح</button>
+      <button type="button" class="admin-toolbar-btn btn-add-top" id="addMenuTopBtn" onclick="openAddMenuModal()">+ إضافة صنف</button>
+      <button type="button" class="admin-toolbar-btn btn-manage-top" id="manageMenuTopBtn" onclick="openManageMenuModal()">✏️ إدارة الأصناف</button>
+      <button type="button" class="admin-toolbar-btn btn-cloud-top" id="cloudMenuTopBtn" onclick="openCloudModal()">☁️ إعداد JSONBin</button>
+    </div>
+
+    <div class="filters-bar" id="menuFiltersBar"></div>
+
+    <div class="info-strip">
+      <div class="info-note">
+        <span class="info-note-dot"></span>
+        <span>اعرض تفاصيل ومكونات كل صنف أو انسخها مباشرة للزبون</span>
+      </div>
+      <div class="count-summary">
+        <span class="count-badge" id="menuTotalBadge" onclick="handleSecretTap()">0</span>
+        <span id="menuCountLabel">صنف في القائمة</span>
+      </div>
+    </div>
+
+    <div class="cards-grid" id="menuCardsGrid"></div>
+  </div>
 </div>
 
 <div class="toast" id="toast"></div>
@@ -719,6 +906,75 @@
   </div>
 </div>
 
+<!-- Add / Edit Menu Item Modal -->
+<div class="modal-backdrop" id="menuItemModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="menuModalTitle">➕ إضافة صنف جديد</h2>
+      <button type="button" class="btn-m btn-m-light" onclick="closeMenuModal()">إغلاق</button>
+    </div>
+
+    <form id="menuForm" onsubmit="saveMenuForm(event)">
+      <div class="form-group">
+        <label class="form-label" for="menuNameInput">اسم الصنف / الوجبة</label>
+        <input type="text" id="menuNameInput" class="form-control" placeholder="مثال: وجبة سوبر عائلي أو سندويش زنجر" required />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="menuCategoryInput">التصنيف (اختياري)</label>
+        <input type="text" id="menuCategoryInput" class="form-control" list="menuCategoriesDatalist" placeholder="مثال: وجبات، سندويشات، مشروبات، إضافات" />
+        <datalist id="menuCategoriesDatalist">
+          <option value="وجبات">
+          <option value="سندويشات">
+          <option value="عروض">
+          <option value="مقبلات وإضافات">
+          <option value="مشروبات">
+        </datalist>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="menuPriceInput">سعر الصنف بالدينار (اختياري - اتركه فارغاً أو 0 إذا لا يوجد)</label>
+        <input type="number" id="menuPriceInput" class="form-control" step="0.05" min="0" placeholder="مثال: 4.50" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="menuContentsInput">محتويات ومكونات الصنف (افصل بين كل مكون بفاصلة أو سطر جديد)</label>
+        <textarea id="menuContentsInput" class="form-control" placeholder="مثال:&#10;قطعتين دجاج مقرمش&#10;بطاطا مقلية&#10;ثومية + كول سلو&#10;خبز + مشروب غازي" required></textarea>
+      </div>
+
+      <div class="modal-actions">
+        <button type="submit" class="btn-m btn-m-success">💾 حفظ الصنف</button>
+        <button type="button" class="btn-m btn-m-light" onclick="closeMenuModal()">إلغاء</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Manage All Menu Items Modal -->
+<div class="modal-backdrop" id="manageMenuModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>✏️ إدارة الأصناف ومحتوياتها</h2>
+      <button type="button" class="btn-m btn-m-light" onclick="closeManageMenuModal()">إغلاق</button>
+    </div>
+
+    <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px;">
+      <button type="button" class="btn-m btn-m-success" onclick="openAddMenuModal()">+ إضافة صنف جديد</button>
+      <button type="button" class="btn-m btn-m-primary" onclick="pushDataToCloud(true)">☁️ مزامنة الكل الآن</button>
+    </div>
+
+    <input
+      type="text"
+      id="manageMenuFilterInput"
+      class="form-control"
+      placeholder="ابحث داخل الأصناف أو محتوياتها للتعديل أو الحذف..."
+      oninput="renderManageMenuList()"
+    />
+
+    <div class="manage-list" id="manageMenuList"></div>
+  </div>
+</div>
+
 <!-- JSONBin Cloud Settings Modal -->
 <div class="modal-backdrop" id="cloudModal">
   <div class="modal">
@@ -728,17 +984,17 @@
     </div>
 
     <div class="help-note">
-      إذا أدخلت <strong>Bin ID</strong> فقط، سيقرأ جميع المستخدمين التعديلات تلقائياً. وإذا أدخلت أيضاً <strong>X-Master-Key</strong> (أو <strong>X-Access-Key</strong>)، فسيقوم الموقع بحفظ وتحديث بيانات <strong>JSONBin</strong> مباشرة لكل الأجهزة عند أي إضافة أو تعديل أو حذف.
+      تُحفظ <strong>المناطق</strong> و<strong>الأصناف</strong> معاً داخل نفس السلة السحابية في <strong>JSONBin</strong> دون فقدان أي منطقة سابقة. عند الضغط على <strong>جلب أحدث بيانات من JSONBin</strong> يتم سحب كل مناطقك المرفوعة سابقاً تلقائياً.
     </div>
 
     <form id="cloudForm" onsubmit="saveCloudConfig(event)">
       <div class="form-group">
         <label class="form-label" for="binIdInput">Bin ID (معرّف السلة في JSONBin)</label>
-        <input type="text" id="binIdInput" class="form-control ltr" placeholder="مثال: 6741a2b3acd3cb34a8a12345" />
+        <input type="text" id="binIdInput" class="form-control ltr" placeholder="مثال: 6aff7506ac6210605a95f27d" />
       </div>
 
       <div class="form-group">
-        <label class="form-label" for="apiKeyInput">API Key للكتابة والتحديث (اختياري للمشاهدين، مطلوب للتعديل من هذا الجهاز)</label>
+        <label class="form-label" for="apiKeyInput">API Key للكتابة والتحديث</label>
         <input type="password" id="apiKeyInput" class="form-control ltr" placeholder="$2a$10$..." autocomplete="off" />
       </div>
 
@@ -753,9 +1009,9 @@
 
 <script>
   const STORAGE_KEY = "delivery_rates_custom_v1";
+  const MENU_STORAGE_KEY = "restaurant_menu_items_v1";
   const CLOUD_CONFIG_KEY = "delivery_jsonbin_config_v1";
 
-  // يمكنك وضع Bin ID ثابت هنا ليظهر التحديث تلقائياً في كل الأجهزة مباشرة
   const DEFAULT_BIN_ID = "6aff7506ac6210605a95f27d";
   const DEFAULT_READ_KEY = "$2a$10$2YW6zv5BSHWd6W6.9UZ0xeq/rUVg6hZweZo5ngPZZ8dOuDVkAFJGi";
 
@@ -764,6 +1020,8 @@
   let secretTapCount = 0;
   let secretTapTimer = null;
   let editingItemRef = null;
+  let editingMenuRef = null;
+  let activeMainSection = "delivery";
 
   const BRANCH_COLORS = {
     "المدينة المنورة": "#2563eb",
@@ -772,6 +1030,14 @@
     "جبيهة": "#8b5cf6",
     "صويفية": "#0d9488",
     "المقابلين": "#ec4899"
+  };
+
+  const CATEGORY_COLORS = {
+    "وجبات": "#059669",
+    "سندويشات": "#d97706",
+    "عروض": "#dc2626",
+    "مقبلات وإضافات": "#7c3aed",
+    "مشروبات": "#0284c7"
   };
 
   const DEFAULT_DATA = [
@@ -938,7 +1204,31 @@
   ];
 
   let activeData = loadSavedData();
+  let menuItems = loadSavedMenu();
   let selectedBranch = "الكل";
+  let selectedMenuCategory = "الكل";
+
+  function switchMainSection(section) {
+    activeMainSection = section;
+    const isDelivery = section === "delivery";
+    document.getElementById("deliverySection").classList.toggle("hidden", !isDelivery);
+    document.getElementById("menuSection").classList.toggle("hidden", isDelivery);
+    document.getElementById("tabDeliveryBtn").classList.toggle("active", isDelivery);
+    document.getElementById("tabMenuBtn").classList.toggle("active", !isDelivery);
+
+    if (isDelivery) {
+      renderChips();
+      renderCards();
+    } else {
+      renderMenuChips();
+      renderMenuCards();
+    }
+  }
+
+  function updateTopTabCounts() {
+    document.getElementById("deliveryTabCount").textContent = activeData.length;
+    document.getElementById("menuTabCount").textContent = menuItems.length;
+  }
 
   function getCloudConfig() {
     try {
@@ -979,6 +1269,25 @@
 
   function saveDataToStorage() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(activeData));
+    updateTopTabCounts();
+  }
+
+  function loadSavedMenu() {
+    try {
+      const raw = localStorage.getItem(MENU_STORAGE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) {
+          return normalizeMenuEntries(parsed);
+        }
+      }
+    } catch (e) {}
+    return [];
+  }
+
+  function saveMenuToStorage() {
+    localStorage.setItem(MENU_STORAGE_KEY, JSON.stringify(menuItems));
+    updateTopTabCounts();
   }
 
   function normalizeEntries(arr) {
@@ -989,6 +1298,24 @@
         price: Number(item.price)
       }))
       .filter(item => item.area && item.branch && !isNaN(item.price));
+  }
+
+  function normalizeMenuEntries(arr) {
+    return arr
+      .map(item => ({
+        name: String(item.name || "").trim(),
+        category: String(item.category || "عام").trim() || "عام",
+        price: item.price !== undefined && item.price !== null && item.price !== "" ? Number(item.price) : 0,
+        contents: String(item.contents || "").trim()
+      }))
+      .filter(item => item.name);
+  }
+
+  function setSyncIndicator(ok, label) {
+    const dot = document.getElementById("syncDot");
+    const txt = document.getElementById("syncStatusText");
+    if (dot) dot.style.background = ok ? "#10b981" : "#f59e0b";
+    if (txt) txt.textContent = label;
   }
 
   async function pullDataFromCloud(showFeedback = false) {
@@ -1008,19 +1335,49 @@
       if (!res.ok) throw new Error("Fetch failed");
       const json = await res.json();
       const payload = json && json.record !== undefined ? json.record : json;
-      const rawItems = Array.isArray(payload) ? payload : (Array.isArray(payload?.items) ? payload.items : []);
-      const cleaned = normalizeEntries(rawItems);
-      if (!cleaned.length) throw new Error("Empty cloud record");
-      activeData = cleaned;
-      saveDataToStorage();
+
+      let rawAreas = [];
+      let rawMenu = null;
+
+      if (Array.isArray(payload)) {
+        // Backward compatible with existing JSONBin array of areas!
+        rawAreas = payload;
+      } else if (payload && typeof payload === "object") {
+        rawAreas = Array.isArray(payload.areas) ? payload.areas : (Array.isArray(payload.items) ? payload.items : []);
+        if (Array.isArray(payload.menuItems)) {
+          rawMenu = payload.menuItems;
+        }
+      }
+
+      const cleanedAreas = normalizeEntries(rawAreas);
+      if (cleanedAreas.length > 0) {
+        activeData = cleanedAreas;
+        saveDataToStorage();
+      }
+
+      if (rawMenu !== null) {
+        menuItems = normalizeMenuEntries(rawMenu);
+        saveMenuToStorage();
+      }
+
+      updateTopTabCounts();
       renderChips();
       renderCards();
+      renderMenuChips();
+      renderMenuCards();
+
       if (document.getElementById("manageModal").classList.contains("open")) {
         renderManageList();
       }
-      if (showFeedback) showToast("تم جلب أحدث البيانات من JSONBin");
+      if (document.getElementById("manageMenuModal").classList.contains("open")) {
+        renderManageMenuList();
+      }
+
+      setSyncIndicator(true, "متصل ومحدّث");
+      if (showFeedback) showToast("تم جلب أحدث المناطق والأصناف من JSONBin");
     } catch (e) {
-      if (showFeedback) alert("تعذر جلب البيانات من JSONBin، تأكد من صحة Bin ID وأن السلة متاحة للقراءة.");
+      setSyncIndicator(false, "وضع محلي");
+      if (showFeedback) alert("تعذر جلب البيانات من JSONBin، تأكد من صحة Bin ID.");
     }
   }
 
@@ -1035,18 +1392,26 @@
       return false;
     }
     try {
+      // Save both areas and menuItems together in the same Bin without losing anything
+      const combinedPayload = {
+        areas: activeData,
+        menuItems: menuItems
+      };
+
       const res = await fetch(`https://api.jsonbin.io/v3/b/${encodeURIComponent(binId)}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
           "X-Master-Key": apiKey
         },
-        body: JSON.stringify(activeData)
+        body: JSON.stringify(combinedPayload)
       });
       if (!res.ok) throw new Error("Update failed");
-      if (showFeedback) showToast("تم نشر التعديلات لجميع الأجهزة عبر JSONBin");
+      setSyncIndicator(true, "تمت المزامنة");
+      if (showFeedback) showToast("تم نشر المناطق والأصناف لجميع الأجهزة عبر JSONBin");
       return true;
     } catch (e) {
+      setSyncIndicator(false, "تعذر الرفع");
       if (showFeedback) alert("تم الحفظ محلياً، لكن تعذر تحديث JSONBin. تأكد من صحة API Key و Bin ID.");
       return false;
     }
@@ -1054,9 +1419,17 @@
 
   function applyAdminUI() {
     document.body.classList.toggle("admin-mode", isAdminUnlocked);
-    document.getElementById("addAreaTopBtn").classList.toggle("visible", isAdminUnlocked);
-    document.getElementById("manageTopBtn").classList.toggle("visible", isAdminUnlocked);
-    document.getElementById("cloudTopBtn").classList.toggle("visible", isAdminUnlocked);
+    [
+      "addAreaTopBtn",
+      "manageTopBtn",
+      "cloudTopBtn",
+      "addMenuTopBtn",
+      "manageMenuTopBtn",
+      "cloudMenuTopBtn"
+    ].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.classList.toggle("visible", isAdminUnlocked);
+    });
   }
 
   function showToast(msg) {
@@ -1105,6 +1478,10 @@
     return BRANCH_COLORS[clean] || "#0f766e";
   }
 
+  function getCategoryColor(cat) {
+    return CATEGORY_COLORS[cat] || "#2563eb";
+  }
+
   function getBranchCounts(data) {
     const counts = {};
     data.forEach(item => {
@@ -1132,7 +1509,7 @@
       const isActive = selectedBranch === b;
       const color = getBranchColor(b);
       html += `
-        <button type="button" class="chip ${isActive ? "active" : ""}" onclick="selectBranch('${b.replace(/'/g, "\\'")}')">
+        <button type="button" class="chip ${isActive ? "active" : ""}" onclick="selectBranch('${b.replace(/'/g, "\'")}')">
           <span class="chip-dot" style="background:${color}"></span>
           <span>${b}</span>
           <span class="chip-count">(${counts[b]})</span>
@@ -1222,7 +1599,7 @@
       const dataIdx = activeData.indexOf(item);
 
       const copyText = `المنطقة: ${item.area} | الفرع: ${bName} | التوصيل: ${priceNum.toFixed(2)} دينار`;
-      const safeCopyText = copyText.replace(/'/g, "\\'");
+      const safeCopyText = copyText.replace(/'/g, "\'");
 
       return `
         <div class="area-card ${isLowest ? "recommended" : ""}">
@@ -1262,6 +1639,301 @@
     }).join("");
   }
 
+  /* ==================== MENU ITEMS RENDERING & ACTIONS ==================== */
+  function escapeHtml(str) {
+    return String(str || "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+  }
+
+  function parseContentsList(contentsStr) {
+    return String(contentsStr || "")
+      .split(/[
+،,]+/)
+      .map(s => s.trim())
+      .filter(Boolean);
+  }
+
+  function renderMenuChips() {
+    const counts = {};
+    menuItems.forEach(item => {
+      const c = item.category || "عام";
+      counts[c] = (counts[c] || 0) + 1;
+    });
+
+    const categories = Object.keys(counts);
+    const bar = document.getElementById("menuFiltersBar");
+    let html = `
+      <button type="button" class="chip ${selectedMenuCategory === "الكل" ? "active" : ""}" onclick="selectMenuCategory('الكل')">
+        <span>كل الأصناف</span>
+        <span class="chip-count">(${menuItems.length})</span>
+      </button>
+    `;
+
+    categories.forEach(cat => {
+      const isActive = selectedMenuCategory === cat;
+      const color = getCategoryColor(cat);
+      html += `
+        <button type="button" class="chip ${isActive ? "active" : ""}" onclick="selectMenuCategory('${cat.replace(/'/g, "\'")}')">
+          <span class="chip-dot" style="background:${color}"></span>
+          <span>${escapeHtml(cat)}</span>
+          <span class="chip-count">(${counts[cat]})</span>
+        </button>
+      `;
+    });
+
+    bar.innerHTML = html;
+  }
+
+  function selectMenuCategory(cat) {
+    selectedMenuCategory = cat;
+    renderMenuChips();
+    renderMenuCards();
+  }
+
+  function clearMenuSearch() {
+    const input = document.getElementById("menuSearchInput");
+    input.value = "";
+    input.focus();
+    renderMenuCards();
+  }
+
+  function renderMenuCards() {
+    const query = document.getElementById("menuSearchInput").value;
+    const normQuery = normalizeArabic(query);
+
+    const filtered = menuItems.filter(item => {
+      const cat = item.category || "عام";
+      const matchCat = selectedMenuCategory === "الكل" || cat === selectedMenuCategory;
+      const matchQuery = !normQuery
+        || normalizeArabic(item.name).includes(normQuery)
+        || normalizeArabic(item.contents).includes(normQuery)
+        || normalizeArabic(cat).includes(normQuery);
+      return matchCat && matchQuery;
+    });
+
+    document.getElementById("menuTotalBadge").textContent = filtered.length;
+    document.getElementById("menuCountLabel").textContent =
+      selectedMenuCategory === "الكل" ? "صنف في القائمة" : `صنف في قسم ${selectedMenuCategory}`;
+
+    const grid = document.getElementById("menuCardsGrid");
+
+    if (filtered.length === 0) {
+      grid.innerHTML = `
+        <div class="empty-state">
+          <h3>${menuItems.length === 0 ? "لم يتم إضافة أصناف بعد" : "لا توجد أصناف مطابقة للبحث"}</h3>
+          <p style="margin-top:6px;">
+            ${menuItems.length === 0
+              ? 'اضغط على زر "+ إضافة صنف" لإضافة أول صنف ومكوناته إلى القائمة'
+              : 'جرّب البحث باسم صنف آخر أو اضغط على "كل الأصناف"'}
+          </p>
+          <div style="margin-top:14px;">
+            <button type="button" class="btn-m btn-m-success" onclick="openAddMenuModal()">+ إضافة صنف الآن</button>
+          </div>
+        </div>
+      `;
+      return;
+    }
+
+    grid.innerHTML = filtered.map(item => {
+      const cat = item.category || "عام";
+      const color = getCategoryColor(cat);
+      const parts = parseContentsList(item.contents);
+      const priceNum = Number(item.price) || 0;
+      const idx = menuItems.indexOf(item);
+
+      const copyText = `الصنف: ${item.name}${priceNum > 0 ? ` (${priceNum.toFixed(2)} دينار)` : ""} | المحتويات: ${parts.join("، ")}`;
+      const safeCopyText = copyText.replace(/'/g, "\'");
+
+      const contentsHtml = parts.length > 1
+        ? `<div class="ingredients-tags">${parts.map(p => `<span class="ingredient-tag">• ${escapeHtml(p)}</span>`).join("")}</div>`
+        : `<div class="item-notes-text">${escapeHtml(item.contents)}</div>`;
+
+      return `
+        <div class="area-card">
+          <div class="card-top">
+            <div class="card-info">
+              <div class="tags-row">
+                <span class="branch-pill">
+                  <span class="chip-dot" style="background:${color}"></span>
+                  <span>${escapeHtml(cat)}</span>
+                </span>
+                <span class="best-pill" style="background:#0f172a;">${parts.length} مكونات</span>
+              </div>
+              <div class="area-name">${escapeHtml(item.name)}</div>
+
+              <div class="item-contents-box">
+                <span class="item-contents-title">محتويات الصنف:</span>
+                ${contentsHtml}
+              </div>
+            </div>
+
+            ${priceNum > 0 ? `
+              <div class="price-box">
+                <span class="price-num">${priceNum.toFixed(2)}</span>
+                <span class="price-currency">دينار</span>
+              </div>
+            ` : ""}
+          </div>
+
+          <div class="card-bottom">
+            <div class="card-actions-left">
+              <button type="button" class="copy-btn" onclick="copyCardDetails(this, '${safeCopyText}')">
+                <span>📋</span>
+                <span>نسخ الصنف والمكونات</span>
+              </button>
+              <button type="button" class="card-edit-btn" onclick="openEditMenuByIndex(${idx})">✏️ تعديل</button>
+              <button type="button" class="card-del-btn" onclick="deleteMenuByIndex(${idx})">🗑️ حذف</button>
+            </div>
+            <span class="coverage-text">${escapeHtml(cat)}</span>
+          </div>
+        </div>
+      `;
+    }).join("");
+  }
+
+  function openAddMenuModal() {
+    isAdminUnlocked = true;
+    applyAdminUI();
+    editingMenuRef = null;
+
+    document.getElementById("menuModalTitle").textContent = "➕ إضافة صنف جديد";
+    document.getElementById("menuNameInput").value = "";
+    document.getElementById("menuCategoryInput").value = selectedMenuCategory !== "الكل" ? selectedMenuCategory : "وجبات";
+    document.getElementById("menuPriceInput").value = "";
+    document.getElementById("menuContentsInput").value = "";
+
+    document.getElementById("menuItemModal").classList.add("open");
+    setTimeout(() => document.getElementById("menuNameInput").focus(), 40);
+  }
+
+  function openEditMenuByIndex(idx) {
+    if (idx < 0 || idx >= menuItems.length) return;
+    isAdminUnlocked = true;
+    applyAdminUI();
+
+    const item = menuItems[idx];
+    editingMenuRef = item;
+
+    document.getElementById("menuModalTitle").textContent = "✏️ تعديل بيانات الصنف";
+    document.getElementById("menuNameInput").value = item.name;
+    document.getElementById("menuCategoryInput").value = item.category || "وجبات";
+    document.getElementById("menuPriceInput").value = Number(item.price) > 0 ? Number(item.price) : "";
+    document.getElementById("menuContentsInput").value = item.contents;
+
+    document.getElementById("menuItemModal").classList.add("open");
+    setTimeout(() => document.getElementById("menuNameInput").focus(), 40);
+  }
+
+  function closeMenuModal() {
+    document.getElementById("menuItemModal").classList.remove("open");
+    editingMenuRef = null;
+  }
+
+  async function saveMenuForm(event) {
+    if (event) event.preventDefault();
+
+    const name = document.getElementById("menuNameInput").value.trim();
+    const category = document.getElementById("menuCategoryInput").value.trim() || "عام";
+    const priceRaw = document.getElementById("menuPriceInput").value;
+    const price = priceRaw !== "" ? parseFloat(priceRaw) : 0;
+    const contents = document.getElementById("menuContentsInput").value.trim();
+
+    if (!name) {
+      alert("يرجى إدخال اسم الصنف");
+      return;
+    }
+    if (!contents) {
+      alert("يرجى إدخال محتويات الصنف");
+      return;
+    }
+
+    let msg = "تمت إضافة الصنف الجديد";
+    if (editingMenuRef) {
+      const targetIdx = menuItems.indexOf(editingMenuRef);
+      if (targetIdx !== -1) {
+        menuItems[targetIdx] = { name, category, price: isNaN(price) ? 0 : price, contents };
+        msg = "تم حفظ التعديلات على الصنف";
+      } else {
+        menuItems.push({ name, category, price: isNaN(price) ? 0 : price, contents });
+      }
+    } else {
+      menuItems.push({ name, category, price: isNaN(price) ? 0 : price, contents });
+    }
+
+    closeMenuModal();
+    saveMenuToStorage();
+    renderMenuChips();
+    renderMenuCards();
+    if (document.getElementById("manageMenuModal").classList.contains("open")) {
+      renderManageMenuList();
+    }
+    const synced = await pushDataToCloud(false);
+    showToast(synced ? `${msg} وتم تحديث جميع الأجهزة` : msg);
+  }
+
+  async function deleteMenuByIndex(idx) {
+    if (idx < 0 || idx >= menuItems.length) return;
+    const item = menuItems[idx];
+    if (!confirm(`هل تريد حذف الصنف "${item.name}"؟`)) return;
+    menuItems.splice(idx, 1);
+    saveMenuToStorage();
+    renderMenuChips();
+    renderMenuCards();
+    if (document.getElementById("manageMenuModal").classList.contains("open")) {
+      renderManageMenuList();
+    }
+    const synced = await pushDataToCloud(false);
+    showToast(synced ? "تم حذف الصنف وتحديث جميع الأجهزة" : "تم حذف الصنف");
+  }
+
+  function openManageMenuModal() {
+    isAdminUnlocked = true;
+    applyAdminUI();
+    document.getElementById("manageMenuFilterInput").value = "";
+    renderManageMenuList();
+    document.getElementById("manageMenuModal").classList.add("open");
+  }
+
+  function closeManageMenuModal() {
+    document.getElementById("manageMenuModal").classList.remove("open");
+  }
+
+  function renderManageMenuList() {
+    const q = normalizeArabic(document.getElementById("manageMenuFilterInput").value);
+    const listEl = document.getElementById("manageMenuList");
+
+    const rows = menuItems
+      .map((item, idx) => ({ item, idx }))
+      .filter(({ item }) => {
+        if (!q) return true;
+        return normalizeArabic(item.name).includes(q)
+          || normalizeArabic(item.contents).includes(q)
+          || normalizeArabic(item.category).includes(q);
+      });
+
+    if (rows.length === 0) {
+      listEl.innerHTML = `<div class="manage-row"><span class="manage-sub">لا توجد أصناف مطابقة</span></div>`;
+      return;
+    }
+
+    listEl.innerHTML = rows.map(({ item, idx }) => `
+      <div class="manage-row">
+        <div>
+          <div class="manage-meta">${escapeHtml(item.name)} ${Number(item.price) > 0 ? `— ${Number(item.price).toFixed(2)} دينار` : ""}</div>
+          <div class="manage-sub">${escapeHtml(item.category || "عام")} • ${escapeHtml(item.contents)}</div>
+        </div>
+        <div style="display:flex; gap:6px; flex-shrink:0;">
+          <button type="button" class="btn-m btn-m-light" onclick="openEditMenuByIndex(${idx})">✏️ تعديل</button>
+          <button type="button" class="btn-m btn-m-danger" onclick="deleteMenuByIndex(${idx})">🗑️ حذف</button>
+        </div>
+      </div>
+    `).join("");
+  }
+
+  /* ==================== DELIVERY AREAS MODALS & ACTIONS ==================== */
   function ensureBranchOption(branchName) {
     const selectEl = document.getElementById("areaBranchSelect");
     const exists = Array.from(selectEl.options).some(opt => opt.value === branchName);
@@ -1401,7 +2073,7 @@
     setCloudConfig({ binId, apiKey });
     closeCloudModal();
     showToast("تم حفظ إعدادات JSONBin");
-    if (binId && !apiKey) {
+    if (binId) {
       await pullDataFromCloud(true);
     }
   }
@@ -1437,9 +2109,11 @@
   }
 
   function exportCSV() {
-    const bom = "\uFEFF";
-    const header = "المنطقة,الفرع,السعر\n";
-    const rows = activeData.map(r => `"${r.area}","${cleanBranchName(r.branch)}",${Number(r.price).toFixed(2)}`).join("\n");
+    const bom = "﻿";
+    const header = "المنطقة,الفرع,السعر
+";
+    const rows = activeData.map(r => `"${r.area}","${cleanBranchName(r.branch)}",${Number(r.price).toFixed(2)}`).join("
+");
     const blob = new Blob([bom + header + rows], { type: "text/csv;charset=utf-8;" });
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
@@ -1457,25 +2131,36 @@
   }
 
   document.getElementById("searchInput").addEventListener("input", renderCards);
+  document.getElementById("menuSearchInput").addEventListener("input", renderMenuCards);
+
   document.addEventListener("keydown", e => {
     if (e.key === "Escape") {
       if (document.getElementById("areaModal").classList.contains("open")) {
         closeAreaModal();
+      } else if (document.getElementById("menuItemModal").classList.contains("open")) {
+        closeMenuModal();
       } else if (document.getElementById("cloudModal").classList.contains("open")) {
         closeCloudModal();
       } else if (document.getElementById("manageModal").classList.contains("open")) {
         closeManageModal();
-      } else {
+      } else if (document.getElementById("manageMenuModal").classList.contains("open")) {
+        closeManageMenuModal();
+      } else if (activeMainSection === "delivery") {
         clearSearch();
+      } else {
+        clearMenuSearch();
       }
     }
   });
 
-  window.addEventListener("DOMContentLoaded", () => {
+  window.addEventListener("DOMContentLoaded", async () => {
     applyAdminUI();
+    updateTopTabCounts();
     renderChips();
     renderCards();
-    pullDataFromCloud(false);
+    renderMenuChips();
+    renderMenuCards();
+    await pullDataFromCloud(false);
   });
 </script>
 
