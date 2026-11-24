@@ -785,7 +785,7 @@
       <button type="button" class="esc-btn" onclick="clearSearch()" title="مسح البحث">ESC للمسح</button>
       <button type="button" class="admin-toolbar-btn btn-add-top" id="addAreaTopBtn" onclick="openAddAreaModal()">+ إضافة منطقة</button>
       <button type="button" class="admin-toolbar-btn btn-manage-top" id="manageTopBtn" onclick="openManageModal()">✏️ إدارة المناطق</button>
-      <button type="button" class="admin-toolbar-btn btn-cloud-top" id="cloudTopBtn" onclick="openCloudModal()">☁️ إعداد JSONBin</button>
+      <button type="button" class="admin-toolbar-btn btn-cloud-top" id="cloudTopBtn" onclick="openCloudModal()">🆓 مزامنة مجانية</button>
     </div>
 
     <div class="filters-bar" id="filtersBar"></div>
@@ -818,7 +818,7 @@
       <button type="button" class="esc-btn" onclick="clearMenuSearch()" title="مسح البحث">ESC للمسح</button>
       <button type="button" class="admin-toolbar-btn btn-add-top" id="addMenuTopBtn" onclick="openAddMenuModal()">+ إضافة صنف</button>
       <button type="button" class="admin-toolbar-btn btn-manage-top" id="manageMenuTopBtn" onclick="openManageMenuModal()">✏️ إدارة الأصناف</button>
-      <button type="button" class="admin-toolbar-btn btn-cloud-top" id="cloudMenuTopBtn" onclick="openCloudModal()">☁️ إعداد JSONBin</button>
+      <button type="button" class="admin-toolbar-btn btn-cloud-top" id="cloudMenuTopBtn" onclick="openCloudModal()">🆓 مزامنة مجانية</button>
     </div>
 
     <div class="filters-bar" id="menuFiltersBar"></div>
@@ -829,7 +829,7 @@
         <span>اعرض تفاصيل ومكونات كل صنف أو انسخها مباشرة للزبون</span>
       </div>
       <div class="count-summary">
-        <span class="count-badge" id="menuTotalBadge" onclick="handleSecretTap()">0</span>
+        <span class="count-badge" id="menuTotalBadge" onclick="handleMenuCountTap()" title="انقر 5 مرات لإظهار خيارات إدارة الأصناف">0</span>
         <span id="menuCountLabel">صنف في القائمة</span>
       </div>
     </div>
@@ -975,33 +975,48 @@
   </div>
 </div>
 
-<!-- JSONBin Cloud Settings Modal -->
+<!-- Free GitHub Cloud Sync Modal -->
 <div class="modal-backdrop" id="cloudModal">
   <div class="modal">
     <div class="modal-header">
-      <h2>☁️ إعدادات المزامنة السحابية (JSONBin.io)</h2>
+      <h2>🆓 المزامنة المجانية المفتوحة (GitHub)</h2>
       <button type="button" class="btn-m btn-m-light" onclick="closeCloudModal()">إغلاق</button>
     </div>
 
     <div class="help-note">
-      تُحفظ <strong>المناطق</strong> و<strong>الأصناف</strong> معاً داخل نفس السلة السحابية في <strong>JSONBin</strong> دون فقدان أي منطقة سابقة. عند الضغط على <strong>جلب أحدث بيانات من JSONBin</strong> يتم سحب كل مناطقك المرفوعة سابقاً تلقائياً.
+      يتم حفظ <strong>المناطق</strong> و<strong>الأصناف</strong> مجاناً بالكامل وبدون حدود طلبات ضيقة داخل ملف <strong>JSON</strong> على مستودعك في <strong>GitHub</strong>. القراءة مفتوحة مجاناً للجميع، والكتابة تتم عبر مفتاح GitHub Token بصلاحية Contents على المستودع. كما يمكنك دائماً تصدير/استيراد نسخة JSON كملف احتياطي مفتوح.
     </div>
 
     <form id="cloudForm" onsubmit="saveCloudConfig(event)">
       <div class="form-group">
-        <label class="form-label" for="binIdInput">Bin ID (معرّف السلة في JSONBin)</label>
-        <input type="text" id="binIdInput" class="form-control ltr" placeholder="مثال: 6aff7506ac6210605a95f27d" />
+        <label class="form-label" for="ghOwnerInput">اسم المستخدم أو الجهة (GitHub Owner)</label>
+        <input type="text" id="ghOwnerInput" class="form-control ltr" placeholder="مثال: your-username" />
       </div>
 
       <div class="form-group">
-        <label class="form-label" for="apiKeyInput">API Key للكتابة والتحديث</label>
-        <input type="password" id="apiKeyInput" class="form-control ltr" placeholder="$2a$10$..." autocomplete="off" />
+        <label class="form-label" for="ghRepoInput">اسم المستودع (Repository Name)</label>
+        <input type="text" id="ghRepoInput" class="form-control ltr" placeholder="مثال: delivery-menu" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="ghBranchInput">الفرع (Branch)</label>
+        <input type="text" id="ghBranchInput" class="form-control ltr" placeholder="main" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="ghPathInput">مسار ملف البيانات (JSON File Path)</label>
+        <input type="text" id="ghPathInput" class="form-control ltr" placeholder="data/store.json" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="apiKeyInput">GitHub Personal Access Token (للرفع والتعديل)</label>
+        <input type="password" id="apiKeyInput" class="form-control ltr" placeholder="github_pat_..." autocomplete="off" />
       </div>
 
       <div class="modal-actions">
         <button type="submit" class="btn-m btn-m-success">💾 حفظ الإعدادات</button>
-        <button type="button" class="btn-m btn-m-primary" onclick="pushDataToCloud(true)">⬆️ رفع البيانات الحالية إلى JSONBin</button>
-        <button type="button" class="btn-m btn-m-light" onclick="pullDataFromCloud(true)">⬇️ جلب أحدث بيانات من JSONBin</button>
+        <button type="button" class="btn-m btn-m-primary" onclick="pushDataToCloud(true)">⬆️ نشر البيانات إلى GitHub</button>
+        <button type="button" class="btn-m btn-m-light" onclick="pullDataFromCloud(true)">⬇️ جلب البيانات من GitHub</button>
       </div>
     </form>
   </div>
@@ -1010,10 +1025,14 @@
 <script>
   const STORAGE_KEY = "delivery_rates_custom_v1";
   const MENU_STORAGE_KEY = "restaurant_menu_items_v1";
-  const CLOUD_CONFIG_KEY = "delivery_jsonbin_config_v1";
+  const CLOUD_CONFIG_KEY = "delivery_github_sync_config_v1";
 
-  const DEFAULT_BIN_ID = "6aff7506ac6210605a95f27d";
-  const DEFAULT_READ_KEY = "$2a$10$2YW6zv5BSHWd6W6.9UZ0xeq/rUVg6hZweZo5ngPZZ8dOuDVkAFJGi";
+  // Open free storage via GitHub repository JSON file (e.g. data/store.json)
+  const DEFAULT_GH_OWNER = "";
+  const DEFAULT_GH_REPO = "";
+  const DEFAULT_GH_BRANCH = "main";
+  const DEFAULT_GH_PATH = "data/store.json";
+  const DEFAULT_GH_TOKEN = "";
 
   const isAdminParam = new URLSearchParams(window.location.search).get("admin") === "1";
   let isAdminUnlocked = isAdminParam;
@@ -1235,19 +1254,50 @@
       const raw = localStorage.getItem(CLOUD_CONFIG_KEY);
       const parsed = raw ? JSON.parse(raw) : {};
       return {
-        binId: (parsed.binId || DEFAULT_BIN_ID || "").trim(),
-        apiKey: (parsed.apiKey || DEFAULT_READ_KEY || "").trim()
+        owner: (parsed.owner || DEFAULT_GH_OWNER || "").trim(),
+        repo: (parsed.repo || DEFAULT_GH_REPO || "").trim(),
+        branch: (parsed.branch || DEFAULT_GH_BRANCH || "main").trim() || "main",
+        path: (parsed.path || DEFAULT_GH_PATH || "data/store.json").trim().replace(/^\/+/, "") || "data/store.json",
+        apiKey: (parsed.apiKey || DEFAULT_GH_TOKEN || "").trim()
       };
     } catch (e) {
-      return { binId: DEFAULT_BIN_ID || "", apiKey: DEFAULT_READ_KEY || "" };
+      return {
+        owner: DEFAULT_GH_OWNER,
+        repo: DEFAULT_GH_REPO,
+        branch: DEFAULT_GH_BRANCH,
+        path: DEFAULT_GH_PATH,
+        apiKey: DEFAULT_GH_TOKEN
+      };
     }
   }
 
   function setCloudConfig(cfg) {
     localStorage.setItem(CLOUD_CONFIG_KEY, JSON.stringify({
-      binId: (cfg.binId || "").trim(),
+      owner: (cfg.owner || "").trim(),
+      repo: (cfg.repo || "").trim(),
+      branch: (cfg.branch || "main").trim() || "main",
+      path: (cfg.path || "data/store.json").trim().replace(/^\/+/, "") || "data/store.json",
       apiKey: (cfg.apiKey || "").trim()
     }));
+  }
+
+  function encodeBase64Utf8(str) {
+    const bytes = new TextEncoder().encode(str);
+    let bin = "";
+    for (let i = 0; i < bytes.length; i++) {
+      bin += String.fromCharCode(bytes[i]);
+    }
+    return btoa(bin);
+  }
+
+  function decodeBase64Utf8(b64) {
+    const clean = (b64 || "").replace(/\n/g, "");
+    const bin = atob(clean);
+    const bytes = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) {
+      bytes[i] = bin.charCodeAt(i);
+    }
+    return new TextDecoder().decode(bytes);
   }
 
   function loadSavedData() {
@@ -1319,28 +1369,27 @@
   }
 
   async function pullDataFromCloud(showFeedback = false) {
-    const { binId, apiKey } = getCloudConfig();
-    if (!binId) {
-      if (showFeedback) alert("يرجى إدخال Bin ID أولاً من إعدادات JSONBin");
+    const { owner, repo, branch, path, apiKey } = getCloudConfig();
+    if (!owner || !repo) {
+      setSyncIndicator(true, "مجاني ومفتوح");
+      if (showFeedback) openCloudModal();
       return;
     }
     try {
-      const readKey = apiKey || DEFAULT_READ_KEY;
-      const headers = {};
-      if (readKey) headers["X-Master-Key"] = readKey;
-      const res = await fetch(`https://api.jsonbin.io/v3/b/${encodeURIComponent(binId)}/latest?meta=false`, {
-        headers,
-        cache: "no-store"
-      });
+      const apiUrl = `https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/contents/${path.split("/").map(encodeURIComponent).join("/")}?ref=${encodeURIComponent(branch)}`;
+      const headers = { "Accept": "application/vnd.github+json" };
+      if (apiKey) headers["Authorization"] = `Bearer ${apiKey}`;
+
+      const res = await fetch(apiUrl, { headers, cache: "no-store" });
       if (!res.ok) throw new Error("Fetch failed");
-      const json = await res.json();
-      const payload = json && json.record !== undefined ? json.record : json;
+      const fileJson = await res.json();
+      const rawText = decodeBase64Utf8(fileJson.content || "");
+      const payload = JSON.parse(rawText);
 
       let rawAreas = [];
       let rawMenu = null;
 
       if (Array.isArray(payload)) {
-        // Backward compatible with existing JSONBin array of areas!
         rawAreas = payload;
       } else if (payload && typeof payload === "object") {
         rawAreas = Array.isArray(payload.areas) ? payload.areas : (Array.isArray(payload.items) ? payload.items : []);
@@ -1373,52 +1422,74 @@
         renderManageMenuList();
       }
 
-      setSyncIndicator(true, "متصل ومحدّث");
-      if (showFeedback) showToast("تم جلب أحدث المناطق والأصناف من JSONBin");
+      setSyncIndicator(true, "متصل مجاناً (GitHub)");
+      if (showFeedback) showToast("تم جلب أحدث البيانات مجاناً من GitHub");
     } catch (e) {
-      setSyncIndicator(false, "وضع محلي");
-      if (showFeedback) alert("تعذر جلب البيانات من JSONBin، تأكد من صحة Bin ID.");
+      setSyncIndicator(true, "وضع محلي مجاني");
+      if (showFeedback) alert("تعذر جلب الملف من GitHub، تأكد من اسم المستخدم والمستودع ومسار الملف.");
     }
   }
 
   async function pushDataToCloud(showFeedback = false) {
-    const { binId, apiKey } = getCloudConfig();
-    if (!binId) {
+    const { owner, repo, branch, path, apiKey } = getCloudConfig();
+    if (!owner || !repo) {
       if (showFeedback) openCloudModal();
       return false;
     }
     if (!apiKey) {
-      if (showFeedback) alert("تم الحفظ على هذا الجهاز، ولإرساله لباقي الأجهزة أدخل API Key في إعدادات JSONBin.");
+      if (showFeedback) alert("تم الحفظ محلياً على هذا الجهاز. أضف GitHub Token في إعدادات المزامنة المجانية للنشر المباشر.");
       return false;
     }
     try {
-      // Save both areas and menuItems together in the same Bin without losing anything
+      const apiUrl = `https://api.github.com/repos/${encodeURIComponent(owner)}/${encodeURIComponent(repo)}/contents/${path.split("/").map(encodeURIComponent).join("/")}`;
+      const headers = {
+        "Accept": "application/vnd.github+json",
+        "Authorization": `Bearer ${apiKey}`,
+        "Content-Type": "application/json"
+      };
+
+      let sha = undefined;
+      const getRes = await fetch(`${apiUrl}?ref=${encodeURIComponent(branch)}`, { headers, cache: "no-store" });
+      if (getRes.ok) {
+        const existing = await getRes.json();
+        sha = existing.sha;
+      }
+
       const combinedPayload = {
+        updatedAt: new Date().toISOString(),
         areas: activeData,
         menuItems: menuItems
       };
 
-      const res = await fetch(`https://api.jsonbin.io/v3/b/${encodeURIComponent(binId)}`, {
+      const body = {
+        message: "Update delivery areas and menu items",
+        content: encodeBase64Utf8(JSON.stringify(combinedPayload, null, 2)),
+        branch
+      };
+      if (sha) body.sha = sha;
+
+      const putRes = await fetch(apiUrl, {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          "X-Master-Key": apiKey
-        },
-        body: JSON.stringify(combinedPayload)
+        headers,
+        body: JSON.stringify(body)
       });
-      if (!res.ok) throw new Error("Update failed");
-      setSyncIndicator(true, "تمت المزامنة");
-      if (showFeedback) showToast("تم نشر المناطق والأصناف لجميع الأجهزة عبر JSONBin");
+      if (!putRes.ok) throw new Error("Update failed");
+
+      setSyncIndicator(true, "تم النشر مجاناً");
+      if (showFeedback) showToast("تم نشر المناطق والأصناف مجاناً على GitHub");
       return true;
     } catch (e) {
-      setSyncIndicator(false, "تعذر الرفع");
-      if (showFeedback) alert("تم الحفظ محلياً، لكن تعذر تحديث JSONBin. تأكد من صحة API Key و Bin ID.");
+      setSyncIndicator(false, "تعذر النشر");
+      if (showFeedback) alert("تم الحفظ محلياً، لكن تعذر النشر إلى GitHub. تأكد من صلاحيات Token.");
       return false;
     }
   }
 
   function applyAdminUI() {
     document.body.classList.toggle("admin-mode", isAdminUnlocked);
+    if (activeMainSection === "menu") {
+      renderMenuCards();
+    }
     [
       "addAreaTopBtn",
       "manageTopBtn",
@@ -1440,6 +1511,25 @@
     window.__toastTimer = setTimeout(() => t.classList.remove("show"), 2300);
   }
 
+  let menuTapCount = 0;
+  let menuTapTimer = null;
+
+  function handleMenuCountTap() {
+    menuTapCount++;
+    clearTimeout(menuTapTimer);
+    menuTapTimer = setTimeout(() => {
+      menuTapCount = 0;
+    }, 1800);
+
+    if (menuTapCount >= 5) {
+      menuTapCount = 0;
+      isAdminUnlocked = !isAdminUnlocked;
+      applyAdminUI();
+      renderMenuCards();
+      showToast(isAdminUnlocked ? "تم تفعيل خيارات الإضافة والتعديل والحذف للأصناف" : "تم إخفاء خيارات إدارة الأصناف");
+    }
+  }
+
   function handleSecretTap() {
     secretTapCount++;
     clearTimeout(secretTapTimer);
@@ -1451,6 +1541,7 @@
       secretTapCount = 0;
       isAdminUnlocked = !isAdminUnlocked;
       applyAdminUI();
+      renderMenuCards();
       showToast(isAdminUnlocked ? "تم تفعيل وضع الإضافة والتعديل والحذف" : "تم إخفاء خيارات التعديل");
     }
   }
@@ -1725,12 +1816,16 @@
           <h3>${menuItems.length === 0 ? "لم يتم إضافة أصناف بعد" : "لا توجد أصناف مطابقة للبحث"}</h3>
           <p style="margin-top:6px;">
             ${menuItems.length === 0
-              ? 'اضغط على زر "+ إضافة صنف" لإضافة أول صنف ومكوناته إلى القائمة'
+              ? (isAdminUnlocked
+                  ? 'اضغط على زر "+ إضافة صنف" لإضافة أول صنف ومكوناته إلى القائمة'
+                  : 'انقر 5 مرات على عداد الأصناف لإظهار خيارات الإضافة والتعديل والحذف')
               : 'جرّب البحث باسم صنف آخر أو اضغط على "كل الأصناف"'}
           </p>
+          ${isAdminUnlocked ? `
           <div style="margin-top:14px;">
             <button type="button" class="btn-m btn-m-success" onclick="openAddMenuModal()">+ إضافة صنف الآن</button>
           </div>
+          ` : ""}
         </div>
       `;
       return;
@@ -1794,8 +1889,10 @@
   }
 
   function openAddMenuModal() {
-    isAdminUnlocked = true;
-    applyAdminUI();
+    if (!isAdminUnlocked) {
+      showToast("انقر 5 مرات على عداد الأصناف لتفعيل خيارات الإدارة");
+      return;
+    }
     editingMenuRef = null;
 
     document.getElementById("menuModalTitle").textContent = "➕ إضافة صنف جديد";
@@ -1809,9 +1906,11 @@
   }
 
   function openEditMenuByIndex(idx) {
+    if (!isAdminUnlocked) {
+      showToast("انقر 5 مرات على عداد الأصناف لتفعيل خيارات الإدارة");
+      return;
+    }
     if (idx < 0 || idx >= menuItems.length) return;
-    isAdminUnlocked = true;
-    applyAdminUI();
 
     const item = menuItems[idx];
     editingMenuRef = item;
@@ -1874,6 +1973,10 @@
   }
 
   async function deleteMenuByIndex(idx) {
+    if (!isAdminUnlocked) {
+      showToast("انقر 5 مرات على عداد الأصناف لتفعيل خيارات الإدارة");
+      return;
+    }
     if (idx < 0 || idx >= menuItems.length) return;
     const item = menuItems[idx];
     if (!confirm(`هل تريد حذف الصنف "${item.name}"؟`)) return;
@@ -1889,8 +1992,10 @@
   }
 
   function openManageMenuModal() {
-    isAdminUnlocked = true;
-    applyAdminUI();
+    if (!isAdminUnlocked) {
+      showToast("انقر 5 مرات على عداد الأصناف لتفعيل خيارات الإدارة");
+      return;
+    }
     document.getElementById("manageMenuFilterInput").value = "";
     renderManageMenuList();
     document.getElementById("manageMenuModal").classList.add("open");
@@ -2056,7 +2161,10 @@
     isAdminUnlocked = true;
     applyAdminUI();
     const cfg = getCloudConfig();
-    document.getElementById("binIdInput").value = cfg.binId;
+    document.getElementById("ghOwnerInput").value = cfg.owner;
+    document.getElementById("ghRepoInput").value = cfg.repo;
+    document.getElementById("ghBranchInput").value = cfg.branch;
+    document.getElementById("ghPathInput").value = cfg.path;
     document.getElementById("apiKeyInput").value = cfg.apiKey;
     document.getElementById("cloudModal").classList.add("open");
   }
@@ -2067,12 +2175,15 @@
 
   async function saveCloudConfig(event) {
     if (event) event.preventDefault();
-    const binId = document.getElementById("binIdInput").value.trim();
+    const owner = document.getElementById("ghOwnerInput").value.trim();
+    const repo = document.getElementById("ghRepoInput").value.trim();
+    const branch = document.getElementById("ghBranchInput").value.trim() || "main";
+    const path = document.getElementById("ghPathInput").value.trim() || "data/store.json";
     const apiKey = document.getElementById("apiKeyInput").value.trim();
-    setCloudConfig({ binId, apiKey });
+    setCloudConfig({ owner, repo, branch, path, apiKey });
     closeCloudModal();
-    showToast("تم حفظ إعدادات JSONBin");
-    if (binId) {
+    showToast("تم حفظ إعدادات المزامنة المجانية");
+    if (owner && repo) {
       await pullDataFromCloud(true);
     }
   }
@@ -2157,7 +2268,7 @@
     renderCards();
     renderMenuChips();
     renderMenuCards();
-    await pullDataFromCloud(false);
+    setSyncIndicator(true, "مجاني ومفتوح");
   });
 </script>
 
