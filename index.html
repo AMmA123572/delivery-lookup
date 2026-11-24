@@ -1650,8 +1650,7 @@
 
   function parseContentsList(contentsStr) {
     return String(contentsStr || "")
-      .split(/[
-،,]+/)
+      .split(/[\n،,]+/)
       .map(s => s.trim())
       .filter(Boolean);
   }
@@ -2110,10 +2109,8 @@
 
   function exportCSV() {
     const bom = "﻿";
-    const header = "المنطقة,الفرع,السعر
-";
-    const rows = activeData.map(r => `"${r.area}","${cleanBranchName(r.branch)}",${Number(r.price).toFixed(2)}`).join("
-");
+    const header = "المنطقة,الفرع,السعر\n";
+    const rows = activeData.map(r => `"${r.area}","${cleanBranchName(r.branch)}",${Number(r.price).toFixed(2)}`).join("\n");
     const blob = new Blob([bom + header + rows], { type: "text/csv;charset=utf-8;" });
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
