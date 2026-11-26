@@ -32,6 +32,10 @@
       --bg-repeat: no-repeat;
       --bg-brightness: 100%;
       --bg-contrast: 100%;
+      --card-bg-override: "";
+      --inner-box-bg: rgba(248, 250, 252, 0.85);
+      --inner-box-border: #e2e8f0;
+      --tab-bg-override: "";
     }
 
     body[data-mode="dark"] {
@@ -43,6 +47,8 @@
       --border: #334155;
       --shadow-sm: 0 8px 28px rgba(0, 0, 0, 0.36);
       --bg-overlay: rgba(11, 17, 32, 0.55);
+      --inner-box-bg: rgba(15, 23, 42, 0.72);
+      --inner-box-border: rgba(148, 163, 184, 0.25);
     }
 
     * {
@@ -89,7 +95,7 @@
     .area-card,
     .search-wrapper,
     .empty-state {
-      background: rgba(var(--surface-rgb), var(--card-alpha)) !important;
+      background: var(--card-bg-override, rgba(var(--surface-rgb), var(--card-alpha))) !important;
       backdrop-filter: blur(var(--card-blur)) saturate(150%);
       -webkit-backdrop-filter: blur(var(--card-blur)) saturate(150%);
       border: 1.5px solid rgba(255, 255, 255, var(--border-alpha)) !important;
@@ -115,10 +121,15 @@
     }
 
     .main-tabs {
-      background: rgba(var(--surface-rgb), 0.65);
+      background: var(--tab-bg-override, rgba(var(--surface-rgb), 0.65));
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       border: 1px solid rgba(148, 163, 184, 0.25);
+    }
+
+    .item-contents-box {
+      background: var(--inner-box-bg);
+      border-color: var(--inner-box-border);
     }
 
     .main-tab-btn.active,
@@ -1622,6 +1633,36 @@
         </div>
       </div>
 
+      <!-- 2b. Custom Colors for Cards, Inner Contents Box & Top Tabs -->
+      <div class="grid-2-cols">
+        <div class="form-group">
+          <label class="form-label" for="cardBgColorPicker">لون البطاقة الرئيسية</label>
+          <div class="color-picker-row">
+            <input type="color" id="cardBgColorPicker" class="color-wheel-input" value="#1e293b" oninput="onCustomColorInput('cardBgColorPicker', 'cardBgColorHex')" />
+            <input type="text" id="cardBgColorHex" class="form-control ltr" style="width:105px;" placeholder="تلقائي" maxlength="7" oninput="onCustomHexTyped('cardBgColorHex', 'cardBgColorPicker')" />
+            <button type="button" class="btn-m btn-m-light" style="padding:6px 10px;" onclick="clearCustomColorField('cardBgColorHex')">تلقائي</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="innerBoxColorPicker">لون مربع محتويات الصنف الداخلي</label>
+          <div class="color-picker-row">
+            <input type="color" id="innerBoxColorPicker" class="color-wheel-input" value="#0f172a" oninput="onCustomColorInput('innerBoxColorPicker', 'innerBoxColorHex')" />
+            <input type="text" id="innerBoxColorHex" class="form-control ltr" style="width:105px;" placeholder="تلقائي" maxlength="7" oninput="onCustomHexTyped('innerBoxColorHex', 'innerBoxColorPicker')" />
+            <button type="button" class="btn-m btn-m-light" style="padding:6px 10px;" onclick="clearCustomColorField('innerBoxColorHex')">تلقائي</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="tabsBgColorPicker">لون شريط التبويبات العلوي (التوصيل / الأصناف)</label>
+        <div class="color-picker-row">
+          <input type="color" id="tabsBgColorPicker" class="color-wheel-input" value="#1e293b" oninput="onCustomColorInput('tabsBgColorPicker', 'tabsBgColorHex')" />
+          <input type="text" id="tabsBgColorHex" class="form-control ltr" style="width:115px;" placeholder="تلقائي" maxlength="7" oninput="onCustomHexTyped('tabsBgColorHex', 'tabsBgColorPicker')" />
+          <button type="button" class="btn-m btn-m-light" style="padding:6px 10px;" onclick="clearCustomColorField('tabsBgColorHex')">تلقائي</button>
+        </div>
+      </div>
+
       <!-- 3. Glassmorphic Cards Transparency & Blur -->
       <div class="grid-2-cols">
         <div class="form-group">
@@ -1907,10 +1948,27 @@
   let siteAppearance = loadSavedAppearance();
   let tempDarkMode = Boolean(siteAppearance.darkMode);
 
+  function hexToRgba(hexColor, alpha) {
+    const clean = (hexColor || "").replace("#", "").trim();
+    if (!/^[0-9a-fA-F]{6}$/.test(clean)) return "";
+    const r = parseInt(clean.substring(0, 2), 16);
+    const g = parseInt(clean.substring(2, 4), 16);
+    const b = parseInt(clean.substring(4, 6), 16);
+    return `rgba(${r}, ${g}, ${b}, ${Number(alpha).toFixed(2)})`;
+  }
+
+  function normalizeHexOrEmpty(val) {
+    const clean = String(val || "").trim();
+    return /^#[0-9a-fA-F]{6}$/.test(clean) ? clean.toLowerCase() : "";
+  }
+
   function getDefaultAppearance() {
     return {
       darkMode: false,
       accentColor: "#0f172a",
+      cardColor: "",
+      innerBoxColor: "",
+      tabsColor: "",
       cardOpacity: 72,
       cardBlur: 14,
       bgImage: "",
@@ -1943,6 +2001,9 @@
     return {
       darkMode: dark,
       accentColor: accent,
+      cardColor: normalizeHexOrEmpty(rawObj.cardColor),
+      innerBoxColor: normalizeHexOrEmpty(rawObj.innerBoxColor),
+      tabsColor: normalizeHexOrEmpty(rawObj.tabsColor),
       cardOpacity: rawObj.cardOpacity !== undefined ? Math.min(100, Math.max(15, Number(rawObj.cardOpacity))) : def.cardOpacity,
       cardBlur: rawObj.cardBlur !== undefined ? Math.min(30, Math.max(0, Number(rawObj.cardBlur))) : def.cardBlur,
       bgImage: String(rawObj.bgImage || ""),
@@ -1997,6 +2058,26 @@
     const cardAlpha = (cfg.cardOpacity / 100).toFixed(2);
     rootStyle.setProperty("--card-alpha", cardAlpha);
     rootStyle.setProperty("--card-blur", `${cfg.cardBlur}px`);
+
+    if (cfg.cardColor) {
+      rootStyle.setProperty("--card-bg-override", hexToRgba(cfg.cardColor, Number(cardAlpha)));
+    } else {
+      rootStyle.removeProperty("--card-bg-override");
+    }
+
+    if (cfg.innerBoxColor) {
+      rootStyle.setProperty("--inner-box-bg", hexToRgba(cfg.innerBoxColor, 0.86));
+      rootStyle.setProperty("--inner-box-border", cfg.innerBoxColor);
+    } else {
+      rootStyle.removeProperty("--inner-box-bg");
+      rootStyle.removeProperty("--inner-box-border");
+    }
+
+    if (cfg.tabsColor) {
+      rootStyle.setProperty("--tab-bg-override", hexToRgba(cfg.tabsColor, 0.82));
+    } else {
+      rootStyle.removeProperty("--tab-bg-override");
+    }
 
     // Background overlay tint
     const overlayAlpha = (cfg.overlayOpacity / 100).toFixed(2);
@@ -3078,6 +3159,27 @@
   });
 
   /* ==================== APPEARANCE & THEME FUNCTIONS ==================== */
+  function onCustomColorInput(pickerId, hexId) {
+    const val = document.getElementById(pickerId).value;
+    document.getElementById(hexId).value = val;
+    updateLivePreviewFromControls();
+  }
+
+  function onCustomHexTyped(hexId, pickerId) {
+    const clean = document.getElementById(hexId).value.trim();
+    if (/^#[0-9a-fA-F]{6}$/.test(clean)) {
+      document.getElementById(pickerId).value = clean;
+      updateLivePreviewFromControls();
+    } else if (clean === "") {
+      updateLivePreviewFromControls();
+    }
+  }
+
+  function clearCustomColorField(hexId) {
+    document.getElementById(hexId).value = "";
+    updateLivePreviewFromControls();
+  }
+
   function populateAppearanceControls(cfg) {
     const c = normalizeAppearanceObj(cfg);
     tempDarkMode = c.darkMode;
@@ -3086,6 +3188,15 @@
 
     document.getElementById("themeColorPicker").value = c.accentColor;
     document.getElementById("themeColorHexInput").value = c.accentColor;
+
+    document.getElementById("cardBgColorPicker").value = c.cardColor || (c.darkMode ? "#1e293b" : "#ffffff");
+    document.getElementById("cardBgColorHex").value = c.cardColor || "";
+
+    document.getElementById("innerBoxColorPicker").value = c.innerBoxColor || (c.darkMode ? "#0f172a" : "#f8fafc");
+    document.getElementById("innerBoxColorHex").value = c.innerBoxColor || "";
+
+    document.getElementById("tabsBgColorPicker").value = c.tabsColor || (c.darkMode ? "#1e293b" : "#e2e8f0");
+    document.getElementById("tabsBgColorHex").value = c.tabsColor || "";
 
     document.getElementById("cardOpacityRange").value = c.cardOpacity;
     document.getElementById("cardOpacityLabel").textContent = `${c.cardOpacity}%`;
@@ -3126,6 +3237,9 @@
     return normalizeAppearanceObj({
       darkMode: tempDarkMode,
       accentColor: hex,
+      cardColor: document.getElementById("cardBgColorHex").value.trim(),
+      innerBoxColor: document.getElementById("innerBoxColorHex").value.trim(),
+      tabsColor: document.getElementById("tabsBgColorHex").value.trim(),
       cardOpacity: Number(document.getElementById("cardOpacityRange").value),
       cardBlur: Number(document.getElementById("cardBlurRange").value),
       bgImage: document.getElementById("bgImageUrlInput").value.trim(),
