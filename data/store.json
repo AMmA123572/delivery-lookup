@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-26T19:00:11.513Z",
+  "updatedAt": "2026-11-26T19:00:20.249Z",
   "areas": [
     {
       "area": "الجاردنز",
@@ -1139,7 +1139,7 @@
     "bgZoom": 75,
     "bgPosX": 55,
     "bgPosY": 50,
-    "bgBrightness": 34,
+    "bgBrightness": 58,
     "bgContrast": 136,
     "overlayOpacity": 92
   }
