@@ -12,6 +12,7 @@
       --bg: #f1f5f9;
       --surface: #ffffff;
       --dark-pill: #0f172a;
+      --accent-text: #ffffff;
       --text-main: #0f172a;
       --text-muted: #64748b;
       --border: #e2e8f0;
@@ -19,6 +20,53 @@
       --green-border: #34d399;
       --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.04);
       --radius-lg: 18px;
+      --bg-image: none;
+      --bg-overlay: rgba(241, 245, 249, 0.86);
+    }
+
+    body[data-theme="dark"] {
+      --bg: #0b1120;
+      --surface: #1e293b;
+      --dark-pill: #38bdf8;
+      --accent-text: #0f172a;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: #334155;
+      --shadow-sm: 0 4px 14px rgba(0, 0, 0, 0.28);
+      --bg-overlay: rgba(11, 17, 32, 0.84);
+    }
+
+    body[data-theme="emerald"] {
+      --bg: #ecfdf5;
+      --surface: #ffffff;
+      --dark-pill: #065f46;
+      --accent-text: #ffffff;
+      --text-main: #064e3b;
+      --text-muted: #4b5563;
+      --border: #a7f3d0;
+      --bg-overlay: rgba(236, 253, 245, 0.86);
+    }
+
+    body[data-theme="royal"] {
+      --bg: #eff6ff;
+      --surface: #ffffff;
+      --dark-pill: #1e3a8a;
+      --accent-text: #ffffff;
+      --text-main: #1e293b;
+      --text-muted: #475569;
+      --border: #bfdbfe;
+      --bg-overlay: rgba(239, 246, 255, 0.86);
+    }
+
+    body[data-theme="warm"] {
+      --bg: #fffbeb;
+      --surface: #ffffff;
+      --dark-pill: #9a3412;
+      --accent-text: #ffffff;
+      --text-main: #431407;
+      --text-muted: #78350f;
+      --border: #fed7aa;
+      --bg-overlay: rgba(255, 251, 235, 0.86);
     }
 
     * {
@@ -30,9 +78,162 @@
 
     body {
       background-color: var(--bg);
+      background-image: linear-gradient(var(--bg-overlay), var(--bg-overlay)), var(--bg-image);
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      background-repeat: no-repeat;
       color: var(--text-main);
       min-height: 100vh;
       padding: 18px 16px 75px;
+      transition: background-color 0.2s ease, color 0.2s ease;
+    }
+
+    body[data-theme="dark"] .main-tabs {
+      background: #1e293b;
+      border: 1px solid #334155;
+    }
+    body[data-theme="dark"] .main-tab-btn {
+      color: #cbd5e1;
+    }
+    body[data-theme="dark"] .main-tab-btn:hover {
+      color: #ffffff;
+    }
+    body[data-theme="dark"] .main-tab-btn.active {
+      background: var(--dark-pill);
+      color: var(--accent-text);
+    }
+    body[data-theme="dark"] .chip {
+      color: #e2e8f0;
+    }
+    body[data-theme="dark"] .chip.active {
+      background: var(--dark-pill);
+      color: var(--accent-text);
+      border-color: var(--dark-pill);
+    }
+    body[data-theme="dark"] .chip.active .chip-count {
+      color: #0f172a;
+    }
+    body[data-theme="dark"] .area-name,
+    body[data-theme="dark"] .modal-header h2,
+    body[data-theme="dark"] .form-label,
+    body[data-theme="dark"] .manage-meta {
+      color: #f8fafc;
+    }
+    body[data-theme="dark"] .branch-pill,
+    body[data-theme="dark"] .item-contents-box,
+    body[data-theme="dark"] .help-note,
+    body[data-theme="dark"] .esc-btn,
+    body[data-theme="dark"] .copy-btn,
+    body[data-theme="dark"] .sync-status-pill {
+      background: #0f172a;
+      border-color: #334155;
+      color: #e2e8f0;
+    }
+    body[data-theme="dark"] .ingredient-tag {
+      background: #1e293b;
+      border-color: #475569;
+      color: #f1f5f9;
+    }
+    body[data-theme="dark"] .item-notes-text {
+      color: #cbd5e1;
+    }
+    body[data-theme="dark"] .price-box {
+      background: #38bdf8;
+      color: #0f172a;
+    }
+    body[data-theme="dark"] .price-currency {
+      color: #0f172a;
+    }
+    body[data-theme="dark"] .modal {
+      background: #1e293b;
+      color: #f8fafc;
+      border: 1px solid #334155;
+    }
+    body[data-theme="dark"] .form-control {
+      background: #0f172a;
+      border-color: #334155;
+      color: #f8fafc;
+    }
+    body[data-theme="dark"] .card-bottom,
+    body[data-theme="dark"] .modal-header,
+    body[data-theme="dark"] .manage-row {
+      border-color: #334155;
+    }
+    body[data-theme="dark"] .count-badge {
+      background: #334155;
+      color: #f8fafc;
+    }
+
+    body:not([data-theme="dark"]) .main-tab-btn.active {
+      background: var(--dark-pill);
+      color: var(--accent-text);
+    }
+    body:not([data-theme="dark"]) .chip.active {
+      background: var(--dark-pill);
+      border-color: var(--dark-pill);
+      color: var(--accent-text);
+    }
+    body:not([data-theme="dark"]) .price-box {
+      background: var(--dark-pill);
+      color: var(--accent-text);
+    }
+
+    .btn-appearance-top {
+      background: #7c3aed;
+      color: #ffffff;
+    }
+
+    .theme-swatches {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(115px, 1fr));
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .theme-swatch-btn {
+      border: 2px solid var(--border);
+      background: var(--surface);
+      color: var(--text-main);
+      border-radius: 12px;
+      padding: 9px 10px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      transition: all 0.15s;
+    }
+
+    .theme-swatch-btn.active {
+      border-color: #7c3aed;
+      box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.2);
+    }
+
+    .swatch-circle {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      border: 1px solid rgba(0,0,0,0.15);
+    }
+
+    .bg-preview-box {
+      margin-top: 8px;
+      height: 110px;
+      border-radius: 12px;
+      border: 1.5px dashed #cbd5e1;
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #64748b;
+      font-size: 0.8rem;
+      font-weight: 700;
+      overflow: hidden;
+      position: relative;
     }
 
     .container {
@@ -786,6 +987,7 @@
       <button type="button" class="admin-toolbar-btn btn-add-top" id="addAreaTopBtn" onclick="openAddAreaModal()">+ إضافة منطقة</button>
       <button type="button" class="admin-toolbar-btn btn-manage-top" id="manageTopBtn" onclick="openManageModal()">✏️ إدارة المناطق</button>
       <button type="button" class="admin-toolbar-btn btn-cloud-top" id="cloudTopBtn" onclick="openCloudModal()">🆓 مزامنة مجانية</button>
+      <button type="button" class="admin-toolbar-btn btn-appearance-top" id="appearanceTopBtn" onclick="openAppearanceModal()">🎨 المظهر والخلفية</button>
     </div>
 
     <div class="filters-bar" id="filtersBar"></div>
@@ -819,6 +1021,7 @@
       <button type="button" class="admin-toolbar-btn btn-add-top" id="addMenuTopBtn" onclick="openAddMenuModal()">+ إضافة صنف</button>
       <button type="button" class="admin-toolbar-btn btn-manage-top" id="manageMenuTopBtn" onclick="openManageMenuModal()">✏️ إدارة الأصناف</button>
       <button type="button" class="admin-toolbar-btn btn-cloud-top" id="cloudMenuTopBtn" onclick="openCloudModal()">🆓 مزامنة مجانية</button>
+      <button type="button" class="admin-toolbar-btn btn-appearance-top" id="appearanceMenuTopBtn" onclick="openAppearanceModal()">🎨 المظهر والخلفية</button>
     </div>
 
     <div class="filters-bar" id="menuFiltersBar"></div>
@@ -1022,10 +1225,75 @@
   </div>
 </div>
 
+<!-- Appearance & Theme Modal -->
+<div class="modal-backdrop" id="appearanceModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>🎨 إعدادات المظهر وصورة الخلفية</h2>
+      <button type="button" class="btn-m btn-m-light" onclick="closeAppearanceModal()">إغلاق</button>
+    </div>
+
+    <div class="help-note">
+      اختر ثيم الألوان المناسب أو أضف صورة خلفية للموقع (عبر رابط صورة مباشر أو رفع صورة من جهازك). عند الضغط على <strong>حفظ ونشر للجميع</strong> يتم حفظ المظهر في <code>data/store.json</code> ليظهر تلقائياً لكل الزوار على جميع الأجهزة.
+    </div>
+
+    <form id="appearanceForm" onsubmit="saveAppearanceForm(event)">
+      <div class="form-group">
+        <label class="form-label">اختر ثيم الموقع</label>
+        <div class="theme-swatches" id="themeSwatches">
+          <button type="button" class="theme-swatch-btn" data-theme-val="default" onclick="selectThemeOption('default')">
+            <span class="swatch-circle" style="background:#0f172a;"></span>
+            <span>كلاسيكي فاتح</span>
+          </button>
+          <button type="button" class="theme-swatch-btn" data-theme-val="dark" onclick="selectThemeOption('dark')">
+            <span class="swatch-circle" style="background:#0b1120;"></span>
+            <span>ليلي داكن</span>
+          </button>
+          <button type="button" class="theme-swatch-btn" data-theme-val="emerald" onclick="selectThemeOption('emerald')">
+            <span class="swatch-circle" style="background:#065f46;"></span>
+            <span>أخضر زمردي</span>
+          </button>
+          <button type="button" class="theme-swatch-btn" data-theme-val="royal" onclick="selectThemeOption('royal')">
+            <span class="swatch-circle" style="background:#1e3a8a;"></span>
+            <span>أزرق ملكي</span>
+          </button>
+          <button type="button" class="theme-swatch-btn" data-theme-val="warm" onclick="selectThemeOption('warm')">
+            <span class="swatch-circle" style="background:#9a3412;"></span>
+            <span>دافئ برتقالي</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="bgImageUrlInput">رابط صورة الخلفية (URL) أو اختر صورة من جهازك</label>
+        <input type="text" id="bgImageUrlInput" class="form-control ltr" placeholder="https://example.com/background.jpg" oninput="updateBgPreviewFromInput()" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="bgImageFileInput">أو رفع صورة من الجهاز (يتم ضغطها تلقائياً لتناسب المزامنة)</label>
+        <input type="file" id="bgImageFileInput" class="form-control" accept="image/*" onchange="handleBgFileUpload(event)" />
+        <div class="bg-preview-box" id="bgPreviewBox">معاينة الخلفية (لا توجد صورة حالياً)</div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="bgOpacityRange">درجة وضوح الخلفية (شفافية الطبقة فوق الصورة): <span id="bgOpacityLabel">86%</span></label>
+        <input type="range" id="bgOpacityRange" min="20" max="95" value="86" style="width:100%;" oninput="updateBgOpacityLabel()" />
+      </div>
+
+      <div class="modal-actions">
+        <button type="submit" class="btn-m btn-m-success">💾 حفظ ونشر للجميع</button>
+        <button type="button" class="btn-m btn-m-danger" onclick="clearBackgroundImage()">🗑️ إزالة الخلفية</button>
+        <button type="button" class="btn-m btn-m-light" onclick="closeAppearanceModal()">إلغاء</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <script>
   const STORAGE_KEY = "delivery_rates_custom_v1";
   const MENU_STORAGE_KEY = "restaurant_menu_items_v1";
   const CLOUD_CONFIG_KEY = "delivery_github_sync_config_v1";
+  const APPEARANCE_STORAGE_KEY = "delivery_site_appearance_v1";
 
   // Open free storage via GitHub repository JSON file (e.g. data/store.json)
   const DEFAULT_GH_OWNER = "AMmA123572";
@@ -1226,6 +1494,59 @@
   let menuItems = loadSavedMenu();
   let selectedBranch = "الكل";
   let selectedMenuCategory = "الكل";
+  let siteAppearance = loadSavedAppearance();
+  let tempSelectedTheme = siteAppearance.theme || "default";
+
+  function loadSavedAppearance() {
+    try {
+      const raw = localStorage.getItem(APPEARANCE_STORAGE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed && typeof parsed === "object") {
+          return {
+            theme: String(parsed.theme || "default"),
+            bgImage: String(parsed.bgImage || ""),
+            overlayOpacity: parsed.overlayOpacity !== undefined ? Number(parsed.overlayOpacity) : 86
+          };
+        }
+      }
+    } catch (e) {}
+    return { theme: "default", bgImage: "", overlayOpacity: 86 };
+  }
+
+  function saveAppearanceToStorage() {
+    localStorage.setItem(APPEARANCE_STORAGE_KEY, JSON.stringify(siteAppearance));
+  }
+
+  function applySiteAppearance(appCfg) {
+    const cfg = appCfg || siteAppearance || { theme: "default", bgImage: "", overlayOpacity: 86 };
+    const theme = cfg.theme || "default";
+    if (theme === "default") {
+      document.body.removeAttribute("data-theme");
+    } else {
+      document.body.setAttribute("data-theme", theme);
+    }
+
+    const opacityPct = Math.min(95, Math.max(20, Number(cfg.overlayOpacity) || 86));
+    const alpha = (opacityPct / 100).toFixed(2);
+    const baseRgbMap = {
+      default: "241, 245, 249",
+      dark: "11, 17, 32",
+      emerald: "236, 253, 245",
+      royal: "239, 246, 255",
+      warm: "255, 251, 235"
+    };
+    const rgb = baseRgbMap[theme] || baseRgbMap.default;
+    document.documentElement.style.setProperty("--bg-overlay", `rgba(${rgb}, ${alpha})`);
+
+    const bg = (cfg.bgImage || "").trim();
+    if (bg) {
+      const safeBg = bg.replace(/"/g, '\"');
+      document.documentElement.style.setProperty("--bg-image", `url("${safeBg}")`);
+    } else {
+      document.documentElement.style.setProperty("--bg-image", "none");
+    }
+  }
 
   function switchMainSection(section) {
     activeMainSection = section;
@@ -1409,6 +1730,16 @@
         saveMenuToStorage();
       }
 
+      if (payload && typeof payload === "object" && payload.appearance && typeof payload.appearance === "object") {
+        siteAppearance = {
+          theme: String(payload.appearance.theme || "default"),
+          bgImage: String(payload.appearance.bgImage || ""),
+          overlayOpacity: payload.appearance.overlayOpacity !== undefined ? Number(payload.appearance.overlayOpacity) : 86
+        };
+        saveAppearanceToStorage();
+        applySiteAppearance(siteAppearance);
+      }
+
       updateTopTabCounts();
       renderChips();
       renderCards();
@@ -1458,7 +1789,8 @@
       const combinedPayload = {
         updatedAt: new Date().toISOString(),
         areas: activeData,
-        menuItems: menuItems
+        menuItems: menuItems,
+        appearance: siteAppearance
       };
 
       const body = {
@@ -1494,9 +1826,11 @@
       "addAreaTopBtn",
       "manageTopBtn",
       "cloudTopBtn",
+      "appearanceTopBtn",
       "addMenuTopBtn",
       "manageMenuTopBtn",
-      "cloudMenuTopBtn"
+      "cloudMenuTopBtn",
+      "appearanceMenuTopBtn"
     ].forEach(id => {
       const el = document.getElementById(id);
       if (el) el.classList.toggle("visible", isAdminUnlocked);
@@ -2247,6 +2581,8 @@
         closeAreaModal();
       } else if (document.getElementById("menuItemModal").classList.contains("open")) {
         closeMenuModal();
+      } else if (document.getElementById("appearanceModal").classList.contains("open")) {
+        closeAppearanceModal();
       } else if (document.getElementById("cloudModal").classList.contains("open")) {
         closeCloudModal();
       } else if (document.getElementById("manageModal").classList.contains("open")) {
@@ -2260,6 +2596,117 @@
       }
     }
   });
+
+  /* ==================== APPEARANCE & THEME FUNCTIONS ==================== */
+  function openAppearanceModal() {
+    isAdminUnlocked = true;
+    applyAdminUI();
+    tempSelectedTheme = siteAppearance.theme || "default";
+    document.getElementById("bgImageUrlInput").value = siteAppearance.bgImage || "";
+    document.getElementById("bgImageFileInput").value = "";
+    const op = siteAppearance.overlayOpacity !== undefined ? Number(siteAppearance.overlayOpacity) : 86;
+    document.getElementById("bgOpacityRange").value = op;
+    document.getElementById("bgOpacityLabel").textContent = `${op}%`;
+    highlightSelectedThemeSwatch(tempSelectedTheme);
+    updateBgPreviewFromInput();
+    document.getElementById("appearanceModal").classList.add("open");
+  }
+
+  function closeAppearanceModal() {
+    document.getElementById("appearanceModal").classList.remove("open");
+    applySiteAppearance(siteAppearance);
+  }
+
+  function highlightSelectedThemeSwatch(themeVal) {
+    document.querySelectorAll("#themeSwatches .theme-swatch-btn").forEach(btn => {
+      btn.classList.toggle("active", btn.getAttribute("data-theme-val") === themeVal);
+    });
+  }
+
+  function selectThemeOption(themeVal) {
+    tempSelectedTheme = themeVal;
+    highlightSelectedThemeSwatch(themeVal);
+    const previewUrl = document.getElementById("bgImageUrlInput").value.trim();
+    const previewOp = Number(document.getElementById("bgOpacityRange").value) || 86;
+    applySiteAppearance({ theme: tempSelectedTheme, bgImage: previewUrl, overlayOpacity: previewOp });
+  }
+
+  function updateBgOpacityLabel() {
+    const op = Number(document.getElementById("bgOpacityRange").value) || 86;
+    document.getElementById("bgOpacityLabel").textContent = `${op}%`;
+    const previewUrl = document.getElementById("bgImageUrlInput").value.trim();
+    applySiteAppearance({ theme: tempSelectedTheme, bgImage: previewUrl, overlayOpacity: op });
+  }
+
+  function updateBgPreviewFromInput() {
+    const url = document.getElementById("bgImageUrlInput").value.trim();
+    const box = document.getElementById("bgPreviewBox");
+    if (url) {
+      box.style.backgroundImage = `url("${url.replace(/"/g, '\"')}")`;
+      box.textContent = "";
+    } else {
+      box.style.backgroundImage = "none";
+      box.textContent = "معاينة الخلفية (لا توجد صورة حالياً)";
+    }
+    const op = Number(document.getElementById("bgOpacityRange").value) || 86;
+    applySiteAppearance({ theme: tempSelectedTheme, bgImage: url, overlayOpacity: op });
+  }
+
+  function handleBgFileUpload(event) {
+    const file = event.target.files && event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const img = new Image();
+      img.onload = function() {
+        const canvas = document.createElement("canvas");
+        const maxDim = 1280;
+        let w = img.width;
+        let h = img.height;
+        if (w > maxDim || h > maxDim) {
+          if (w > h) {
+            h = Math.round((h * maxDim) / w);
+            w = maxDim;
+          } else {
+            w = Math.round((w * maxDim) / h);
+            h = maxDim;
+          }
+        }
+        canvas.width = w;
+        canvas.height = h;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, w, h);
+        const compressedDataUrl = canvas.toDataURL("image/jpeg", 0.72);
+        document.getElementById("bgImageUrlInput").value = compressedDataUrl;
+        updateBgPreviewFromInput();
+        showToast("تم تجهيز الصورة وضغطها للمزامنة");
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function clearBackgroundImage() {
+    document.getElementById("bgImageUrlInput").value = "";
+    document.getElementById("bgImageFileInput").value = "";
+    updateBgPreviewFromInput();
+  }
+
+  async function saveAppearanceForm(event) {
+    if (event) event.preventDefault();
+    const bgImage = document.getElementById("bgImageUrlInput").value.trim();
+    const overlayOpacity = Number(document.getElementById("bgOpacityRange").value) || 86;
+    siteAppearance = {
+      theme: tempSelectedTheme || "default",
+      bgImage,
+      overlayOpacity
+    };
+    saveAppearanceToStorage();
+    applySiteAppearance(siteAppearance);
+    document.getElementById("appearanceModal").classList.remove("open");
+    const synced = await pushDataToCloud(false);
+    showToast(synced ? "تم حفظ المظهر ونشره لجميع الأجهزة" : "تم حفظ المظهر محلياً على هذا الجهاز");
+  }
 
   async function fetchPublicStoreForVisitors() {
     const cfg = getCloudConfig();
@@ -2306,6 +2753,17 @@
           applied = true;
         }
 
+        if (payload && typeof payload === "object" && payload.appearance && typeof payload.appearance === "object") {
+          siteAppearance = {
+            theme: String(payload.appearance.theme || "default"),
+            bgImage: String(payload.appearance.bgImage || ""),
+            overlayOpacity: payload.appearance.overlayOpacity !== undefined ? Number(payload.appearance.overlayOpacity) : 86
+          };
+          saveAppearanceToStorage();
+          applySiteAppearance(siteAppearance);
+          applied = true;
+        }
+
         if (applied) {
           updateTopTabCounts();
           renderChips();
@@ -2334,6 +2792,7 @@
   }
 
   window.addEventListener("DOMContentLoaded", async () => {
+    applySiteAppearance(siteAppearance);
     applyAdminUI();
     updateTopTabCounts();
     renderChips();
