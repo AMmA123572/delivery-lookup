@@ -11,62 +11,36 @@
     :root {
       --bg: #f1f5f9;
       --surface: #ffffff;
+      --surface-rgb: 255, 255, 255;
+      --card-alpha: 0.72;
+      --card-blur: 14px;
       --dark-pill: #0f172a;
+      --accent-color: #0f172a;
       --accent-text: #ffffff;
       --text-main: #0f172a;
       --text-muted: #64748b;
       --border: #e2e8f0;
+      --border-alpha: 0.55;
       --green: #10b981;
       --green-border: #34d399;
-      --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.04);
+      --shadow-sm: 0 8px 24px rgba(15, 23, 42, 0.08);
       --radius-lg: 18px;
       --bg-image: none;
-      --bg-overlay: rgba(241, 245, 249, 0.86);
+      --bg-overlay: rgba(241, 245, 249, 0.45);
+      --bg-size: cover;
+      --bg-pos: center center;
+      --bg-repeat: no-repeat;
     }
 
-    body[data-theme="dark"] {
+    body[data-mode="dark"] {
       --bg: #0b1120;
       --surface: #1e293b;
-      --dark-pill: #38bdf8;
-      --accent-text: #0f172a;
+      --surface-rgb: 15, 23, 42;
       --text-main: #f8fafc;
       --text-muted: #94a3b8;
       --border: #334155;
-      --shadow-sm: 0 4px 14px rgba(0, 0, 0, 0.28);
-      --bg-overlay: rgba(11, 17, 32, 0.84);
-    }
-
-    body[data-theme="emerald"] {
-      --bg: #ecfdf5;
-      --surface: #ffffff;
-      --dark-pill: #065f46;
-      --accent-text: #ffffff;
-      --text-main: #064e3b;
-      --text-muted: #4b5563;
-      --border: #a7f3d0;
-      --bg-overlay: rgba(236, 253, 245, 0.86);
-    }
-
-    body[data-theme="royal"] {
-      --bg: #eff6ff;
-      --surface: #ffffff;
-      --dark-pill: #1e3a8a;
-      --accent-text: #ffffff;
-      --text-main: #1e293b;
-      --text-muted: #475569;
-      --border: #bfdbfe;
-      --bg-overlay: rgba(239, 246, 255, 0.86);
-    }
-
-    body[data-theme="warm"] {
-      --bg: #fffbeb;
-      --surface: #ffffff;
-      --dark-pill: #9a3412;
-      --accent-text: #ffffff;
-      --text-main: #431407;
-      --text-muted: #78350f;
-      --border: #fed7aa;
-      --bg-overlay: rgba(255, 251, 235, 0.86);
+      --shadow-sm: 0 8px 28px rgba(0, 0, 0, 0.36);
+      --bg-overlay: rgba(11, 17, 32, 0.55);
     }
 
     * {
@@ -79,104 +53,122 @@
     body {
       background-color: var(--bg);
       background-image: linear-gradient(var(--bg-overlay), var(--bg-overlay)), var(--bg-image);
-      background-size: cover;
-      background-position: center;
+      background-size: var(--bg-size);
+      background-position: var(--bg-pos);
       background-attachment: fixed;
-      background-repeat: no-repeat;
+      background-repeat: var(--bg-repeat);
       color: var(--text-main);
       min-height: 100vh;
       padding: 18px 16px 75px;
       transition: background-color 0.2s ease, color 0.2s ease;
     }
 
-    body[data-theme="dark"] .main-tabs {
-      background: #1e293b;
-      border: 1px solid #334155;
+    /* Glassmorphic surfaces for cards, search bar, and chips */
+    .area-card,
+    .search-wrapper,
+    .empty-state {
+      background: rgba(var(--surface-rgb), var(--card-alpha)) !important;
+      backdrop-filter: blur(var(--card-blur)) saturate(150%);
+      -webkit-backdrop-filter: blur(var(--card-blur)) saturate(150%);
+      border: 1.5px solid rgba(255, 255, 255, var(--border-alpha)) !important;
+      box-shadow: var(--shadow-sm);
     }
-    body[data-theme="dark"] .main-tab-btn {
+
+    body[data-mode="dark"] .area-card,
+    body[data-mode="dark"] .search-wrapper,
+    body[data-mode="dark"] .empty-state {
+      border-color: rgba(148, 163, 184, 0.22) !important;
+    }
+
+    .area-card.recommended {
+      border-color: var(--green-border) !important;
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.16);
+    }
+
+    .chip,
+    .sync-status-pill {
+      background: rgba(var(--surface-rgb), calc(var(--card-alpha) * 0.92 + 0.08));
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .main-tabs {
+      background: rgba(var(--surface-rgb), 0.65);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(148, 163, 184, 0.25);
+    }
+
+    .main-tab-btn.active,
+    .chip.active,
+    .price-box {
+      background: var(--accent-color) !important;
+      border-color: var(--accent-color) !important;
+      color: var(--accent-text) !important;
+    }
+
+    .price-currency,
+    .chip.active .chip-count {
+      color: var(--accent-text) !important;
+      opacity: 0.9;
+    }
+
+    body[data-mode="dark"] .main-tab-btn:not(.active) {
       color: #cbd5e1;
     }
-    body[data-theme="dark"] .main-tab-btn:hover {
+    body[data-mode="dark"] .main-tab-btn:not(.active):hover {
       color: #ffffff;
     }
-    body[data-theme="dark"] .main-tab-btn.active {
-      background: var(--dark-pill);
-      color: var(--accent-text);
-    }
-    body[data-theme="dark"] .chip {
+    body[data-mode="dark"] .chip:not(.active) {
       color: #e2e8f0;
+      border-color: rgba(148, 163, 184, 0.25);
     }
-    body[data-theme="dark"] .chip.active {
-      background: var(--dark-pill);
-      color: var(--accent-text);
-      border-color: var(--dark-pill);
-    }
-    body[data-theme="dark"] .chip.active .chip-count {
-      color: #0f172a;
-    }
-    body[data-theme="dark"] .area-name,
-    body[data-theme="dark"] .modal-header h2,
-    body[data-theme="dark"] .form-label,
-    body[data-theme="dark"] .manage-meta {
+    body[data-mode="dark"] .area-name,
+    body[data-mode="dark"] .modal-header h2,
+    body[data-mode="dark"] .form-label,
+    body[data-mode="dark"] .manage-meta {
       color: #f8fafc;
     }
-    body[data-theme="dark"] .branch-pill,
-    body[data-theme="dark"] .item-contents-box,
-    body[data-theme="dark"] .help-note,
-    body[data-theme="dark"] .esc-btn,
-    body[data-theme="dark"] .copy-btn,
-    body[data-theme="dark"] .sync-status-pill {
-      background: #0f172a;
-      border-color: #334155;
+    body[data-mode="dark"] .branch-pill,
+    body[data-mode="dark"] .item-contents-box,
+    body[data-mode="dark"] .help-note,
+    body[data-mode="dark"] .esc-btn,
+    body[data-mode="dark"] .copy-btn,
+    body[data-mode="dark"] .sync-status-pill {
+      background: rgba(15, 23, 42, 0.72);
+      border-color: rgba(148, 163, 184, 0.25);
       color: #e2e8f0;
     }
-    body[data-theme="dark"] .ingredient-tag {
-      background: #1e293b;
+    body[data-mode="dark"] .ingredient-tag {
+      background: rgba(30, 41, 59, 0.85);
       border-color: #475569;
       color: #f1f5f9;
     }
-    body[data-theme="dark"] .item-notes-text {
+    body[data-mode="dark"] .item-notes-text {
       color: #cbd5e1;
     }
-    body[data-theme="dark"] .price-box {
-      background: #38bdf8;
-      color: #0f172a;
-    }
-    body[data-theme="dark"] .price-currency {
-      color: #0f172a;
-    }
-    body[data-theme="dark"] .modal {
+    body[data-mode="dark"] .modal {
       background: #1e293b;
       color: #f8fafc;
       border: 1px solid #334155;
     }
-    body[data-theme="dark"] .form-control {
+    body[data-mode="dark"] .form-control {
       background: #0f172a;
       border-color: #334155;
       color: #f8fafc;
     }
-    body[data-theme="dark"] .card-bottom,
-    body[data-theme="dark"] .modal-header,
-    body[data-theme="dark"] .manage-row {
+    body[data-mode="dark"] .card-bottom,
+    body[data-mode="dark"] .modal-header,
+    body[data-mode="dark"] .manage-row {
       border-color: #334155;
     }
-    body[data-theme="dark"] .count-badge {
+    body[data-mode="dark"] .count-badge {
       background: #334155;
       color: #f8fafc;
     }
-
-    body:not([data-theme="dark"]) .main-tab-btn.active {
-      background: var(--dark-pill);
-      color: var(--accent-text);
-    }
-    body:not([data-theme="dark"]) .chip.active {
-      background: var(--dark-pill);
-      border-color: var(--dark-pill);
-      color: var(--accent-text);
-    }
-    body:not([data-theme="dark"]) .price-box {
-      background: var(--dark-pill);
-      color: var(--accent-text);
+    body[data-mode="dark"] .info-strip,
+    body[data-mode="dark"] .count-summary {
+      color: #e2e8f0;
     }
 
     .btn-appearance-top {
@@ -184,48 +176,92 @@
       color: #ffffff;
     }
 
-    .theme-swatches {
+    .mode-toggle-group {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(115px, 1fr));
+      grid-template-columns: 1fr 1fr;
       gap: 8px;
-      margin-top: 6px;
     }
 
-    .theme-swatch-btn {
+    .mode-toggle-btn {
       border: 2px solid var(--border);
       background: var(--surface);
       color: var(--text-main);
       border-radius: 12px;
-      padding: 9px 10px;
-      font-size: 0.82rem;
+      padding: 10px 12px;
+      font-size: 0.88rem;
       font-weight: 800;
       cursor: pointer;
       display: flex;
       align-items: center;
+      justify-content: center;
       gap: 7px;
       transition: all 0.15s;
     }
 
-    .theme-swatch-btn.active {
+    .mode-toggle-btn.active {
       border-color: #7c3aed;
-      box-shadow: 0 0 0 2px rgba(124, 58, 237, 0.2);
+      background: rgba(124, 58, 237, 0.12);
     }
 
-    .swatch-circle {
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
+    .color-picker-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .color-wheel-input {
+      width: 54px;
+      height: 44px;
+      padding: 2px;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 10px;
+      cursor: pointer;
+      background: transparent;
       flex-shrink: 0;
-      border: 1px solid rgba(0,0,0,0.15);
+    }
+
+    .preset-dots {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      flex-wrap: wrap;
+    }
+
+    .preset-dot-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 2px solid #ffffff;
+      box-shadow: 0 0 0 1.5px #cbd5e1;
+      cursor: pointer;
+      transition: transform 0.12s;
+    }
+
+    .preset-dot-btn:hover {
+      transform: scale(1.12);
+    }
+
+    .grid-2-cols {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    @media (max-width: 520px) {
+      .grid-2-cols {
+        grid-template-columns: 1fr;
+      }
     }
 
     .bg-preview-box {
       margin-top: 8px;
-      height: 110px;
+      height: 120px;
       border-radius: 12px;
       border: 1.5px dashed #cbd5e1;
       background-size: cover;
       background-position: center;
+      background-repeat: no-repeat;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -1229,60 +1265,108 @@
 <div class="modal-backdrop" id="appearanceModal">
   <div class="modal">
     <div class="modal-header">
-      <h2>🎨 إعدادات المظهر وصورة الخلفية</h2>
+      <h2>🎨 تخصيص المظهر، الشفافية، والخلفية</h2>
       <button type="button" class="btn-m btn-m-light" onclick="closeAppearanceModal()">إغلاق</button>
     </div>
 
     <div class="help-note">
-      اختر ثيم الألوان المناسب أو أضف صورة خلفية للموقع (عبر رابط صورة مباشر أو رفع صورة من جهازك). عند الضغط على <strong>حفظ ونشر للجميع</strong> يتم حفظ المظهر في <code>data/store.json</code> ليظهر تلقائياً لكل الزوار على جميع الأجهزة.
+      تحكم بالوضع الليلي (Dark/Light)، واختر أي لون للثيم من لوحة الألوان الكاملة، واضبط شفافية البطاقات الزجاجية وأبعاد صورة الخلفية. عند الضغط على <strong>حفظ ونشر للجميع</strong> يظهر التصميم لكل الزوار.
     </div>
 
     <form id="appearanceForm" onsubmit="saveAppearanceForm(event)">
+      <!-- 1. Dark / Light Mode -->
       <div class="form-group">
-        <label class="form-label">اختر ثيم الموقع</label>
-        <div class="theme-swatches" id="themeSwatches">
-          <button type="button" class="theme-swatch-btn" data-theme-val="default" onclick="selectThemeOption('default')">
-            <span class="swatch-circle" style="background:#0f172a;"></span>
-            <span>كلاسيكي فاتح</span>
+        <label class="form-label">1. وضع الإضاءة (فاتح / داكن)</label>
+        <div class="mode-toggle-group">
+          <button type="button" class="mode-toggle-btn" id="modeLightBtn" onclick="selectDarkMode(false)">
+            <span>☀️</span>
+            <span>وضع فاتح (Light)</span>
           </button>
-          <button type="button" class="theme-swatch-btn" data-theme-val="dark" onclick="selectThemeOption('dark')">
-            <span class="swatch-circle" style="background:#0b1120;"></span>
-            <span>ليلي داكن</span>
-          </button>
-          <button type="button" class="theme-swatch-btn" data-theme-val="emerald" onclick="selectThemeOption('emerald')">
-            <span class="swatch-circle" style="background:#065f46;"></span>
-            <span>أخضر زمردي</span>
-          </button>
-          <button type="button" class="theme-swatch-btn" data-theme-val="royal" onclick="selectThemeOption('royal')">
-            <span class="swatch-circle" style="background:#1e3a8a;"></span>
-            <span>أزرق ملكي</span>
-          </button>
-          <button type="button" class="theme-swatch-btn" data-theme-val="warm" onclick="selectThemeOption('warm')">
-            <span class="swatch-circle" style="background:#9a3412;"></span>
-            <span>دافئ برتقالي</span>
+          <button type="button" class="mode-toggle-btn" id="modeDarkBtn" onclick="selectDarkMode(true)">
+            <span>🌙</span>
+            <span>وضع داكن (Dark)</span>
           </button>
         </div>
       </div>
 
+      <!-- 2. Full Color Picker for Theme Accent -->
       <div class="form-group">
-        <label class="form-label" for="bgImageUrlInput">رابط صورة الخلفية (URL) أو اختر صورة من جهازك</label>
-        <input type="text" id="bgImageUrlInput" class="form-control ltr" placeholder="https://example.com/background.jpg" oninput="updateBgPreviewFromInput()" />
+        <label class="form-label" for="themeColorPicker">2. لون الثيم الرئيسي (اختر أي لون من الطيف الكامل)</label>
+        <div class="color-picker-row">
+          <input type="color" id="themeColorPicker" class="color-wheel-input" value="#0f172a" oninput="onThemeColorChange(this.value)" title="اختر أي لون" />
+          <input type="text" id="themeColorHexInput" class="form-control ltr" style="width:115px;" value="#0f172a" maxlength="7" oninput="onThemeHexTyped(this.value)" />
+          <div class="preset-dots">
+            <button type="button" class="preset-dot-btn" style="background:#0f172a;" onclick="onThemeColorChange('#0f172a')" title="كحلي داكن"></button>
+            <button type="button" class="preset-dot-btn" style="background:#2563eb;" onclick="onThemeColorChange('#2563eb')" title="أزرق"></button>
+            <button type="button" class="preset-dot-btn" style="background:#059669;" onclick="onThemeColorChange('#059669')" title="زمردي"></button>
+            <button type="button" class="preset-dot-btn" style="background:#7c3aed;" onclick="onThemeColorChange('#7c3aed')" title="بنفسجي"></button>
+            <button type="button" class="preset-dot-btn" style="background:#dc2626;" onclick="onThemeColorChange('#dc2626')" title="أحمر"></button>
+            <button type="button" class="preset-dot-btn" style="background:#d97706;" onclick="onThemeColorChange('#d97706')" title="ذهبي برتقالي"></button>
+            <button type="button" class="preset-dot-btn" style="background:#0891b2;" onclick="onThemeColorChange('#0891b2')" title="سماوي"></button>
+            <button type="button" class="preset-dot-btn" style="background:#db2777;" onclick="onThemeColorChange('#db2777')" title="وردي"></button>
+          </div>
+        </div>
       </div>
 
+      <!-- 3. Glassmorphic Cards Transparency & Blur -->
+      <div class="grid-2-cols">
+        <div class="form-group">
+          <label class="form-label" for="cardOpacityRange">3. شفافية البطاقات الزجاجية: <span id="cardOpacityLabel">72%</span></label>
+          <input type="range" id="cardOpacityRange" min="15" max="100" value="72" style="width:100%;" oninput="updateLivePreviewFromControls()" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="cardBlurRange">درجة التمويه الزجاجي (Blur): <span id="cardBlurLabel">14px</span></label>
+          <input type="range" id="cardBlurRange" min="0" max="30" value="14" style="width:100%;" oninput="updateLivePreviewFromControls()" />
+        </div>
+      </div>
+
+      <!-- 4. Background Image Source -->
       <div class="form-group">
-        <label class="form-label" for="bgImageFileInput">أو رفع صورة من الجهاز (يتم ضغطها تلقائياً لتناسب المزامنة)</label>
-        <input type="file" id="bgImageFileInput" class="form-control" accept="image/*" onchange="handleBgFileUpload(event)" />
+        <label class="form-label" for="bgImageUrlInput">4. صورة الخلفية (رابط URL أو رفع من جهازك)</label>
+        <input type="text" id="bgImageUrlInput" class="form-control ltr" placeholder="https://example.com/background.jpg" oninput="updateLivePreviewFromControls()" />
+        <input type="file" id="bgImageFileInput" class="form-control" style="margin-top:8px;" accept="image/*" onchange="handleBgFileUpload(event)" />
         <div class="bg-preview-box" id="bgPreviewBox">معاينة الخلفية (لا توجد صورة حالياً)</div>
       </div>
 
+      <!-- 5. Background Dimensions & Positioning -->
+      <div class="grid-2-cols">
+        <div class="form-group">
+          <label class="form-label" for="bgSizeModeSelect">5. أبعاد وتمدد الخلفية</label>
+          <select id="bgSizeModeSelect" class="form-control" onchange="updateLivePreviewFromControls()">
+            <option value="cover">ملء الشاشة تلقائياً (Cover)</option>
+            <option value="contain">احتواء كامل الصورة (Contain)</option>
+            <option value="100% 100%">تمديد كامل العرض والطول (Stretch)</option>
+            <option value="custom">مقاس وتكبير مخصص (Zoom %)</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="bgZoomRange">مقياس التكبير (عند اختيار مخصص): <span id="bgZoomLabel">100%</span></label>
+          <input type="range" id="bgZoomRange" min="30" max="220" value="100" style="width:100%;" oninput="updateLivePreviewFromControls()" />
+        </div>
+      </div>
+
+      <div class="grid-2-cols">
+        <div class="form-group">
+          <label class="form-label" for="bgPosXRange">الموضع الأفقي للصورة (يمين/يسار): <span id="bgPosXLabel">50%</span></label>
+          <input type="range" id="bgPosXRange" min="0" max="100" value="50" style="width:100%;" oninput="updateLivePreviewFromControls()" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="bgPosYRange">الموضع العمودي للصورة (أعلى/أسفل): <span id="bgPosYLabel">50%</span></label>
+          <input type="range" id="bgPosYRange" min="0" max="100" value="50" style="width:100%;" oninput="updateLivePreviewFromControls()" />
+        </div>
+      </div>
+
       <div class="form-group">
-        <label class="form-label" for="bgOpacityRange">درجة وضوح الخلفية (شفافية الطبقة فوق الصورة): <span id="bgOpacityLabel">86%</span></label>
-        <input type="range" id="bgOpacityRange" min="20" max="95" value="86" style="width:100%;" oninput="updateBgOpacityLabel()" />
+        <label class="form-label" for="bgOpacityRange">تعتيم الطبقة فوق الخلفية (لتحسين وضوح النص): <span id="bgOpacityLabel">45%</span></label>
+        <input type="range" id="bgOpacityRange" min="0" max="92" value="45" style="width:100%;" oninput="updateLivePreviewFromControls()" />
       </div>
 
       <div class="modal-actions">
         <button type="submit" class="btn-m btn-m-success">💾 حفظ ونشر للجميع</button>
         <button type="button" class="btn-m btn-m-danger" onclick="clearBackgroundImage()">🗑️ إزالة الخلفية</button>
+        <button type="button" class="btn-m btn-m-light" onclick="resetAppearanceDefault()">↩️ افتراضي</button>
         <button type="button" class="btn-m btn-m-light" onclick="closeAppearanceModal()">إلغاء</button>
       </div>
     </form>
@@ -1495,57 +1579,112 @@
   let selectedBranch = "الكل";
   let selectedMenuCategory = "الكل";
   let siteAppearance = loadSavedAppearance();
-  let tempSelectedTheme = siteAppearance.theme || "default";
+  let tempDarkMode = Boolean(siteAppearance.darkMode);
+
+  function getDefaultAppearance() {
+    return {
+      darkMode: false,
+      accentColor: "#0f172a",
+      cardOpacity: 72,
+      cardBlur: 14,
+      bgImage: "",
+      bgSizeMode: "cover",
+      bgZoom: 100,
+      bgPosX: 50,
+      bgPosY: 50,
+      overlayOpacity: 45
+    };
+  }
+
+  function normalizeAppearanceObj(rawObj) {
+    const def = getDefaultAppearance();
+    if (!rawObj || typeof rawObj !== "object") return def;
+    // Backward compatibility if old theme string was stored
+    let dark = Boolean(rawObj.darkMode);
+    let accent = String(rawObj.accentColor || "").trim();
+    if (!accent) {
+      const legacyTheme = String(rawObj.theme || "default");
+      if (legacyTheme === "dark") { dark = true; accent = "#38bdf8"; }
+      else if (legacyTheme === "emerald") accent = "#065f46";
+      else if (legacyTheme === "royal") accent = "#1e3a8a";
+      else if (legacyTheme === "warm") accent = "#9a3412";
+      else accent = def.accentColor;
+    }
+    if (!/^#[0-9a-fA-F]{6}$/.test(accent)) accent = def.accentColor;
+
+    return {
+      darkMode: dark,
+      accentColor: accent,
+      cardOpacity: rawObj.cardOpacity !== undefined ? Math.min(100, Math.max(15, Number(rawObj.cardOpacity))) : def.cardOpacity,
+      cardBlur: rawObj.cardBlur !== undefined ? Math.min(30, Math.max(0, Number(rawObj.cardBlur))) : def.cardBlur,
+      bgImage: String(rawObj.bgImage || ""),
+      bgSizeMode: ["cover", "contain", "100% 100%", "custom"].includes(rawObj.bgSizeMode) ? rawObj.bgSizeMode : def.bgSizeMode,
+      bgZoom: rawObj.bgZoom !== undefined ? Math.min(220, Math.max(30, Number(rawObj.bgZoom))) : def.bgZoom,
+      bgPosX: rawObj.bgPosX !== undefined ? Math.min(100, Math.max(0, Number(rawObj.bgPosX))) : def.bgPosX,
+      bgPosY: rawObj.bgPosY !== undefined ? Math.min(100, Math.max(0, Number(rawObj.bgPosY))) : def.bgPosY,
+      overlayOpacity: rawObj.overlayOpacity !== undefined ? Math.min(92, Math.max(0, Number(rawObj.overlayOpacity))) : def.overlayOpacity
+    };
+  }
 
   function loadSavedAppearance() {
     try {
       const raw = localStorage.getItem(APPEARANCE_STORAGE_KEY);
       if (raw) {
-        const parsed = JSON.parse(raw);
-        if (parsed && typeof parsed === "object") {
-          return {
-            theme: String(parsed.theme || "default"),
-            bgImage: String(parsed.bgImage || ""),
-            overlayOpacity: parsed.overlayOpacity !== undefined ? Number(parsed.overlayOpacity) : 86
-          };
-        }
+        return normalizeAppearanceObj(JSON.parse(raw));
       }
     } catch (e) {}
-    return { theme: "default", bgImage: "", overlayOpacity: 86 };
+    return getDefaultAppearance();
   }
 
   function saveAppearanceToStorage() {
     localStorage.setItem(APPEARANCE_STORAGE_KEY, JSON.stringify(siteAppearance));
   }
 
+  function getContrastTextColor(hexColor) {
+    const clean = (hexColor || "#0f172a").replace("#", "");
+    if (clean.length !== 6) return "#ffffff";
+    const r = parseInt(clean.substring(0, 2), 16);
+    const g = parseInt(clean.substring(2, 4), 16);
+    const b = parseInt(clean.substring(4, 6), 16);
+    const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+    return luminance > 0.62 ? "#0f172a" : "#ffffff";
+  }
+
   function applySiteAppearance(appCfg) {
-    const cfg = appCfg || siteAppearance || { theme: "default", bgImage: "", overlayOpacity: 86 };
-    const theme = cfg.theme || "default";
-    if (theme === "default") {
-      document.body.removeAttribute("data-theme");
+    const cfg = normalizeAppearanceObj(appCfg || siteAppearance);
+    if (cfg.darkMode) {
+      document.body.setAttribute("data-mode", "dark");
     } else {
-      document.body.setAttribute("data-theme", theme);
+      document.body.removeAttribute("data-mode");
     }
 
-    const opacityPct = Math.min(95, Math.max(20, Number(cfg.overlayOpacity) || 86));
-    const alpha = (opacityPct / 100).toFixed(2);
-    const baseRgbMap = {
-      default: "241, 245, 249",
-      dark: "11, 17, 32",
-      emerald: "236, 253, 245",
-      royal: "239, 246, 255",
-      warm: "255, 251, 235"
-    };
-    const rgb = baseRgbMap[theme] || baseRgbMap.default;
-    document.documentElement.style.setProperty("--bg-overlay", `rgba(${rgb}, ${alpha})`);
+    const rootStyle = document.documentElement.style;
+    rootStyle.setProperty("--accent-color", cfg.accentColor);
+    rootStyle.setProperty("--dark-pill", cfg.accentColor);
+    rootStyle.setProperty("--accent-text", getContrastTextColor(cfg.accentColor));
 
+    // Glassmorphism card opacity & blur
+    const cardAlpha = (cfg.cardOpacity / 100).toFixed(2);
+    rootStyle.setProperty("--card-alpha", cardAlpha);
+    rootStyle.setProperty("--card-blur", `${cfg.cardBlur}px`);
+
+    // Background overlay tint
+    const overlayAlpha = (cfg.overlayOpacity / 100).toFixed(2);
+    const baseRgb = cfg.darkMode ? "11, 17, 32" : "241, 245, 249";
+    rootStyle.setProperty("--bg-overlay", `rgba(${baseRgb}, ${overlayAlpha})`);
+
+    // Background image & dimensions
     const bg = (cfg.bgImage || "").trim();
     if (bg) {
-      const safeBg = bg.replace(/"/g, '\"');
-      document.documentElement.style.setProperty("--bg-image", `url("${safeBg}")`);
+      const safeBg = bg.replace(/"/g, '"');
+      rootStyle.setProperty("--bg-image", `url("${safeBg}")`);
     } else {
-      document.documentElement.style.setProperty("--bg-image", "none");
+      rootStyle.setProperty("--bg-image", "none");
     }
+
+    const computedSize = cfg.bgSizeMode === "custom" ? `${cfg.bgZoom}% auto` : cfg.bgSizeMode;
+    rootStyle.setProperty("--bg-size", computedSize);
+    rootStyle.setProperty("--bg-pos", `${cfg.bgPosX}% ${cfg.bgPosY}%`);
   }
 
   function switchMainSection(section) {
@@ -1731,11 +1870,7 @@
       }
 
       if (payload && typeof payload === "object" && payload.appearance && typeof payload.appearance === "object") {
-        siteAppearance = {
-          theme: String(payload.appearance.theme || "default"),
-          bgImage: String(payload.appearance.bgImage || ""),
-          overlayOpacity: payload.appearance.overlayOpacity !== undefined ? Number(payload.appearance.overlayOpacity) : 86
-        };
+        siteAppearance = normalizeAppearanceObj(payload.appearance);
         saveAppearanceToStorage();
         applySiteAppearance(siteAppearance);
       }
@@ -2598,17 +2733,88 @@
   });
 
   /* ==================== APPEARANCE & THEME FUNCTIONS ==================== */
+  function populateAppearanceControls(cfg) {
+    const c = normalizeAppearanceObj(cfg);
+    tempDarkMode = c.darkMode;
+    document.getElementById("modeLightBtn").classList.toggle("active", !tempDarkMode);
+    document.getElementById("modeDarkBtn").classList.toggle("active", tempDarkMode);
+
+    document.getElementById("themeColorPicker").value = c.accentColor;
+    document.getElementById("themeColorHexInput").value = c.accentColor;
+
+    document.getElementById("cardOpacityRange").value = c.cardOpacity;
+    document.getElementById("cardOpacityLabel").textContent = `${c.cardOpacity}%`;
+
+    document.getElementById("cardBlurRange").value = c.cardBlur;
+    document.getElementById("cardBlurLabel").textContent = `${c.cardBlur}px`;
+
+    document.getElementById("bgImageUrlInput").value = c.bgImage;
+    document.getElementById("bgImageFileInput").value = "";
+
+    document.getElementById("bgSizeModeSelect").value = c.bgSizeMode;
+    document.getElementById("bgZoomRange").value = c.bgZoom;
+    document.getElementById("bgZoomLabel").textContent = `${c.bgZoom}%`;
+
+    document.getElementById("bgPosXRange").value = c.bgPosX;
+    document.getElementById("bgPosXLabel").textContent = `${c.bgPosX}%`;
+
+    document.getElementById("bgPosYRange").value = c.bgPosY;
+    document.getElementById("bgPosYLabel").textContent = `${c.bgPosY}%`;
+
+    document.getElementById("bgOpacityRange").value = c.overlayOpacity;
+    document.getElementById("bgOpacityLabel").textContent = `${c.overlayOpacity}%`;
+
+    updateBgPreviewBox(c);
+  }
+
+  function readControlsToAppearanceObj() {
+    let hex = document.getElementById("themeColorHexInput").value.trim();
+    if (!/^#[0-9a-fA-F]{6}$/.test(hex)) {
+      hex = document.getElementById("themeColorPicker").value || "#0f172a";
+    }
+    return normalizeAppearanceObj({
+      darkMode: tempDarkMode,
+      accentColor: hex,
+      cardOpacity: Number(document.getElementById("cardOpacityRange").value),
+      cardBlur: Number(document.getElementById("cardBlurRange").value),
+      bgImage: document.getElementById("bgImageUrlInput").value.trim(),
+      bgSizeMode: document.getElementById("bgSizeModeSelect").value,
+      bgZoom: Number(document.getElementById("bgZoomRange").value),
+      bgPosX: Number(document.getElementById("bgPosXRange").value),
+      bgPosY: Number(document.getElementById("bgPosYRange").value),
+      overlayOpacity: Number(document.getElementById("bgOpacityRange").value)
+    });
+  }
+
+  function updateBgPreviewBox(cfg) {
+    const box = document.getElementById("bgPreviewBox");
+    if (cfg.bgImage) {
+      box.style.backgroundImage = `url("${cfg.bgImage.replace(/"/g, '"')}")`;
+      box.style.backgroundSize = cfg.bgSizeMode === "custom" ? `${cfg.bgZoom}% auto` : cfg.bgSizeMode;
+      box.style.backgroundPosition = `${cfg.bgPosX}% ${cfg.bgPosY}%`;
+      box.textContent = "";
+    } else {
+      box.style.backgroundImage = "none";
+      box.textContent = "معاينة الخلفية (لا توجد صورة حالياً)";
+    }
+  }
+
+  function updateLivePreviewFromControls() {
+    const draft = readControlsToAppearanceObj();
+    document.getElementById("cardOpacityLabel").textContent = `${draft.cardOpacity}%`;
+    document.getElementById("cardBlurLabel").textContent = `${draft.cardBlur}px`;
+    document.getElementById("bgZoomLabel").textContent = `${draft.bgZoom}%`;
+    document.getElementById("bgPosXLabel").textContent = `${draft.bgPosX}%`;
+    document.getElementById("bgPosYLabel").textContent = `${draft.bgPosY}%`;
+    document.getElementById("bgOpacityLabel").textContent = `${draft.overlayOpacity}%`;
+    updateBgPreviewBox(draft);
+    applySiteAppearance(draft);
+  }
+
   function openAppearanceModal() {
     isAdminUnlocked = true;
     applyAdminUI();
-    tempSelectedTheme = siteAppearance.theme || "default";
-    document.getElementById("bgImageUrlInput").value = siteAppearance.bgImage || "";
-    document.getElementById("bgImageFileInput").value = "";
-    const op = siteAppearance.overlayOpacity !== undefined ? Number(siteAppearance.overlayOpacity) : 86;
-    document.getElementById("bgOpacityRange").value = op;
-    document.getElementById("bgOpacityLabel").textContent = `${op}%`;
-    highlightSelectedThemeSwatch(tempSelectedTheme);
-    updateBgPreviewFromInput();
+    populateAppearanceControls(siteAppearance);
     document.getElementById("appearanceModal").classList.add("open");
   }
 
@@ -2617,39 +2823,34 @@
     applySiteAppearance(siteAppearance);
   }
 
-  function highlightSelectedThemeSwatch(themeVal) {
-    document.querySelectorAll("#themeSwatches .theme-swatch-btn").forEach(btn => {
-      btn.classList.toggle("active", btn.getAttribute("data-theme-val") === themeVal);
-    });
-  }
-
-  function selectThemeOption(themeVal) {
-    tempSelectedTheme = themeVal;
-    highlightSelectedThemeSwatch(themeVal);
-    const previewUrl = document.getElementById("bgImageUrlInput").value.trim();
-    const previewOp = Number(document.getElementById("bgOpacityRange").value) || 86;
-    applySiteAppearance({ theme: tempSelectedTheme, bgImage: previewUrl, overlayOpacity: previewOp });
-  }
-
-  function updateBgOpacityLabel() {
-    const op = Number(document.getElementById("bgOpacityRange").value) || 86;
-    document.getElementById("bgOpacityLabel").textContent = `${op}%`;
-    const previewUrl = document.getElementById("bgImageUrlInput").value.trim();
-    applySiteAppearance({ theme: tempSelectedTheme, bgImage: previewUrl, overlayOpacity: op });
-  }
-
-  function updateBgPreviewFromInput() {
-    const url = document.getElementById("bgImageUrlInput").value.trim();
-    const box = document.getElementById("bgPreviewBox");
-    if (url) {
-      box.style.backgroundImage = `url("${url.replace(/"/g, '\"')}")`;
-      box.textContent = "";
-    } else {
-      box.style.backgroundImage = "none";
-      box.textContent = "معاينة الخلفية (لا توجد صورة حالياً)";
+  function selectDarkMode(isDark) {
+    tempDarkMode = Boolean(isDark);
+    document.getElementById("modeLightBtn").classList.toggle("active", !tempDarkMode);
+    document.getElementById("modeDarkBtn").classList.toggle("active", tempDarkMode);
+    // Auto-suggest high-contrast accent if user hadn't customized away from default dark/light
+    const currentHex = document.getElementById("themeColorPicker").value.toLowerCase();
+    if (tempDarkMode && currentHex === "#0f172a") {
+      document.getElementById("themeColorPicker").value = "#38bdf8";
+      document.getElementById("themeColorHexInput").value = "#38bdf8";
+    } else if (!tempDarkMode && currentHex === "#38bdf8") {
+      document.getElementById("themeColorPicker").value = "#0f172a";
+      document.getElementById("themeColorHexInput").value = "#0f172a";
     }
-    const op = Number(document.getElementById("bgOpacityRange").value) || 86;
-    applySiteAppearance({ theme: tempSelectedTheme, bgImage: url, overlayOpacity: op });
+    updateLivePreviewFromControls();
+  }
+
+  function onThemeColorChange(hexVal) {
+    document.getElementById("themeColorPicker").value = hexVal;
+    document.getElementById("themeColorHexInput").value = hexVal;
+    updateLivePreviewFromControls();
+  }
+
+  function onThemeHexTyped(val) {
+    const clean = val.trim();
+    if (/^#[0-9a-fA-F]{6}$/.test(clean)) {
+      document.getElementById("themeColorPicker").value = clean;
+      updateLivePreviewFromControls();
+    }
   }
 
   function handleBgFileUpload(event) {
@@ -2660,7 +2861,7 @@
       const img = new Image();
       img.onload = function() {
         const canvas = document.createElement("canvas");
-        const maxDim = 1280;
+        const maxDim = 1400;
         let w = img.width;
         let h = img.height;
         if (w > maxDim || h > maxDim) {
@@ -2676,9 +2877,9 @@
         canvas.height = h;
         const ctx = canvas.getContext("2d");
         ctx.drawImage(img, 0, 0, w, h);
-        const compressedDataUrl = canvas.toDataURL("image/jpeg", 0.72);
+        const compressedDataUrl = canvas.toDataURL("image/jpeg", 0.74);
         document.getElementById("bgImageUrlInput").value = compressedDataUrl;
-        updateBgPreviewFromInput();
+        updateLivePreviewFromControls();
         showToast("تم تجهيز الصورة وضغطها للمزامنة");
       };
       img.src = e.target.result;
@@ -2689,18 +2890,18 @@
   function clearBackgroundImage() {
     document.getElementById("bgImageUrlInput").value = "";
     document.getElementById("bgImageFileInput").value = "";
-    updateBgPreviewFromInput();
+    updateLivePreviewFromControls();
+  }
+
+  function resetAppearanceDefault() {
+    const def = getDefaultAppearance();
+    populateAppearanceControls(def);
+    applySiteAppearance(def);
   }
 
   async function saveAppearanceForm(event) {
     if (event) event.preventDefault();
-    const bgImage = document.getElementById("bgImageUrlInput").value.trim();
-    const overlayOpacity = Number(document.getElementById("bgOpacityRange").value) || 86;
-    siteAppearance = {
-      theme: tempSelectedTheme || "default",
-      bgImage,
-      overlayOpacity
-    };
+    siteAppearance = readControlsToAppearanceObj();
     saveAppearanceToStorage();
     applySiteAppearance(siteAppearance);
     document.getElementById("appearanceModal").classList.remove("open");
@@ -2754,11 +2955,7 @@
         }
 
         if (payload && typeof payload === "object" && payload.appearance && typeof payload.appearance === "object") {
-          siteAppearance = {
-            theme: String(payload.appearance.theme || "default"),
-            bgImage: String(payload.appearance.bgImage || ""),
-            overlayOpacity: payload.appearance.overlayOpacity !== undefined ? Number(payload.appearance.overlayOpacity) : 86
-          };
+          siteAppearance = normalizeAppearanceObj(payload.appearance);
           saveAppearanceToStorage();
           applySiteAppearance(siteAppearance);
           applied = true;
