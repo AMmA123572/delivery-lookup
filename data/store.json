@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-27T21:42:21.882Z",
+  "updatedAt": "2026-11-27T22:38:12.939Z",
   "areas": [
     {
       "area": "الجاردنز",
@@ -1426,7 +1426,7 @@
   ],
   "customCards": {},
   "appearance": {
-    "darkMode": true,
+    "darkMode": false,
     "accentColor": "#32057f",
     "cardOpacity": 20,
     "cardBlur": 7,
