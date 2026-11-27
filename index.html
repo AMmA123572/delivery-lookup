@@ -120,10 +120,52 @@
     }
 
     .main-tabs {
-      background: var(--tab-bg-override, rgba(var(--surface-rgb), 0.65));
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(148, 163, 184, 0.25);
+      background: transparent !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+      border: none !important;
+      box-shadow: none !important;
+      padding: 0 !important;
+      gap: 10px !important;
+      flex-wrap: wrap;
+    }
+
+    .main-tab-btn {
+      background: var(--card-bg-override, rgba(var(--surface-rgb), var(--card-alpha))) !important;
+      backdrop-filter: blur(var(--card-blur)) saturate(150%) !important;
+      -webkit-backdrop-filter: blur(var(--card-blur)) saturate(150%) !important;
+      border: 1.5px solid rgba(255, 255, 255, var(--border-alpha)) !important;
+      box-shadow: var(--shadow-sm) !important;
+      border-radius: 16px !important;
+      padding: 10px 18px !important;
+      color: var(--text-main) !important;
+    }
+
+    body[data-mode="dark"] .main-tab-btn:not(.active) {
+      border-color: rgba(148, 163, 184, 0.22) !important;
+      color: #f8fafc !important;
+    }
+
+    .main-tab-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 26px rgba(15, 23, 42, 0.14) !important;
+    }
+
+    .main-tab-btn.active {
+      background: var(--accent-color) !important;
+      border-color: var(--accent-color) !important;
+      color: var(--accent-text) !important;
+      box-shadow: 0 8px 22px rgba(15, 23, 42, 0.22) !important;
+    }
+
+    .main-tab-btn:not(.active) .tab-pill-count {
+      background: rgba(148, 163, 184, 0.24) !important;
+      color: inherit !important;
+    }
+
+    .btn-sections-top {
+      background: #0284c7;
+      color: #ffffff;
     }
 
     .item-contents-box {
@@ -597,51 +639,26 @@
 
     .main-tabs {
       display: inline-flex;
-      background: #e2e8f0;
-      padding: 5px;
-      border-radius: 14px;
-      gap: 6px;
-      box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.06);
+      align-items: center;
     }
 
     .main-tab-btn {
-      border: none;
-      background: transparent;
-      color: #475569;
       font-size: 0.95rem;
       font-weight: 800;
-      padding: 9px 20px;
-      border-radius: 10px;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      transition: all 0.18s ease;
       white-space: nowrap;
     }
 
-    .main-tab-btn:hover {
-      color: #0f172a;
-    }
-
-    .main-tab-btn.active {
-      background: #0f172a;
-      color: #ffffff;
-      box-shadow: 0 3px 10px rgba(15, 23, 42, 0.18);
-    }
-
     .tab-pill-count {
-      background: rgba(255, 255, 255, 0.16);
+      background: rgba(255, 255, 255, 0.2);
       color: inherit;
       font-size: 0.78rem;
-      padding: 1px 8px;
+      padding: 2px 9px;
       border-radius: 999px;
       font-weight: 800;
-    }
-
-    .main-tab-btn:not(.active) .tab-pill-count {
-      background: #cbd5e1;
-      color: #1e293b;
     }
 
     .sync-status-pill {
@@ -1422,18 +1439,7 @@
 
 <div class="container">
   <div class="main-tabs-bar">
-    <div class="main-tabs" role="tablist">
-      <button type="button" class="main-tab-btn active" id="tabDeliveryBtn" onclick="switchMainSection('delivery')">
-        <span>🛵</span>
-        <span>التوصيل والأفرع</span>
-        <span class="tab-pill-count" id="deliveryTabCount">149</span>
-      </button>
-      <button type="button" class="main-tab-btn" id="tabMenuBtn" onclick="switchMainSection('menu')">
-        <span>🍽️</span>
-        <span>الأصناف ومحتوياتها</span>
-        <span class="tab-pill-count" id="menuTabCount">0</span>
-      </button>
-    </div>
+    <div class="main-tabs" id="mainTabsContainer" role="tablist"></div>
 
     <div class="sync-status-pill" onclick="handleSecretTap()" title="انقر 5 مرات لتفعيل وضع الإدارة">
       <span class="sync-dot" id="syncDot"></span>
@@ -1456,6 +1462,7 @@
       <button type="button" class="admin-toolbar-btn btn-add-top" id="addAreaTopBtn" onclick="openAddAreaModal()">+ إضافة منطقة</button>
       <button type="button" class="admin-toolbar-btn btn-manage-top" id="manageTopBtn" onclick="openManageModal()">✏️ إدارة المناطق</button>
       <button type="button" class="admin-toolbar-btn btn-cloud-top" id="cloudTopBtn" onclick="openCloudModal()">🆓 مزامنة مجانية</button>
+      <button type="button" class="admin-toolbar-btn btn-sections-top" id="sectionsTopBtn" onclick="openManageSectionsModal()">🗂️ إدارة السكشنات</button>
       <button type="button" class="admin-toolbar-btn btn-appearance-top" id="appearanceTopBtn" onclick="openAppearanceModal()">🎨 المظهر والخلفية</button>
     </div>
 
@@ -1520,6 +1527,7 @@
       <button type="button" class="admin-toolbar-btn btn-add-top" id="addMenuTopBtn" onclick="openAddMenuModal()">+ إضافة صنف</button>
       <button type="button" class="admin-toolbar-btn btn-manage-top" id="manageMenuTopBtn" onclick="openManageMenuModal()">✏️ إدارة الأصناف</button>
       <button type="button" class="admin-toolbar-btn btn-cloud-top" id="cloudMenuTopBtn" onclick="openCloudModal()">🆓 مزامنة مجانية</button>
+      <button type="button" class="admin-toolbar-btn btn-sections-top" id="sectionsMenuTopBtn" onclick="openManageSectionsModal()">🗂️ إدارة السكشنات</button>
       <button type="button" class="admin-toolbar-btn btn-appearance-top" id="appearanceMenuTopBtn" onclick="openAppearanceModal()">🎨 المظهر والخلفية</button>
     </div>
 
@@ -1537,6 +1545,71 @@
     </div>
 
     <div class="cards-grid" id="menuCardsGrid"></div>
+  </div>
+
+  <div id="troubleshootSection" class="view-section hidden">
+    <div class="search-wrapper">
+      <span class="search-icon">🛠️</span>
+      <input
+        type="text"
+        id="troubleshootSearchInput"
+        class="search-input"
+        placeholder="ابحث بعنوان المشكلة أو طريقة الحل... (مثلاً: تأخير الطلب، عنوان غير واضح، الدفع)"
+        autocomplete="off"
+      />
+      <button type="button" class="esc-btn" onclick="clearTroubleshootSearch()" title="مسح البحث">ESC للمسح</button>
+      <button type="button" class="admin-toolbar-btn btn-add-top" id="addTroubleTopBtn" onclick="openAddTroubleModal()">+ إضافة مشكلة وحل</button>
+      <button type="button" class="admin-toolbar-btn btn-manage-top" id="manageTroubleTopBtn" onclick="openManageTroubleModal()">✏️ إدارة المشاكل</button>
+      <button type="button" class="admin-toolbar-btn btn-sections-top" id="sectionsTroubleTopBtn" onclick="openManageSectionsModal()">🗂️ إدارة السكشنات</button>
+      <button type="button" class="admin-toolbar-btn btn-cloud-top" id="cloudTroubleTopBtn" onclick="openCloudModal()">🆓 مزامنة مجانية</button>
+      <button type="button" class="admin-toolbar-btn btn-appearance-top" id="appearanceTroubleTopBtn" onclick="openAppearanceModal()">🎨 المظهر والخلفية</button>
+    </div>
+
+    <div class="filters-bar" id="troubleFiltersBar"></div>
+
+    <div class="info-strip">
+      <div class="info-note">
+        <span class="info-note-dot"></span>
+        <span>دليل سريع للمشاكل المتكررة وخطوات حلها المعتمدة</span>
+      </div>
+      <div class="count-summary">
+        <span class="count-badge" id="troubleTotalBadge" onclick="handleSecretTap()" title="انقر 5 مرات لتفعيل وضع الإدارة">0</span>
+        <span id="troubleCountLabel">مشكلة وحل في الدليل</span>
+      </div>
+    </div>
+
+    <div class="cards-grid" id="troubleCardsGrid"></div>
+  </div>
+
+  <div id="customSectionView" class="view-section hidden">
+    <div class="search-wrapper">
+      <span class="search-icon" id="customSectionSearchIcon">📌</span>
+      <input
+        type="text"
+        id="customSectionSearchInput"
+        class="search-input"
+        placeholder="ابحث في هذا القسم..."
+        autocomplete="off"
+      />
+      <button type="button" class="esc-btn" onclick="clearCustomSectionSearch()" title="مسح البحث">ESC للمسح</button>
+      <button type="button" class="admin-toolbar-btn btn-add-top" id="addCustomCardTopBtn" onclick="openAddCustomCardModal()">+ إضافة كارد جديد</button>
+      <button type="button" class="admin-toolbar-btn btn-sections-top" id="sectionsCustomTopBtn" onclick="openManageSectionsModal()">🗂️ إدارة السكشنات</button>
+      <button type="button" class="admin-toolbar-btn btn-cloud-top" id="cloudCustomTopBtn" onclick="openCloudModal()">🆓 مزامنة مجانية</button>
+      <button type="button" class="admin-toolbar-btn btn-appearance-top" id="appearanceCustomTopBtn" onclick="openAppearanceModal()">🎨 المظهر والخلفية</button>
+    </div>
+
+    <div class="info-strip">
+      <div class="info-note">
+        <span class="info-note-dot"></span>
+        <span id="customSectionSubtitle">محتويات وكاردات القسم</span>
+      </div>
+      <div class="count-summary">
+        <span class="count-badge" id="customSectionTotalBadge" onclick="handleSecretTap()" title="انقر 5 مرات لتفعيل وضع الإدارة">0</span>
+        <span id="customSectionCountLabel">كارد في هذا السكشن</span>
+      </div>
+    </div>
+
+    <div class="cards-grid" id="customSectionCardsGrid"></div>
   </div>
 </div>
 
@@ -1635,6 +1708,92 @@
   </div>
 </div>
 
+<div class="modal-backdrop" id="troubleItemModal" style="z-index:500;">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="troubleModalTitle">➕ إضافة مشكلة وحل جديد</h2>
+      <button type="button" class="btn-m btn-m-light" onclick="closeTroubleModal()">إغلاق</button>
+    </div>
+    <form id="troubleForm" onsubmit="saveTroubleForm(event)">
+      <div class="form-group">
+        <label class="form-label" for="troubleTitleInput">عنوان المشكلة</label>
+        <input type="text" id="troubleTitleInput" class="form-control" placeholder="مثال: تأخر السائق عن موعد التسليم" required />
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="troubleCategoryInput">تصنيف المشكلة (اختياري)</label>
+        <input type="text" id="troubleCategoryInput" class="form-control" placeholder="مثال: التوصيل، الطلبات، الدفع، عام" />
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="troubleSolutionInput">الحل والإجراء المعتمد</label>
+        <textarea id="troubleSolutionInput" class="form-control" placeholder="اكتب خطوات حل المشكلة بالتفصيل..." required></textarea>
+      </div>
+      <div class="modal-actions">
+        <button type="submit" class="btn-m btn-m-success">💾 حفظ في الدليل</button>
+        <button type="button" class="btn-m btn-m-light" onclick="closeTroubleModal()">إلغاء</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="manageTroubleModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>✏️ إدارة دليل حل المشاكل</h2>
+      <button type="button" class="btn-m btn-m-light" onclick="closeManageTroubleModal()">إغلاق</button>
+    </div>
+    <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px;">
+      <button type="button" class="btn-m btn-m-success" onclick="openAddTroubleModal()">+ إضافة مشكلة جديدة</button>
+    </div>
+    <input type="text" id="manageTroubleFilterInput" class="form-control" placeholder="ابحث في المشاكل..." oninput="renderManageTroubleList()" />
+    <div class="manage-list" id="manageTroubleList"></div>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="customCardModal" style="z-index:500;">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="customCardModalTitle">➕ إضافة كارد جديد</h2>
+      <button type="button" class="btn-m btn-m-light" onclick="closeCustomCardModal()">إغلاق</button>
+    </div>
+    <form id="customCardForm" onsubmit="saveCustomCardForm(event)">
+      <div class="form-group">
+        <label class="form-label" for="customCardTitleInput">العنوان</label>
+        <input type="text" id="customCardTitleInput" class="form-control" required />
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="customCardTagInput">وسم / تصنيف فرعي (اختياري)</label>
+        <input type="text" id="customCardTagInput" class="form-control" />
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="customCardBodyInput">التفاصيل / المحتوى</label>
+        <textarea id="customCardBodyInput" class="form-control" required></textarea>
+      </div>
+      <div class="modal-actions">
+        <button type="submit" class="btn-m btn-m-success">💾 حفظ الكارد</button>
+        <button type="button" class="btn-m btn-m-light" onclick="closeCustomCardModal()">إلغاء</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="modal-backdrop" id="manageSectionsModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2>🗂️ إدارة السكشنات العلوية (إضافة / تعديل / حذف)</h2>
+      <button type="button" class="btn-m btn-m-light" onclick="closeManageSectionsModal()">إغلاق</button>
+    </div>
+    <div class="help-note">
+      يمكنك تعديل أسماء وأيقونات السكشنات الحالية، أو إضافة سكشنات جديدة بالكامل، أو حذف أي سكشن.
+    </div>
+    <form id="addSectionForm" onsubmit="addNewSection(event)" style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px;">
+      <input type="text" id="newSectionIconInput" class="form-control" style="width:74px; text-align:center;" value="📌" maxlength="4" title="أيقونة السكشن" />
+      <input type="text" id="newSectionNameInput" class="form-control" style="flex:1; min-width:160px;" placeholder="اسم السكشن الجديد..." required />
+      <button type="submit" class="btn-m btn-m-success">+ إضافة سكشن</button>
+    </form>
+    <div class="manage-list" id="manageSectionsList"></div>
+  </div>
+</div>
+
 <div class="modal-backdrop" id="cloudModal">
   <div class="modal">
     <div class="modal-header">
@@ -1703,6 +1862,9 @@
 <script>
   const STORAGE_KEY = "delivery_rates_custom_v1";
   const MENU_STORAGE_KEY = "restaurant_menu_items_v1";
+  const TROUBLE_STORAGE_KEY = "restaurant_troubleshoot_v1";
+  const SECTIONS_STORAGE_KEY = "restaurant_sections_config_v1";
+  const CUSTOM_CARDS_STORAGE_KEY = "restaurant_custom_section_cards_v1";
   const CLOUD_CONFIG_KEY = "delivery_github_sync_config_v1";
   const APPEARANCE_STORAGE_KEY = "delivery_site_appearance_v1";
 
@@ -1718,7 +1880,28 @@
   let secretTapTimer = null;
   let editingItemRef = null;
   let editingMenuRef = null;
+  let editingTroubleRef = null;
+  let editingCustomCardRef = null;
   let activeMainSection = "delivery";
+
+  const DEFAULT_SECTIONS = [
+    { id: "delivery", name: "التوصيل والأفرع", icon: "🛵", type: "builtin" },
+    { id: "menu", name: "الأصناف ومحتوياتها", icon: "🍽️", type: "builtin" },
+    { id: "troubleshoot", name: "دليل حل المشاكل", icon: "🛠️", type: "builtin" }
+  ];
+
+  const DEFAULT_TROUBLES = [
+    {
+      title: "تأخر السائق عن الموعد المحدد للتوصيل",
+      category: "التوصيل",
+      solution: "1. التواصل فوراً مع السائق لتحديد موقعه الحالي والوقت المتوقع للوصول.\n2. إبلاغ الزبون بالوقت المحدث بشفافية واعتذار لطيف.\n3. في حال تجاوز التأخير 20 دقيقة، يتم التنسيق مع مشرف الفرع لتقديم تعويض مناسب."
+    },
+    {
+      title: "وصول طلب ناقص أو صنف مختلف للزبون",
+      category: "الطلبات",
+      solution: "1. الاعتذار من الزبون وتأكيد تفاصيل الصنف الناقص.\n2. تجهيز الصنف فوراً وإرساله بأقرب سائق متاح على نفقة المطعم.\n3. تسجيل ملاحظة لمتابعة التغليف في الفرع."
+    }
+  ];
 
   const BRANCH_COLORS = {
     "المدينة المنورة": "#2563eb",
@@ -1734,7 +1917,11 @@
     "سندويشات": "#d97706",
     "عروض": "#dc2626",
     "مقبلات وإضافات": "#7c3aed",
-    "مشروبات": "#0284c7"
+    "مشروبات": "#0284c7",
+    "التوصيل": "#2563eb",
+    "الطلبات": "#d97706",
+    "الدفع": "#059669",
+    "عام": "#64748b"
   };
 
   const DEFAULT_DATA = [
@@ -1891,74 +2078,108 @@
 
   let activeData = loadSavedData();
   let menuItems = loadSavedMenu();
+  let troubleItems = loadSavedTroubles();
+  let sectionsConfig = loadSavedSections();
+  let customSectionCards = loadSavedCustomCards();
   let selectedBranch = "الكل";
   let selectedMenuCategory = "الكل";
+  let selectedTroubleCategory = "الكل";
   let siteAppearance = loadSavedAppearance();
   let tempDarkMode = Boolean(siteAppearance.darkMode);
 
-  function hexToRgba(hexColor, alpha) {
-    const clean = (hexColor || "").replace("#", "").trim();
-    if (!/^[0-9a-fA-F]{6}$/.test(clean)) return "";
-    const r = parseInt(clean.substring(0, 2), 16);
-    const g = parseInt(clean.substring(2, 4), 16);
-    const b = parseInt(clean.substring(4, 6), 16);
-    return `rgba(${r}, ${g}, ${b}, ${Number(alpha).toFixed(2)})`;
+  function loadSavedSections() {
+    try {
+      const raw = localStorage.getItem(SECTIONS_STORAGE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
+    } catch (e) {}
+    return DEFAULT_SECTIONS.map(s => ({ ...s }));
   }
 
-  function normalizeHexOrEmpty(val) {
-    const clean = String(val || "").trim();
-    return /^#[0-9a-fA-F]{6}$/.test(clean) ? clean.toLowerCase() : "";
+  function saveSectionsToStorage() {
+    localStorage.setItem(SECTIONS_STORAGE_KEY, JSON.stringify(sectionsConfig));
+    renderMainTabs();
+  }
+
+  function loadSavedTroubles() {
+    try {
+      const raw = localStorage.getItem(TROUBLE_STORAGE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) return parsed;
+      }
+    } catch (e) {}
+    return DEFAULT_TROUBLES.map(t => ({ ...t }));
+  }
+
+  function saveTroublesToStorage() {
+    localStorage.setItem(TROUBLE_STORAGE_KEY, JSON.stringify(troubleItems));
+    renderMainTabs();
+  }
+
+  function loadSavedCustomCards() {
+    try {
+      const raw = localStorage.getItem(CUSTOM_CARDS_STORAGE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed && typeof parsed === "object") return parsed;
+      }
+    } catch (e) {}
+    return {};
+  }
+
+  function saveCustomCardsToStorage() {
+    localStorage.setItem(CUSTOM_CARDS_STORAGE_KEY, JSON.stringify(customSectionCards));
+    renderMainTabs();
+  }
+
+  function getSectionItemCount(secId) {
+    if (secId === "delivery") return activeData.length;
+    if (secId === "menu") return menuItems.length;
+    if (secId === "troubleshoot") return troubleItems.length;
+    return (customSectionCards[secId] || []).length;
+  }
+
+  function renderMainTabs() {
+    const container = document.getElementById("mainTabsContainer");
+    if (!container) return;
+    if (sectionsConfig.length === 0) {
+      container.innerHTML = "";
+      return;
+    }
+    if (!sectionsConfig.some(s => s.id === activeMainSection)) {
+      activeMainSection = sectionsConfig[0].id;
+    }
+    container.innerHTML = sectionsConfig.map(sec => {
+      const isActive = sec.id === activeMainSection;
+      const count = getSectionItemCount(sec.id);
+      return `
+        <button type="button" class="main-tab-btn ${isActive ? "active" : ""}" onclick="switchMainSection('${sec.id}')">
+          <span>${escapeHtml(sec.icon || "📌")}</span>
+          <span>${escapeHtml(sec.name)}</span>
+          <span class="tab-pill-count">${count}</span>
+        </button>
+      `;
+    }).join("");
   }
 
   function getDefaultAppearance() {
     return {
       darkMode: false,
       accentColor: "#0f172a",
-      cardColor: "",
-      innerBoxColor: "",
-      tabsColor: "",
       cardOpacity: 72,
       cardBlur: 14,
       bgImage: "",
-      bgSizeMode: "cover",
-      bgZoom: 100,
-      bgPosX: 50,
-      bgPosY: 50,
-      bgBrightness: 100,
-      bgContrast: 100,
       overlayOpacity: 45
-    };
-  }
-
-  function normalizeAppearanceObj(rawObj) {
-    const def = getDefaultAppearance();
-    if (!rawObj || typeof rawObj !== "object") return def;
-    let dark = Boolean(rawObj.darkMode);
-    let accent = String(rawObj.accentColor || def.accentColor).trim();
-    if (!/^#[0-9a-fA-F]{6}$/.test(accent)) accent = def.accentColor;
-    return {
-      darkMode: dark,
-      accentColor: accent,
-      cardColor: normalizeHexOrEmpty(rawObj.cardColor),
-      innerBoxColor: normalizeHexOrEmpty(rawObj.innerBoxColor),
-      tabsColor: normalizeHexOrEmpty(rawObj.tabsColor),
-      cardOpacity: rawObj.cardOpacity !== undefined ? Math.min(100, Math.max(15, Number(rawObj.cardOpacity))) : def.cardOpacity,
-      cardBlur: rawObj.cardBlur !== undefined ? Math.min(30, Math.max(0, Number(rawObj.cardBlur))) : def.cardBlur,
-      bgImage: String(rawObj.bgImage || ""),
-      bgSizeMode: ["cover", "contain", "100% 100%", "custom"].includes(rawObj.bgSizeMode) ? rawObj.bgSizeMode : def.bgSizeMode,
-      bgZoom: rawObj.bgZoom !== undefined ? Math.min(220, Math.max(30, Number(rawObj.bgZoom))) : def.bgZoom,
-      bgPosX: rawObj.bgPosX !== undefined ? Math.min(100, Math.max(0, Number(rawObj.bgPosX))) : def.bgPosX,
-      bgPosY: rawObj.bgPosY !== undefined ? Math.min(100, Math.max(0, Number(rawObj.bgPosY))) : def.bgPosY,
-      bgBrightness: rawObj.bgBrightness !== undefined ? Math.min(180, Math.max(15, Number(rawObj.bgBrightness))) : def.bgBrightness,
-      bgContrast: rawObj.bgContrast !== undefined ? Math.min(200, Math.max(40, Number(rawObj.bgContrast))) : def.bgContrast,
-      overlayOpacity: rawObj.overlayOpacity !== undefined ? Math.min(92, Math.max(0, Number(rawObj.overlayOpacity))) : def.overlayOpacity
     };
   }
 
   function loadSavedAppearance() {
     try {
       const raw = localStorage.getItem(APPEARANCE_STORAGE_KEY);
-      if (raw) return normalizeAppearanceObj(JSON.parse(raw));
+      if (raw) return { ...getDefaultAppearance(), ...JSON.parse(raw) };
     } catch (e) {}
     return getDefaultAppearance();
   }
@@ -1978,21 +2199,20 @@
   }
 
   function applySiteAppearance(appCfg) {
-    const cfg = normalizeAppearanceObj(appCfg || siteAppearance);
+    const cfg = { ...getDefaultAppearance(), ...(appCfg || siteAppearance) };
     if (cfg.darkMode) document.body.setAttribute("data-mode", "dark");
     else document.body.removeAttribute("data-mode");
     const rootStyle = document.documentElement.style;
     rootStyle.setProperty("--accent-color", cfg.accentColor);
     rootStyle.setProperty("--dark-pill", cfg.accentColor);
     rootStyle.setProperty("--accent-text", getContrastTextColor(cfg.accentColor));
-    const cardAlpha = (cfg.cardOpacity / 100).toFixed(2);
-    rootStyle.setProperty("--card-alpha", cardAlpha);
+    rootStyle.setProperty("--card-alpha", (cfg.cardOpacity / 100).toFixed(2));
     rootStyle.setProperty("--card-blur", `${cfg.cardBlur}px`);
     const overlayAlpha = (cfg.overlayOpacity / 100).toFixed(2);
     const baseRgb = cfg.darkMode ? "11, 17, 32" : "241, 245, 249";
     rootStyle.setProperty("--bg-overlay", `rgba(${baseRgb}, ${overlayAlpha})`);
     const bg = (cfg.bgImage || "").trim();
-    rootStyle.setProperty("--bg-image", bg ? `url("${bg.replace(/"/g, '"')}")` : "none");
+    rootStyle.setProperty("--bg-image", bg ? `url("${bg.replace(/"/g, '\"')}")` : "none");
   }
 
   function triggerSectionAnimation(sectionEl) {
@@ -2002,29 +2222,50 @@
     sectionEl.classList.add("section-animating");
   }
 
-  function switchMainSection(section) {
-    activeMainSection = section;
-    const isDelivery = section === "delivery";
+  function switchMainSection(sectionId) {
+    activeMainSection = sectionId;
+    renderMainTabs();
+
     const delEl = document.getElementById("deliverySection");
     const menuEl = document.getElementById("menuSection");
-    delEl.classList.toggle("hidden", !isDelivery);
-    menuEl.classList.toggle("hidden", isDelivery);
-    document.getElementById("tabDeliveryBtn").classList.toggle("active", isDelivery);
-    document.getElementById("tabMenuBtn").classList.toggle("active", !isDelivery);
-    if (isDelivery) {
+    const troubleEl = document.getElementById("troubleshootSection");
+    const customEl = document.getElementById("customSectionView");
+
+    delEl.classList.add("hidden");
+    menuEl.classList.add("hidden");
+    troubleEl.classList.add("hidden");
+    customEl.classList.add("hidden");
+
+    if (sectionId === "delivery") {
+      delEl.classList.remove("hidden");
       renderChips();
       renderCards();
       triggerSectionAnimation(delEl);
-    } else {
+    } else if (sectionId === "menu") {
+      menuEl.classList.remove("hidden");
       renderMenuChips();
       renderMenuCards();
       triggerSectionAnimation(menuEl);
+    } else if (sectionId === "troubleshoot") {
+      troubleEl.classList.remove("hidden");
+      renderTroubleChips();
+      renderTroubleCards();
+      triggerSectionAnimation(troubleEl);
+    } else {
+      const secObj = sectionsConfig.find(s => s.id === sectionId);
+      if (secObj) {
+        customEl.classList.remove("hidden");
+        document.getElementById("customSectionSearchIcon").textContent = secObj.icon || "📌";
+        document.getElementById("customSectionSearchInput").placeholder = `ابحث في قسم ${secObj.name}...`;
+        document.getElementById("customSectionSubtitle").textContent = `محتويات وكاردات قسم: ${secObj.name}`;
+        renderCustomSectionCards();
+        triggerSectionAnimation(customEl);
+      }
     }
   }
 
   function updateTopTabCounts() {
-    document.getElementById("deliveryTabCount").textContent = activeData.length;
-    document.getElementById("menuTabCount").textContent = menuItems.length;
+    renderMainTabs();
   }
 
   function getCloudConfig() {
@@ -2085,14 +2326,6 @@
     updateTopTabCounts();
   }
 
-  function normalizeEntries(arr) {
-    return arr.map(item => ({
-      area: String(item.area || "").trim(),
-      branch: cleanBranchName(String(item.branch || "")),
-      price: Number(item.price)
-    })).filter(item => item.area && item.branch && !isNaN(item.price));
-  }
-
   function normalizeMenuEntries(arr) {
     return arr.map(item => ({
       name: String(item.name || "").trim(),
@@ -2110,22 +2343,108 @@
   }
 
   async function pullDataFromCloud(showFeedback = false) {
-    if (showFeedback) openCloudModal();
+    const cfg = getCloudConfig();
+    if (!cfg.owner || !cfg.repo) {
+      if (showFeedback) openCloudModal();
+      return;
+    }
+    try {
+      const url = `https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${cfg.path}?ref=${cfg.branch}&t=${Date.now()}`;
+      const headers = { Accept: "application/vnd.github.v3+json" };
+      if (cfg.apiKey) headers.Authorization = `token ${cfg.apiKey}`;
+      const res = await fetch(url, { headers });
+      if (!res.ok) throw new Error("Fetch failed");
+      const fileData = await res.json();
+      const decoded = decodeURIComponent(escape(atob(fileData.content.replace(/\n/g, ""))));
+      const store = JSON.parse(decoded);
+      if (Array.isArray(store.areas) && store.areas.length > 0) {
+        activeData = store.areas;
+        saveDataToStorage();
+      }
+      if (Array.isArray(store.menu)) {
+        menuItems = normalizeMenuEntries(store.menu);
+        saveMenuToStorage();
+      }
+      if (Array.isArray(store.troubles)) {
+        troubleItems = store.troubles;
+        saveTroublesToStorage();
+      }
+      if (Array.isArray(store.sections) && store.sections.length > 0) {
+        sectionsConfig = store.sections;
+        saveSectionsToStorage();
+      }
+      if (store.customCards && typeof store.customCards === "object") {
+        customSectionCards = store.customCards;
+        saveCustomCardsToStorage();
+      }
+      if (store.appearance) {
+        siteAppearance = { ...siteAppearance, ...store.appearance };
+        saveAppearanceToStorage();
+        applySiteAppearance(siteAppearance);
+      }
+      renderMainTabs();
+      switchMainSection(activeMainSection);
+      setSyncIndicator(true, "متصل بالسحابة");
+      if (showFeedback) showToast("تم جلب أحدث البيانات بنجاح");
+    } catch (e) {
+      setSyncIndicator(true, "جاهز (محلي)");
+      if (showFeedback) showToast("تعذر الجلب من السحابة، تحقق من الإعدادات");
+    }
   }
 
   async function pushDataToCloud(showFeedback = false) {
-    if (showFeedback) showToast("تم الحفظ محلياً");
-    return false;
+    const cfg = getCloudConfig();
+    if (!cfg.owner || !cfg.repo || !cfg.apiKey) {
+      if (showFeedback) showToast("تم الحفظ محلياً (أضف توكن GitHub للمزامنة السحابية)");
+      return false;
+    }
+    try {
+      const apiUrl = `https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${cfg.path}`;
+      const headers = {
+        Accept: "application/vnd.github.v3+json",
+        Authorization: `token ${cfg.apiKey}`,
+        "Content-Type": "application/json"
+      };
+      let sha = undefined;
+      const getRes = await fetch(`${apiUrl}?ref=${cfg.branch}`, { headers });
+      if (getRes.ok) {
+        const existing = await getRes.json();
+        sha = existing.sha;
+      }
+      const payloadObj = {
+        updatedAt: new Date().toISOString(),
+        areas: activeData,
+        menu: menuItems,
+        troubles: troubleItems,
+        sections: sectionsConfig,
+        customCards: customSectionCards,
+        appearance: siteAppearance
+      };
+      const contentB64 = btoa(unescape(encodeURIComponent(JSON.stringify(payloadObj, null, 2))));
+      const putRes = await fetch(apiUrl, {
+        method: "PUT",
+        headers,
+        body: JSON.stringify({
+          message: "Update store data from web panel",
+          content: contentB64,
+          branch: cfg.branch,
+          sha
+        })
+      });
+      if (!putRes.ok) throw new Error("Push failed");
+      setSyncIndicator(true, "متصل بالسحابة");
+      if (showFeedback) showToast("تم حفظ ونشر البيانات إلى GitHub بنجاح");
+      return true;
+    } catch (e) {
+      if (showFeedback) showToast("تم الحفظ محلياً، تعذر النشر إلى GitHub");
+      return false;
+    }
   }
 
   function applyAdminUI() {
     document.body.classList.toggle("admin-mode", isAdminUnlocked);
-    [
-      "addAreaTopBtn", "manageTopBtn", "cloudTopBtn", "appearanceTopBtn",
-      "addMenuTopBtn", "manageMenuTopBtn", "cloudMenuTopBtn", "appearanceMenuTopBtn"
-    ].forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.classList.toggle("visible", isAdminUnlocked);
+    document.querySelectorAll(".admin-toolbar-btn").forEach(el => {
+      el.classList.toggle("visible", isAdminUnlocked);
     });
   }
 
@@ -2149,8 +2468,11 @@
       secretTapCount = 0;
       isAdminUnlocked = !isAdminUnlocked;
       applyAdminUI();
+      renderCards();
       renderMenuCards();
-      showToast(isAdminUnlocked ? "تم تفعيل وضع الإضافة والتعديل والحذف" : "تم إخفاء خيارات التعديل");
+      renderTroubleCards();
+      renderCustomSectionCards();
+      showToast(isAdminUnlocked ? "تم تفعيل وضع الإدارة والتعديل" : "تم إخفاء خيارات الإدارة");
     }
   }
 
@@ -2191,7 +2513,7 @@
     let html = `<button type="button" class="chip ${selectedBranch === "الكل" ? "active" : ""}" onclick="selectBranch('الكل')"><span>الكل</span><span class="chip-count">(${activeData.length})</span></button>`;
     allBranches.forEach(b => {
       const isActive = selectedBranch === b;
-      html += `<button type="button" class="chip ${isActive ? "active" : ""}" onclick="selectBranch('${b.replace(/'/g, "\'")}')"><span class="chip-dot" style="background:${getBranchColor(b)}"></span><span>${b}</span><span class="chip-count">(${counts[b]})</span></button>`;
+      html += `<button type="button" class="chip ${isActive ? "active" : ""}" onclick="selectBranch('${b.replace(/'/g, "\\'")}')"><span class="chip-dot" style="background:${getBranchColor(b)}"></span><span>${b}</span><span class="chip-count">(${counts[b]})</span></button>`;
     });
     bar.innerHTML = html;
   }
@@ -2264,7 +2586,7 @@
                 <span class="branch-pill"><span class="chip-dot" style="background:${color}"></span><span>${bName}</span></span>
                 ${isLowest ? `<span class="best-pill">★ الأقرب / الأقل تكلفة</span>` : ""}
               </div>
-              <div class="area-name">${item.area}</div>
+              <div class="area-name">${escapeHtml(item.area)}</div>
             </div>
             <div class="price-box">
               <span class="price-num">${priceNum.toFixed(2)}</span>
@@ -2273,7 +2595,7 @@
           </div>
           <div class="card-bottom">
             <div class="card-actions-left">
-              <button type="button" class="copy-btn" onclick="copyCardDetails(this, '${copyText.replace(/'/g, "\'")}')"><span>📋</span><span>نسخ التفاصيل</span></button>
+              <button type="button" class="copy-btn" onclick="copyCardDetails(this, '${copyText.replace(/'/g, "\\'")}')"><span>📋</span><span>نسخ التفاصيل</span></button>
               <button type="button" class="card-edit-btn" onclick="openEditAreaByIndex(${dataIdx})">✏️ تعديل</button>
               <button type="button" class="card-del-btn" onclick="deleteAreaByIndex(${dataIdx})">🗑️ حذف</button>
             </div>
@@ -2298,7 +2620,7 @@
     const bar = document.getElementById("menuFiltersBar");
     let html = `<button type="button" class="chip ${selectedMenuCategory === "الكل" ? "active" : ""}" onclick="selectMenuCategory('الكل')"><span>كل الأصناف</span><span class="chip-count">(${menuItems.length})</span></button>`;
     Object.keys(counts).forEach(cat => {
-      html += `<button type="button" class="chip ${selectedMenuCategory === cat ? "active" : ""}" onclick="selectMenuCategory('${cat.replace(/'/g, "\'")}')"><span class="chip-dot" style="background:${getCategoryColor(cat)}"></span><span>${escapeHtml(cat)}</span><span class="chip-count">(${counts[cat]})</span></button>`;
+      html += `<button type="button" class="chip ${selectedMenuCategory === cat ? "active" : ""}" onclick="selectMenuCategory('${cat.replace(/'/g, "\\'")}')"><span class="chip-dot" style="background:${getCategoryColor(cat)}"></span><span>${escapeHtml(cat)}</span><span class="chip-count">(${counts[cat]})</span></button>`;
     });
     bar.innerHTML = html;
   }
@@ -2329,6 +2651,9 @@
         <div class="area-card" style="--stagger-idx:${Math.min(renderIdx, 14)}">
           <div class="card-top">
             <div class="card-info">
+              <div class="tags-row">
+                <span class="branch-pill"><span class="chip-dot" style="background:${getCategoryColor(item.category || 'عام')}"></span><span>${escapeHtml(item.category || 'عام')}</span></span>
+              </div>
               <div class="area-name">${escapeHtml(item.name)}</div>
               <div class="item-contents-box"><span class="item-contents-title">محتويات الصنف:</span><div class="item-notes-text">${escapeHtml(item.contents)}</div></div>
             </div>
@@ -2336,7 +2661,7 @@
           </div>
           <div class="card-bottom">
             <div class="card-actions-left">
-              <button type="button" class="copy-btn" onclick="copyCardDetails(this, '${copyText.replace(/'/g, "\'")}')"><span>📋</span><span>نسخ الصنف والمكونات</span></button>
+              <button type="button" class="copy-btn" onclick="copyCardDetails(this, '${copyText.replace(/'/g, "\\'")}')"><span>📋</span><span>نسخ الصنف والمكونات</span></button>
               <button type="button" class="card-edit-btn" onclick="openEditMenuByIndex(${idx})">✏️ تعديل</button>
               <button type="button" class="card-del-btn" onclick="deleteMenuByIndex(${idx})">🗑️ حذف</button>
             </div>
@@ -2346,36 +2671,630 @@
     }).join("");
   }
 
-  function openAddAreaModal() { isAdminUnlocked = true; applyAdminUI(); editingItemRef = null; document.getElementById("areaModal").classList.add("open"); }
-  function openEditAreaByIndex(idx) { editingItemRef = activeData[idx]; document.getElementById("areaModal").classList.add("open"); }
-  function closeAreaModal() { document.getElementById("areaModal").classList.remove("open"); editingItemRef = null; }
-  function saveAreaForm(e) { e.preventDefault(); closeAreaModal(); }
-  function deleteAreaByIndex(idx) { if (confirm("حذف؟")) { activeData.splice(idx, 1); saveDataToStorage(); renderChips(); renderCards(); } }
-  function openManageModal() { renderManageList(); document.getElementById("manageModal").classList.add("open"); }
-  function closeManageModal() { document.getElementById("manageModal").classList.remove("open"); }
-  function renderManageList() {}
-  function openAddMenuModal() { editingMenuRef = null; document.getElementById("menuItemModal").classList.add("open"); }
-  function openEditMenuByIndex(idx) { editingMenuRef = menuItems[idx]; document.getElementById("menuItemModal").classList.add("open"); }
-  function closeMenuModal() { document.getElementById("menuItemModal").classList.remove("open"); }
-  function saveMenuForm(e) { e.preventDefault(); closeMenuModal(); }
-  function deleteMenuByIndex(idx) { menuItems.splice(idx, 1); saveMenuToStorage(); renderMenuChips(); renderMenuCards(); }
-  function openManageMenuModal() { document.getElementById("manageMenuModal").classList.add("open"); }
-  function closeManageMenuModal() { document.getElementById("manageMenuModal").classList.remove("open"); }
-  function renderManageMenuList() {}
-  function openCloudModal() { document.getElementById("cloudModal").classList.add("open"); }
-  function closeCloudModal() { document.getElementById("cloudModal").classList.remove("open"); }
-  function saveCloudConfig(e) { e.preventDefault(); closeCloudModal(); }
-  function openAppearanceModal() { document.getElementById("appearanceModal").classList.add("open"); }
-  function closeAppearanceModal() { document.getElementById("appearanceModal").classList.remove("open"); }
-  function selectDarkMode(d) { tempDarkMode = d; }
-  function onThemeColorChange(v) {}
-  function onThemeHexTyped(v) {}
-  function saveAppearanceForm(e) { e.preventDefault(); closeAppearanceModal(); }
-  function exportCSV() {}
-  function resetDefaultData() {}
+  // Troubleshooting Guide Functions
+  function renderTroubleChips() {
+    const counts = {};
+    troubleItems.forEach(item => { const c = item.category || "عام"; counts[c] = (counts[c] || 0) + 1; });
+    const bar = document.getElementById("troubleFiltersBar");
+    let html = `<button type="button" class="chip ${selectedTroubleCategory === "الكل" ? "active" : ""}" onclick="selectTroubleCategory('الكل')"><span>كل المشاكل</span><span class="chip-count">(${troubleItems.length})</span></button>`;
+    Object.keys(counts).forEach(cat => {
+      html += `<button type="button" class="chip ${selectedTroubleCategory === cat ? "active" : ""}" onclick="selectTroubleCategory('${cat.replace(/'/g, "\\'")}')"><span class="chip-dot" style="background:${getCategoryColor(cat)}"></span><span>${escapeHtml(cat)}</span><span class="chip-count">(${counts[cat]})</span></button>`;
+    });
+    bar.innerHTML = html;
+  }
+
+  function selectTroubleCategory(cat) {
+    selectedTroubleCategory = cat;
+    renderTroubleChips();
+    renderTroubleCards();
+  }
+
+  function clearTroubleshootSearch() {
+    const i = document.getElementById("troubleshootSearchInput");
+    i.value = "";
+    i.focus();
+    renderTroubleCards();
+  }
+
+  function renderTroubleCards() {
+    const normQuery = normalizeArabic(document.getElementById("troubleshootSearchInput").value);
+    const filtered = troubleItems.filter(item => {
+      const cat = item.category || "عام";
+      return (selectedTroubleCategory === "الكل" || cat === selectedTroubleCategory) &&
+        (!normQuery || normalizeArabic(item.title).includes(normQuery) || normalizeArabic(item.solution).includes(normQuery) || normalizeArabic(cat).includes(normQuery));
+    });
+    document.getElementById("troubleTotalBadge").textContent = filtered.length;
+    document.getElementById("troubleCountLabel").textContent = selectedTroubleCategory === "الكل" ? "مشكلة وحل في الدليل" : `مشكلة في تصنيف ${selectedTroubleCategory}`;
+    const grid = document.getElementById("troubleCardsGrid");
+    if (filtered.length === 0) {
+      grid.innerHTML = `<div class="empty-state"><h3>${troubleItems.length === 0 ? "لم يتم إضافة مشاكل وحلول بعد" : "لا توجد نتائج مطابقة للبحث"}</h3><p style="margin-top:6px;">فعّل وضع الإدارة لإضافة عنوان المشكلة وطريقة حلها</p></div>`;
+      return;
+    }
+    grid.innerHTML = filtered.map((item, renderIdx) => {
+      const idx = troubleItems.indexOf(item);
+      const cat = item.category || "عام";
+      const copyText = `المشكلة: ${item.title}\nالحل: ${item.solution}`;
+      return `
+        <div class="area-card" style="--stagger-idx:${Math.min(renderIdx, 14)}">
+          <div class="card-top">
+            <div class="card-info">
+              <div class="tags-row">
+                <span class="branch-pill"><span class="chip-dot" style="background:${getCategoryColor(cat)}"></span><span>${escapeHtml(cat)}</span></span>
+              </div>
+              <div class="area-name">${escapeHtml(item.title)}</div>
+              <div class="item-contents-box">
+                <span class="item-contents-title">✅ خطوات الحل المعتمدة:</span>
+                <div class="item-notes-text">${escapeHtml(item.solution)}</div>
+              </div>
+            </div>
+          </div>
+          <div class="card-bottom">
+            <div class="card-actions-left">
+              <button type="button" class="copy-btn" onclick="copyCardDetails(this, '${copyText.replace(/'/g, "\\'")}')"><span>📋</span><span>نسخ المشكلة والحل</span></button>
+              <button type="button" class="card-edit-btn" onclick="openEditTroubleByIndex(${idx})">✏️ تعديل</button>
+              <button type="button" class="card-del-btn" onclick="deleteTroubleByIndex(${idx})">🗑️ حذف</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join("");
+  }
+
+  function openAddTroubleModal() {
+    editingTroubleRef = null;
+    document.getElementById("troubleModalTitle").textContent = "➕ إضافة مشكلة وحل جديد";
+    document.getElementById("troubleTitleInput").value = "";
+    document.getElementById("troubleCategoryInput").value = "";
+    document.getElementById("troubleSolutionInput").value = "";
+    document.getElementById("troubleItemModal").classList.add("open");
+  }
+
+  function openEditTroubleByIndex(idx) {
+    const item = troubleItems[idx];
+    if (!item) return;
+    editingTroubleRef = idx;
+    document.getElementById("troubleModalTitle").textContent = "✏️ تعديل المشكلة والحل";
+    document.getElementById("troubleTitleInput").value = item.title || "";
+    document.getElementById("troubleCategoryInput").value = item.category || "";
+    document.getElementById("troubleSolutionInput").value = item.solution || "";
+    document.getElementById("troubleItemModal").classList.add("open");
+  }
+
+  function closeTroubleModal() {
+    document.getElementById("troubleItemModal").classList.remove("open");
+    editingTroubleRef = null;
+  }
+
+  function saveTroubleForm(e) {
+    e.preventDefault();
+    const title = document.getElementById("troubleTitleInput").value.trim();
+    const category = document.getElementById("troubleCategoryInput").value.trim() || "عام";
+    const solution = document.getElementById("troubleSolutionInput").value.trim();
+    if (!title || !solution) return;
+
+    if (editingTroubleRef !== null && troubleItems[editingTroubleRef]) {
+      troubleItems[editingTroubleRef] = { title, category, solution };
+      showToast("تم تعديل المشكلة والحل بنجاح");
+    } else {
+      troubleItems.unshift({ title, category, solution });
+      showToast("تمت إضافة المشكلة والحل إلى الدليل");
+    }
+    saveTroublesToStorage();
+    renderTroubleChips();
+    renderTroubleCards();
+    renderManageTroubleList();
+    closeTroubleModal();
+    pushDataToCloud(false);
+  }
+
+  function deleteTroubleByIndex(idx) {
+    if (!confirm("هل أنت متأكد من حذف هذه المشكلة وحلها؟")) return;
+    troubleItems.splice(idx, 1);
+    saveTroublesToStorage();
+    renderTroubleChips();
+    renderTroubleCards();
+    renderManageTroubleList();
+    showToast("تم الحذف بنجاح");
+    pushDataToCloud(false);
+  }
+
+  function openManageTroubleModal() {
+    renderManageTroubleList();
+    document.getElementById("manageTroubleModal").classList.add("open");
+  }
+
+  function closeManageTroubleModal() {
+    document.getElementById("manageTroubleModal").classList.remove("open");
+  }
+
+  function renderManageTroubleList() {
+    const listEl = document.getElementById("manageTroubleList");
+    if (!listEl) return;
+    const q = normalizeArabic(document.getElementById("manageTroubleFilterInput")?.value || "");
+    const filtered = troubleItems.map((item, idx) => ({ item, idx }))
+      .filter(({ item }) => !q || normalizeArabic(item.title).includes(q) || normalizeArabic(item.solution).includes(q));
+    if (filtered.length === 0) {
+      listEl.innerHTML = `<div style="padding:16px; text-align:center; color:#64748b; font-weight:700;">لا توجد مشاكل مضافة</div>`;
+      return;
+    }
+    listEl.innerHTML = filtered.map(({ item, idx }) => `
+      <div class="manage-row">
+        <div>
+          <div class="manage-meta">${escapeHtml(item.title)}</div>
+          <div class="manage-sub">${escapeHtml(item.category || "عام")}</div>
+        </div>
+        <div style="display:flex; gap:6px;">
+          <button type="button" class="btn-m btn-m-light" onclick="openEditTroubleByIndex(${idx})">✏️</button>
+          <button type="button" class="btn-m btn-m-danger" onclick="deleteTroubleByIndex(${idx})">🗑️</button>
+        </div>
+      </div>
+    `).join("");
+  }
+
+  // Custom Dynamic Sections & Cards
+  function clearCustomSectionSearch() {
+    const i = document.getElementById("customSectionSearchInput");
+    i.value = "";
+    i.focus();
+    renderCustomSectionCards();
+  }
+
+  function renderCustomSectionCards() {
+    const grid = document.getElementById("customSectionCardsGrid");
+    if (!grid) return;
+    const cards = customSectionCards[activeMainSection] || [];
+    const normQuery = normalizeArabic(document.getElementById("customSectionSearchInput").value);
+    const filtered = cards.filter(c => !normQuery || normalizeArabic(c.title).includes(normQuery) || normalizeArabic(c.body).includes(normQuery) || normalizeArabic(c.tag).includes(normQuery));
+    document.getElementById("customSectionTotalBadge").textContent = filtered.length;
+    if (filtered.length === 0) {
+      grid.innerHTML = `<div class="empty-state"><h3>${cards.length === 0 ? "لا توجد كاردات في هذا السكشن بعد" : "لا توجد نتائج مطابقة"}</h3><p style="margin-top:6px;">يمكنك إضافة كاردات جديدة من زر (+ إضافة كارد جديد) في وضع الإدارة</p></div>`;
+      return;
+    }
+    grid.innerHTML = filtered.map((item, renderIdx) => {
+      const idx = cards.indexOf(item);
+      const copyText = `${item.title}\n${item.body}`;
+      return `
+        <div class="area-card" style="--stagger-idx:${Math.min(renderIdx, 14)}">
+          <div class="card-top">
+            <div class="card-info">
+              ${item.tag ? `<div class="tags-row"><span class="branch-pill"><span class="chip-dot" style="background:#0284c7"></span><span>${escapeHtml(item.tag)}</span></span></div>` : ""}
+              <div class="area-name">${escapeHtml(item.title)}</div>
+              <div class="item-contents-box">
+                <div class="item-notes-text">${escapeHtml(item.body)}</div>
+              </div>
+            </div>
+          </div>
+          <div class="card-bottom">
+            <div class="card-actions-left">
+              <button type="button" class="copy-btn" onclick="copyCardDetails(this, '${copyText.replace(/'/g, "\\'")}')"><span>📋</span><span>نسخ المحتوى</span></button>
+              <button type="button" class="card-edit-btn" onclick="openEditCustomCardByIndex(${idx})">✏️ تعديل</button>
+              <button type="button" class="card-del-btn" onclick="deleteCustomCardByIndex(${idx})">🗑️ حذف</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join("");
+  }
+
+  function openAddCustomCardModal() {
+    editingCustomCardRef = null;
+    document.getElementById("customCardModalTitle").textContent = "➕ إضافة كارد جديد";
+    document.getElementById("customCardTitleInput").value = "";
+    document.getElementById("customCardTagInput").value = "";
+    document.getElementById("customCardBodyInput").value = "";
+    document.getElementById("customCardModal").classList.add("open");
+  }
+
+  function openEditCustomCardByIndex(idx) {
+    const cards = customSectionCards[activeMainSection] || [];
+    const item = cards[idx];
+    if (!item) return;
+    editingCustomCardRef = idx;
+    document.getElementById("customCardModalTitle").textContent = "✏️ تعديل الكارد";
+    document.getElementById("customCardTitleInput").value = item.title || "";
+    document.getElementById("customCardTagInput").value = item.tag || "";
+    document.getElementById("customCardBodyInput").value = item.body || "";
+    document.getElementById("customCardModal").classList.add("open");
+  }
+
+  function closeCustomCardModal() {
+    document.getElementById("customCardModal").classList.remove("open");
+    editingCustomCardRef = null;
+  }
+
+  function saveCustomCardForm(e) {
+    e.preventDefault();
+    const title = document.getElementById("customCardTitleInput").value.trim();
+    const tag = document.getElementById("customCardTagInput").value.trim();
+    const body = document.getElementById("customCardBodyInput").value.trim();
+    if (!title || !body) return;
+    if (!customSectionCards[activeMainSection]) customSectionCards[activeMainSection] = [];
+    if (editingCustomCardRef !== null && customSectionCards[activeMainSection][editingCustomCardRef]) {
+      customSectionCards[activeMainSection][editingCustomCardRef] = { title, tag, body };
+      showToast("تم تعديل الكارد بنجاح");
+    } else {
+      customSectionCards[activeMainSection].unshift({ title, tag, body });
+      showToast("تمت إضافة الكارد بنجاح");
+    }
+    saveCustomCardsToStorage();
+    renderCustomSectionCards();
+    closeCustomCardModal();
+    pushDataToCloud(false);
+  }
+
+  function deleteCustomCardByIndex(idx) {
+    if (!confirm("هل أنت متأكد من حذف هذا الكارد؟")) return;
+    if (customSectionCards[activeMainSection]) {
+      customSectionCards[activeMainSection].splice(idx, 1);
+      saveCustomCardsToStorage();
+      renderCustomSectionCards();
+      showToast("تم حذف الكارد");
+      pushDataToCloud(false);
+    }
+  }
+
+  // Admin Section Management (Add / Rename / Delete Sections)
+  function openManageSectionsModal() {
+    renderManageSectionsList();
+    document.getElementById("manageSectionsModal").classList.add("open");
+  }
+
+  function closeManageSectionsModal() {
+    document.getElementById("manageSectionsModal").classList.remove("open");
+  }
+
+  function renderManageSectionsList() {
+    const listEl = document.getElementById("manageSectionsList");
+    if (!listEl) return;
+    listEl.innerHTML = sectionsConfig.map((sec, idx) => `
+      <div class="manage-row">
+        <div style="display:flex; align-items:center; gap:8px; flex:1;">
+          <input type="text" id="secIcon_${idx}" class="form-control" style="width:52px; padding:6px; text-align:center;" value="${escapeHtml(sec.icon || '📌')}" maxlength="4" />
+          <input type="text" id="secName_${idx}" class="form-control" style="flex:1; padding:6px 10px;" value="${escapeHtml(sec.name)}" />
+        </div>
+        <div style="display:flex; gap:6px;">
+          <button type="button" class="btn-m btn-m-success" onclick="renameSectionAt(${idx})" title="حفظ التعديل">💾</button>
+          <button type="button" class="btn-m btn-m-danger" onclick="deleteSectionAt(${idx})" title="حذف السكشن">🗑️</button>
+        </div>
+      </div>
+    `).join("");
+  }
+
+  function addNewSection(e) {
+    e.preventDefault();
+    const icon = document.getElementById("newSectionIconInput").value.trim() || "📌";
+    const name = document.getElementById("newSectionNameInput").value.trim();
+    if (!name) return;
+    const newId = "sec_" + Date.now();
+    sectionsConfig.push({ id: newId, name, icon, type: "custom" });
+    customSectionCards[newId] = [];
+    saveSectionsToStorage();
+    saveCustomCardsToStorage();
+    document.getElementById("newSectionNameInput").value = "";
+    renderManageSectionsList();
+    switchMainSection(newId);
+    showToast(`تمت إضافة سكشن "${name}" بنجاح`);
+    pushDataToCloud(false);
+  }
+
+  function renameSectionAt(idx) {
+    const sec = sectionsConfig[idx];
+    if (!sec) return;
+    const newName = document.getElementById(`secName_${idx}`).value.trim();
+    const newIcon = document.getElementById(`secIcon_${idx}`).value.trim() || "📌";
+    if (!newName) return;
+    sec.name = newName;
+    sec.icon = newIcon;
+    saveSectionsToStorage();
+    renderManageSectionsList();
+    if (activeMainSection === sec.id) switchMainSection(sec.id);
+    showToast("تم تعديل اسم السكشن بنجاح");
+    pushDataToCloud(false);
+  }
+
+  function deleteSectionAt(idx) {
+    if (sectionsConfig.length <= 1) {
+      showToast("يجب الإبقاء على سكشن واحد على الأقل");
+      return;
+    }
+    const sec = sectionsConfig[idx];
+    if (!confirm(`هل أنت متأكد من حذف سكشن "${sec.name}"؟`)) return;
+    sectionsConfig.splice(idx, 1);
+    if (sec.type === "custom") {
+      delete customSectionCards[sec.id];
+      saveCustomCardsToStorage();
+    }
+    saveSectionsToStorage();
+    renderManageSectionsList();
+    if (activeMainSection === sec.id) {
+      switchMainSection(sectionsConfig[0].id);
+    }
+    showToast("تم حذف السكشن بنجاح");
+    pushDataToCloud(false);
+  }
+
+  // Area Modals
+  function openAddAreaModal() {
+    isAdminUnlocked = true;
+    applyAdminUI();
+    editingItemRef = null;
+    document.getElementById("areaModalTitle").textContent = "➕ إضافة منطقة جديدة";
+    document.getElementById("areaNameInput").value = "";
+    document.getElementById("areaBranchSelect").value = "المدينة المنورة";
+    document.getElementById("areaPriceInput").value = "2.00";
+    document.getElementById("areaModal").classList.add("open");
+  }
+
+  function openEditAreaByIndex(idx) {
+    const item = activeData[idx];
+    if (!item) return;
+    editingItemRef = idx;
+    document.getElementById("areaModalTitle").textContent = "✏️ تعديل بيانات المنطقة";
+    document.getElementById("areaNameInput").value = item.area;
+    document.getElementById("areaBranchSelect").value = cleanBranchName(item.branch);
+    document.getElementById("areaPriceInput").value = Number(item.price).toFixed(2);
+    document.getElementById("areaModal").classList.add("open");
+  }
+
+  function closeAreaModal() {
+    document.getElementById("areaModal").classList.remove("open");
+    editingItemRef = null;
+  }
+
+  function saveAreaForm(e) {
+    e.preventDefault();
+    const area = document.getElementById("areaNameInput").value.trim();
+    const branch = cleanBranchName(document.getElementById("areaBranchSelect").value);
+    const price = parseFloat(document.getElementById("areaPriceInput").value);
+    if (!area || !branch || isNaN(price)) return;
+
+    if (editingItemRef !== null && activeData[editingItemRef]) {
+      activeData[editingItemRef] = { area, branch, price };
+      showToast("تم تعديل المنطقة بنجاح");
+    } else {
+      activeData.unshift({ area, branch, price });
+      showToast("تمت إضافة المنطقة بنجاح");
+    }
+    saveDataToStorage();
+    renderChips();
+    renderCards();
+    renderManageList();
+    closeAreaModal();
+    pushDataToCloud(false);
+  }
+
+  function deleteAreaByIndex(idx) {
+    if (confirm("هل أنت متأكد من حذف هذه المنطقة؟")) {
+      activeData.splice(idx, 1);
+      saveDataToStorage();
+      renderChips();
+      renderCards();
+      renderManageList();
+      showToast("تم حذف المنطقة");
+      pushDataToCloud(false);
+    }
+  }
+
+  function openManageModal() {
+    renderManageList();
+    document.getElementById("manageModal").classList.add("open");
+  }
+
+  function closeManageModal() {
+    document.getElementById("manageModal").classList.remove("open");
+  }
+
+  function renderManageList() {
+    const listEl = document.getElementById("manageList");
+    if (!listEl) return;
+    const q = normalizeArabic(document.getElementById("manageFilterInput")?.value || "");
+    const filtered = activeData.map((item, idx) => ({ item, idx }))
+      .filter(({ item }) => !q || normalizeArabic(item.area).includes(q) || normalizeArabic(item.branch).includes(q));
+    listEl.innerHTML = filtered.slice(0, 80).map(({ item, idx }) => `
+      <div class="manage-row">
+        <div>
+          <div class="manage-meta">${escapeHtml(item.area)}</div>
+          <div class="manage-sub">${escapeHtml(item.branch)} — ${Number(item.price).toFixed(2)} دينار</div>
+        </div>
+        <div style="display:flex; gap:6px;">
+          <button type="button" class="btn-m btn-m-light" onclick="openEditAreaByIndex(${idx})">✏️</button>
+          <button type="button" class="btn-m btn-m-danger" onclick="deleteAreaByIndex(${idx})">🗑️</button>
+        </div>
+      </div>
+    `).join("");
+  }
+
+  // Menu Modals
+  function openAddMenuModal() {
+    editingMenuRef = null;
+    document.getElementById("menuModalTitle").textContent = "➕ إضافة صنف جديد";
+    document.getElementById("menuNameInput").value = "";
+    document.getElementById("menuCategoryInput").value = "";
+    document.getElementById("menuPriceInput").value = "";
+    document.getElementById("menuContentsInput").value = "";
+    document.getElementById("menuItemModal").classList.add("open");
+  }
+
+  function openEditMenuByIndex(idx) {
+    const item = menuItems[idx];
+    if (!item) return;
+    editingMenuRef = idx;
+    document.getElementById("menuModalTitle").textContent = "✏️ تعديل الصنف";
+    document.getElementById("menuNameInput").value = item.name || "";
+    document.getElementById("menuCategoryInput").value = item.category || "";
+    document.getElementById("menuPriceInput").value = item.price || "";
+    document.getElementById("menuContentsInput").value = item.contents || "";
+    document.getElementById("menuItemModal").classList.add("open");
+  }
+
+  function closeMenuModal() {
+    document.getElementById("menuItemModal").classList.remove("open");
+    editingMenuRef = null;
+  }
+
+  function saveMenuForm(e) {
+    e.preventDefault();
+    const name = document.getElementById("menuNameInput").value.trim();
+    const category = document.getElementById("menuCategoryInput").value.trim() || "عام";
+    const price = parseFloat(document.getElementById("menuPriceInput").value) || 0;
+    const contents = document.getElementById("menuContentsInput").value.trim();
+    if (!name || !contents) return;
+
+    if (editingMenuRef !== null && menuItems[editingMenuRef]) {
+      menuItems[editingMenuRef] = { name, category, price, contents };
+      showToast("تم تعديل الصنف بنجاح");
+    } else {
+      menuItems.unshift({ name, category, price, contents });
+      showToast("تمت إضافة الصنف بنجاح");
+    }
+    saveMenuToStorage();
+    renderMenuChips();
+    renderMenuCards();
+    renderManageMenuList();
+    closeMenuModal();
+    pushDataToCloud(false);
+  }
+
+  function deleteMenuByIndex(idx) {
+    if (!confirm("حذف هذا الصنف؟")) return;
+    menuItems.splice(idx, 1);
+    saveMenuToStorage();
+    renderMenuChips();
+    renderMenuCards();
+    renderManageMenuList();
+    showToast("تم حذف الصنف");
+    pushDataToCloud(false);
+  }
+
+  function openManageMenuModal() {
+    renderManageMenuList();
+    document.getElementById("manageMenuModal").classList.add("open");
+  }
+
+  function closeManageMenuModal() {
+    document.getElementById("manageMenuModal").classList.remove("open");
+  }
+
+  function renderManageMenuList() {
+    const listEl = document.getElementById("manageMenuList");
+    if (!listEl) return;
+    const q = normalizeArabic(document.getElementById("manageMenuFilterInput")?.value || "");
+    const filtered = menuItems.map((item, idx) => ({ item, idx }))
+      .filter(({ item }) => !q || normalizeArabic(item.name).includes(q));
+    listEl.innerHTML = filtered.map(({ item, idx }) => `
+      <div class="manage-row">
+        <div>
+          <div class="manage-meta">${escapeHtml(item.name)}</div>
+          <div class="manage-sub">${escapeHtml(item.category || "عام")}</div>
+        </div>
+        <div style="display:flex; gap:6px;">
+          <button type="button" class="btn-m btn-m-light" onclick="openEditMenuByIndex(${idx})">✏️</button>
+          <button type="button" class="btn-m btn-m-danger" onclick="deleteMenuByIndex(${idx})">🗑️</button>
+        </div>
+      </div>
+    `).join("");
+  }
+
+  // Cloud & Appearance Modals
+  function openCloudModal() {
+    const cfg = getCloudConfig();
+    document.getElementById("ghOwnerInput").value = cfg.owner;
+    document.getElementById("ghRepoInput").value = cfg.repo;
+    document.getElementById("ghBranchInput").value = cfg.branch;
+    document.getElementById("ghPathInput").value = cfg.path;
+    document.getElementById("apiKeyInput").value = cfg.apiKey;
+    document.getElementById("cloudModal").classList.add("open");
+  }
+
+  function closeCloudModal() {
+    document.getElementById("cloudModal").classList.remove("open");
+  }
+
+  function saveCloudConfig(e) {
+    e.preventDefault();
+    setCloudConfig({
+      owner: document.getElementById("ghOwnerInput").value.trim(),
+      repo: document.getElementById("ghRepoInput").value.trim(),
+      branch: document.getElementById("ghBranchInput").value.trim() || "main",
+      path: document.getElementById("ghPathInput").value.trim() || "data/store.json",
+      apiKey: document.getElementById("apiKeyInput").value.trim()
+    });
+    closeCloudModal();
+    showToast("تم حفظ إعدادات GitHub");
+  }
+
+  function openAppearanceModal() {
+    tempDarkMode = Boolean(siteAppearance.darkMode);
+    document.getElementById("themeColorPicker").value = siteAppearance.accentColor || "#0f172a";
+    document.getElementById("themeColorHexInput").value = siteAppearance.accentColor || "#0f172a";
+    document.getElementById("modeLightBtn").classList.toggle("active", !tempDarkMode);
+    document.getElementById("modeDarkBtn").classList.toggle("active", tempDarkMode);
+    document.getElementById("appearanceModal").classList.add("open");
+  }
+
+  function closeAppearanceModal() {
+    document.getElementById("appearanceModal").classList.remove("open");
+  }
+
+  function selectDarkMode(d) {
+    tempDarkMode = d;
+    document.getElementById("modeLightBtn").classList.toggle("active", !d);
+    document.getElementById("modeDarkBtn").classList.toggle("active", d);
+  }
+
+  function onThemeColorChange(v) {
+    document.getElementById("themeColorHexInput").value = v;
+  }
+
+  function onThemeHexTyped(v) {
+    if (/^#[0-9a-fA-F]{6}$/.test(v)) document.getElementById("themeColorPicker").value = v;
+  }
+
+  function saveAppearanceForm(e) {
+    e.preventDefault();
+    const color = document.getElementById("themeColorPicker").value;
+    siteAppearance.darkMode = tempDarkMode;
+    siteAppearance.accentColor = color;
+    saveAppearanceToStorage();
+    applySiteAppearance(siteAppearance);
+    closeAppearanceModal();
+    showToast("تم حفظ إعدادات المظهر");
+    pushDataToCloud(false);
+  }
+
+  function exportCSV() {
+    const rows = [["المنطقة", "الفرع", "السعر"], ...activeData.map(d => [d.area, d.branch, d.price])];
+    const csv = "\uFEFF" + rows.map(r => r.join(",")).join("\n");
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "delivery_rates.csv";
+    a.click();
+  }
+
+  function resetDefaultData() {
+    if (!confirm("استعادة البيانات الافتراضية؟")) return;
+    activeData = DEFAULT_DATA.map(d => ({ ...d }));
+    saveDataToStorage();
+    renderChips();
+    renderCards();
+    renderManageList();
+    showToast("تمت الاستعادة");
+  }
 
   document.getElementById("searchInput").addEventListener("input", renderCards);
   document.getElementById("menuSearchInput").addEventListener("input", renderMenuCards);
+  document.getElementById("troubleshootSearchInput").addEventListener("input", renderTroubleCards);
+  document.getElementById("customSectionSearchInput").addEventListener("input", renderCustomSectionCards);
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      if (activeMainSection === "delivery") clearSearch();
+      else if (activeMainSection === "menu") clearMenuSearch();
+      else if (activeMainSection === "troubleshoot") clearTroubleshootSearch();
+      else clearCustomSectionSearch();
+    }
+  });
 
   function dismissOpeningPresentation() {
     const splash = document.getElementById("splashPresentation");
@@ -2392,15 +3311,18 @@
   window.addEventListener("DOMContentLoaded", () => {
     applySiteAppearance(siteAppearance);
     applyAdminUI();
-    updateTopTabCounts();
+    renderMainTabs();
     renderChips();
     renderCards();
     renderMenuChips();
     renderMenuCards();
+    renderTroubleChips();
+    renderTroubleCards();
     setTimeout(dismissOpeningPresentation, 1200);
     setSyncIndicator(true, "جاهز");
+    pullDataFromCloud(false);
   });
-</script>
+</script></script>
 
 <script>
   function toggleMapSize() {
