@@ -1450,37 +1450,7 @@ body[data-mode="dark"] .map-glass-card {
       <button type="button" class="main-tab-btn active" id="tabDeliveryBtn" onclick="switchMainSection('delivery')">
         <span>🛵</span>
         <span>التوصيل والأفرع</span>
-        <span class="tab-pill-count" id="deliveryTabCoun  <!-- ==================== SECTION 3: INTERACTIVE MAP ==================== -->
-  <div id="mapSection" class="view-section hidden">
-    <div class="search-wrapper">
-      <span class="search-icon">🗺️</span>
-      <input
-        type="text"
-        id="mapSearchInput"
-        class="search-input"
-        placeholder="ابحث عن منطقة أو معلم مضاف للانتقال إليه وتمييز بطاقته... (مثلاً: خلدا، عبدون، تلاع العلي)"
-        autocomplete="off"
-      />
-      <button type="button" class="esc-btn" onclick="clearMapSearch()">مسح البحث</button>
-      <button type="button" class="btn-m btn-m-primary" onclick="resetMapView()">🎯 وسط عمّان</button>
-    </div>
-
-    <div class="filters-bar" id="mapFiltersBar"></div>
-
-    <div class="map-shell">
-      <div id="deliveryMap"></div>
-      <div class="map-overlay-legend" id="mapLegendBar">
-        <span>🏪 الأفرع:</span>
-        <span><i class="chip-dot" style="background:#2563eb"></i> المدينة المنورة</span>
-        <span><i class="chip-dot" style="background:#f59e0b"></i> غوشة</span>
-        <span><i class="chip-dot" style="background:#f43f5e"></i> دابوق</span>
-        <span><i class="chip-dot" style="background:#8b5cf6"></i> جبيهة</span>
-        <span><i class="chip-dot" style="background:#0d9488"></i> صويفية</span>
-        <span><i class="chip-dot" style="background:#ec4899"></i> المقابلين</span>
-      </div>
-    </div>
-  </div>
-
+        <span class="tab-pill-count" id="deliveryTabCount">149</span>
 t">149</span>
       </button>
       <button type="button" class="main-tab-btn" id="tabMenuBtn" onclick="switchMainSection('menu')">
@@ -1569,6 +1539,38 @@ t">149</span>
 
     <div class="cards-grid" id="menuCardsGrid"></div>
   </div>
+
+  <!-- ==================== SECTION 3: INTERACTIVE MAP ==================== -->
+  <div id="mapSection" class="view-section hidden">
+    <div class="search-wrapper">
+      <span class="search-icon">🗺️</span>
+      <input
+        type="text"
+        id="mapSearchInput"
+        class="search-input"
+        placeholder="ابحث عن منطقة أو معلم مضاف للانتقال إليه وتمييز بطاقته... (مثلاً: خلدا، عبدون، تلاع العلي)"
+        autocomplete="off"
+      />
+      <button type="button" class="esc-btn" onclick="clearMapSearch()">مسح البحث</button>
+      <button type="button" class="btn-m btn-m-primary" onclick="resetMapView()">🎯 وسط عمّان</button>
+    </div>
+
+    <div class="filters-bar" id="mapFiltersBar"></div>
+
+    <div class="map-shell">
+      <div id="deliveryMap"></div>
+      <div class="map-overlay-legend" id="mapLegendBar">
+        <span>🏪 الأفرع:</span>
+        <span><i class="chip-dot" style="background:#2563eb"></i> المدينة المنورة</span>
+        <span><i class="chip-dot" style="background:#f59e0b"></i> غوشة</span>
+        <span><i class="chip-dot" style="background:#f43f5e"></i> دابوق</span>
+        <span><i class="chip-dot" style="background:#8b5cf6"></i> جبيهة</span>
+        <span><i class="chip-dot" style="background:#0d9488"></i> صويفية</span>
+        <span><i class="chip-dot" style="background:#ec4899"></i> المقابلين</span>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 <div class="toast" id="toast"></div>
