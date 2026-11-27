@@ -25,6 +25,11 @@
       --green-border: #34d399;
       --shadow-sm: 0 8px 24px rgba(15, 23, 42, 0.08);
       --radius-lg: 18px;
+      --card-radius: 18px;
+      --card-padding-v: 18px;
+      --card-padding-h: 20px;
+      --card-border-color: rgba(255, 255, 255, 0.55);
+      --card-border-width: 1.5px;
       --bg-image: none;
       --bg-overlay: rgba(241, 245, 249, 0.45);
       --bg-size: cover;
@@ -35,6 +40,10 @@
       --card-bg-override: "";
       --inner-box-bg: rgba(248, 250, 252, 0.85);
       --inner-box-border: #e2e8f0;
+      --inner-box-text: #334155;
+      --inner-box-radius: 12px;
+      --price-box-bg: var(--accent-color);
+      --price-box-text: var(--accent-text);
       --tab-bg-override: "";
     }
 
@@ -49,6 +58,8 @@
       --bg-overlay: rgba(11, 17, 32, 0.55);
       --inner-box-bg: rgba(15, 23, 42, 0.72);
       --inner-box-border: rgba(148, 163, 184, 0.25);
+      --inner-box-text: #cbd5e1;
+      --card-border-color: rgba(148, 163, 184, 0.22);
     }
 
     * {
@@ -93,18 +104,18 @@
 
     .area-card,
     .search-wrapper,
-    .empty-state {
+    .empty-state,
+    .map-section-card {
       background: var(--card-bg-override, rgba(var(--surface-rgb), var(--card-alpha))) !important;
       backdrop-filter: blur(var(--card-blur)) saturate(150%);
       -webkit-backdrop-filter: blur(var(--card-blur)) saturate(150%);
-      border: 1.5px solid rgba(255, 255, 255, var(--border-alpha)) !important;
+      border: var(--card-border-width) solid var(--card-border-color) !important;
+      border-radius: var(--card-radius) !important;
       box-shadow: var(--shadow-sm);
     }
 
-    body[data-mode="dark"] .area-card,
-    body[data-mode="dark"] .search-wrapper,
-    body[data-mode="dark"] .empty-state {
-      border-color: rgba(148, 163, 184, 0.22) !important;
+    .area-card {
+      padding: var(--card-padding-v) var(--card-padding-h) !important;
     }
 
     .area-card.recommended {
@@ -114,7 +125,7 @@
 
     .chip,
     .sync-status-pill {
-      background: rgba(var(--surface-rgb), calc(var(--card-alpha) * 0.92 + 0.08));
+      background: var(--card-bg-override, rgba(var(--surface-rgb), calc(var(--card-alpha) * 0.92 + 0.08)));
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
     }
@@ -131,10 +142,10 @@
     }
 
     .main-tab-btn {
-      background: var(--card-bg-override, rgba(var(--surface-rgb), var(--card-alpha))) !important;
+      background: var(--tab-bg-override, var(--card-bg-override, rgba(var(--surface-rgb), var(--card-alpha)))) !important;
       backdrop-filter: blur(var(--card-blur)) saturate(150%) !important;
       -webkit-backdrop-filter: blur(var(--card-blur)) saturate(150%) !important;
-      border: 1.5px solid rgba(255, 255, 255, var(--border-alpha)) !important;
+      border: var(--card-border-width) solid var(--card-border-color) !important;
       box-shadow: var(--shadow-sm) !important;
       border-radius: 16px !important;
       padding: 10px 18px !important;
@@ -142,7 +153,6 @@
     }
 
     body[data-mode="dark"] .main-tab-btn:not(.active) {
-      border-color: rgba(148, 163, 184, 0.22) !important;
       color: #f8fafc !important;
     }
 
@@ -169,21 +179,31 @@
     }
 
     .item-contents-box {
-      background: var(--inner-box-bg);
-      border-color: var(--inner-box-border);
+      background: var(--inner-box-bg) !important;
+      border: 1px solid var(--inner-box-border) !important;
+      border-radius: var(--inner-box-radius) !important;
+      color: var(--inner-box-text);
+    }
+
+    .item-notes-text {
+      color: var(--inner-box-text) !important;
     }
 
     .main-tab-btn.active,
-    .chip.active,
-    .price-box {
+    .chip.active {
       background: var(--accent-color) !important;
       border-color: var(--accent-color) !important;
       color: var(--accent-text) !important;
     }
 
-    .price-currency,
+    .price-box {
+      background: var(--price-box-bg) !important;
+      color: var(--price-box-text) !important;
+    }
+
+    .price-box .price-currency,
     .chip.active .chip-count {
-      color: var(--accent-text) !important;
+      color: inherit !important;
       opacity: 0.9;
     }
 
@@ -204,7 +224,6 @@
       color: #f8fafc;
     }
     body[data-mode="dark"] .branch-pill,
-    body[data-mode="dark"] .item-contents-box,
     body[data-mode="dark"] .help-note,
     body[data-mode="dark"] .esc-btn,
     body[data-mode="dark"] .copy-btn,
@@ -217,9 +236,6 @@
       background: rgba(30, 41, 59, 0.85);
       border-color: #475569;
       color: #f1f5f9;
-    }
-    body[data-mode="dark"] .item-notes-text {
-      color: #cbd5e1;
     }
     body[data-mode="dark"] .modal {
       background: #1e293b;
@@ -285,8 +301,8 @@
     }
 
     .color-wheel-input {
-      width: 54px;
-      height: 44px;
+      width: 52px;
+      height: 42px;
       padding: 2px;
       border: 1.5px solid #cbd5e1;
       border-radius: 10px;
@@ -303,8 +319,8 @@
     }
 
     .preset-dot-btn {
-      width: 28px;
-      height: 28px;
+      width: 26px;
+      height: 26px;
       border-radius: 50%;
       border: 2px solid #ffffff;
       box-shadow: 0 0 0 1.5px #cbd5e1;
@@ -328,18 +344,68 @@
       }
     }
 
+    .customizer-section-box {
+      background: rgba(148, 163, 184, 0.08);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px;
+      margin-bottom: 14px;
+    }
+
+    .customizer-section-title {
+      font-size: 0.92rem;
+      font-weight: 900;
+      margin-bottom: 10px;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .range-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .range-row label {
+      font-size: 0.82rem;
+      font-weight: 800;
+    }
+
+    .range-val {
+      font-size: 0.78rem;
+      font-weight: 800;
+      background: rgba(124, 58, 237, 0.14);
+      padding: 2px 8px;
+      border-radius: 8px;
+      min-width: 50px;
+      text-align: center;
+    }
+
+    input[type="range"].form-range {
+      width: 100%;
+      accent-color: #7c3aed;
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+
     .bg-preview-box {
       margin-top: 8px;
-      height: 120px;
+      height: 110px;
       border-radius: 12px;
       border: 1.5px dashed #cbd5e1;
+      background-color: #0f172a;
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #64748b;
+      color: #e2e8f0;
       font-size: 0.8rem;
       font-weight: 700;
       overflow: hidden;
@@ -959,15 +1025,15 @@
     .area-name {
       font-size: 1.3rem;
       font-weight: 900;
-      color: #0f172a;
+      color: var(--text-main);
       line-height: 1.25;
       margin-top: 2px;
     }
 
     .item-contents-box {
       margin-top: 6px;
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
+      background: var(--inner-box-bg);
+      border: 1px solid var(--inner-box-border);
       border-radius: 12px;
       padding: 10px 12px;
       width: 100%;
@@ -1156,7 +1222,7 @@
     .modal {
       background: #fff;
       width: 100%;
-      max-width: 550px;
+      max-width: 620px;
       border-radius: 18px;
       padding: 22px;
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.24);
@@ -1179,12 +1245,12 @@
     }
 
     .form-group {
-      margin-bottom: 14px;
+      margin-bottom: 12px;
     }
 
     .form-label {
       display: block;
-      font-size: 0.88rem;
+      font-size: 0.86rem;
       font-weight: 800;
       color: #1e293b;
       margin-bottom: 6px;
@@ -1192,10 +1258,10 @@
 
     .form-control {
       width: 100%;
-      padding: 11px 13px;
+      padding: 10px 12px;
       border: 1.5px solid #cbd5e1;
       border-radius: 11px;
-      font-size: 0.95rem;
+      font-size: 0.92rem;
       font-weight: 700;
       color: #0f172a;
       background: #fff;
@@ -1210,7 +1276,7 @@
     .form-control.ltr {
       direction: ltr;
       text-align: left;
-      font-size: 0.86rem;
+      font-size: 0.85rem;
     }
 
     .form-control:focus {
@@ -1234,7 +1300,7 @@
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
-      margin-top: 18px;
+      margin-top: 16px;
     }
 
     .btn-m {
@@ -1319,10 +1385,6 @@
       transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease;
     }
 
-    body[data-mode="dark"] .map-section-card {
-      border-color: rgba(148, 163, 184, 0.22) !important;
-    }
-
     .map-section-header {
       display: flex;
       align-items: center;
@@ -1405,126 +1467,6 @@
       border: 0;
       display: block;
     }
-
-  
-    :root {
-      --text-secondary: #334155;
-      --card-bg-color: #ffffff;
-      --card-border-color: #e2e8f0;
-      --card-radius: 18px;
-      --inner-box-text: #334155;
-      --pill-bg: #f8fafc;
-      --pill-text: #1e293b;
-      --pill-border: #e2e8f0;
-      --tab-bg-color: #ffffff;
-      --tab-text-color: #0f172a;
-      --tab-border-color: #e2e8f0;
-      --input-bg-color: rgba(255, 255, 255, 0.85);
-      --input-text-color: #0f172a;
-    }
-
-    body[data-mode="dark"] {
-      --text-secondary: #cbd5e1;
-      --card-bg-color: #1e293b;
-      --card-border-color: #334155;
-      --inner-box-text: #e2e8f0;
-      --pill-bg: #0f172a;
-      --pill-text: #e2e8f0;
-      --pill-border: #334155;
-      --tab-bg-color: #1e293b;
-      --tab-text-color: #f8fafc;
-      --tab-border-color: #334155;
-      --input-bg-color: rgba(15, 23, 42, 0.82);
-      --input-text-color: #f8fafc;
-    }
-
-    body {
-      color: var(--text-main) !important;
-    }
-
-    .area-card,
-    .search-wrapper,
-    .empty-state,
-    .map-section-card {
-      background-color: var(--card-bg-color) !important;
-      border-color: var(--card-border-color) !important;
-      border-radius: var(--card-radius) !important;
-    }
-
-    .area-name,
-    .map-section-title,
-    .modal-header h2,
-    .form-label,
-    .manage-meta {
-      color: var(--text-main) !important;
-    }
-
-    .item-notes-text,
-    .info-strip,
-    .count-summary,
-    .item-contents-title {
-      color: var(--text-secondary) !important;
-    }
-
-    .coverage-text {
-      color: var(--text-muted) !important;
-    }
-
-    .item-contents-box {
-      background-color: var(--inner-box-bg) !important;
-      border-color: var(--inner-box-border) !important;
-      color: var(--inner-box-text) !important;
-    }
-
-    .branch-pill,
-    .ingredient-tag,
-    .chip:not(.active),
-    .sync-status-pill {
-      background-color: var(--pill-bg) !important;
-      color: var(--pill-text) !important;
-      border-color: var(--pill-border) !important;
-    }
-
-    .main-tab-btn:not(.active) {
-      background-color: var(--tab-bg-color) !important;
-      color: var(--tab-text-color) !important;
-      border-color: var(--tab-border-color) !important;
-    }
-
-    .search-input,
-    .form-control {
-      color: var(--input-text-color) !important;
-    }
-
-    .range-row {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      margin-bottom: 10px;
-    }
-
-    .range-header {
-      display: flex;
-      justify-content: space-between;
-      font-size: 0.8rem;
-      font-weight: 800;
-    }
-
-    .range-slider {
-      width: 100%;
-      cursor: pointer;
-      accent-color: #7c3aed;
-    }
-
-    .section-divider-label {
-      font-size: 0.85rem;
-      font-weight: 900;
-      color: #7c3aed;
-      margin: 14px 0 8px;
-      padding-bottom: 4px;
-      border-bottom: 1px dashed #cbd5e1;
-    }
-
   </style>
 </head>
 <body>
@@ -1540,7 +1482,6 @@
     </div>
   </div>
 </div>
-
 
 <script>
   setTimeout(function () {
@@ -1597,7 +1538,6 @@
         <span id="countLabel">منطقة في جميع الأفرع</span>
       </div>
     </div>
-
 
     <!-- Embedded Google Map -->
     <div class="map-section-card" id="deliveryMapCard">
@@ -1950,170 +1890,191 @@
 </div>
 
 <div class="modal-backdrop" id="appearanceModal">
-  <div class="modal" style="max-width:640px;">
+  <div class="modal">
     <div class="modal-header">
-      <h2>🎨 تخصيص المظهر، الخلفية، والألوان (صلاحيات الأدمن)</h2>
+      <h2>🎨 التحكم الكامل بالمظهر، الخلفية، والألوان</h2>
       <button type="button" class="btn-m btn-m-light" onclick="closeAppearanceModal()">إغلاق</button>
     </div>
     <form id="appearanceForm" onsubmit="saveAppearanceForm(event)">
-      <div class="section-divider-label">🌓 الوضع العام ولون التمييز</div>
-      <div class="form-group">
-        <label class="form-label">وضع الإضاءة</label>
-        <div class="mode-toggle-group">
-          <button type="button" class="mode-toggle-btn" id="modeLightBtn" onclick="selectDarkMode(false)">☀️ وضع فاتح</button>
-          <button type="button" class="mode-toggle-btn" id="modeDarkBtn" onclick="selectDarkMode(true)">🌙 وضع داكن</button>
+
+      <!-- 1. Background Image & Lighting -->
+      <div class="customizer-section-box">
+        <div class="customizer-section-title">
+          <span>🖼️ صورة الخلفية والإضاءة</span>
+          <button type="button" class="btn-m btn-m-danger" style="padding:4px 10px; font-size:0.75rem;" onclick="clearBackgroundImage()">إزالة الصورة</button>
         </div>
-      </div>
-      <div class="form-group">
-        <label class="form-label" for="themeColorPicker">لون الثيم الرئيسي (التبويبات النشطة وصندوق السعر)</label>
-        <div class="color-picker-row">
-          <input type="color" id="themeColorPicker" class="color-wheel-input" value="#0f172a" oninput="syncHexAndPreview('themeColorPicker','themeColorHexInput'); previewLiveAppearance()" />
-          <input type="text" id="themeColorHexInput" class="form-control ltr" style="width:120px;" value="#0f172a" maxlength="7" oninput="syncPickerFromHex('themeColorHexInput','themeColorPicker'); previewLiveAppearance()" />
-          <div class="preset-dots">
-            <button type="button" class="preset-dot-btn" style="background:#0f172a" onclick="setQuickColor('themeColorPicker','themeColorHexInput','#0f172a')"></button>
-            <button type="button" class="preset-dot-btn" style="background:#2563eb" onclick="setQuickColor('themeColorPicker','themeColorHexInput','#2563eb')"></button>
-            <button type="button" class="preset-dot-btn" style="background:#059669" onclick="setQuickColor('themeColorPicker','themeColorHexInput','#059669')"></button>
-            <button type="button" class="preset-dot-btn" style="background:#d97706" onclick="setQuickColor('themeColorPicker','themeColorHexInput','#d97706')"></button>
-            <button type="button" class="preset-dot-btn" style="background:#7c3aed" onclick="setQuickColor('themeColorPicker','themeColorHexInput','#7c3aed')"></button>
-            <button type="button" class="preset-dot-btn" style="background:#dc2626" onclick="setQuickColor('themeColorPicker','themeColorHexInput','#dc2626')"></button>
+        <div class="grid-2-cols">
+          <div class="form-group">
+            <label class="form-label" for="bgImageUrlInput">رابط صورة الخلفية (URL)</label>
+            <input type="text" id="bgImageUrlInput" class="form-control ltr" placeholder="https://..." oninput="livePreviewAppearance()" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="bgImageFileInput">أو رفع صورة من الجهاز</label>
+            <input type="file" id="bgImageFileInput" class="form-control" style="padding:7px;" accept="image/*" onchange="handleBgFileUpload(event)" />
           </div>
         </div>
-      </div>
 
-      <div class="section-divider-label">🖼️ صورة الخلفية والإضاءة والشفافية</div>
-      <div class="form-group">
-        <label class="form-label" for="bgImageUrlInput">رابط صورة الخلفية (URL) أو رفع ملف صورة</label>
-        <div style="display:flex; gap:8px; flex-wrap:wrap;">
-          <input type="text" id="bgImageUrlInput" class="form-control ltr" style="flex:1; min-width:200px;" placeholder="https://example.com/bg.jpg" oninput="previewLiveAppearance()" />
-          <label class="btn-m btn-m-light" style="cursor:pointer;">
-            📁 رفع صورة
-            <input type="file" id="bgImageFileInput" accept="image/*" style="display:none;" onchange="handleBgFileUpload(event)" />
-          </label>
-          <button type="button" class="btn-m btn-m-danger" onclick="clearBgImage()">إزالة الخلفية</button>
+        <div class="grid-2-cols">
+          <div class="form-group">
+            <label class="form-label" for="bgSizeSelect">طريقة ملاءمة الخلفية</label>
+            <select id="bgSizeSelect" class="form-control" onchange="livePreviewAppearance()">
+              <option value="cover">تغطية كاملة (Cover)</option>
+              <option value="contain">احتواء كامل (Contain)</option>
+              <option value="auto">حجم طبيعي (Auto)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="bgRepeatSelect">تكرار الخلفية</label>
+            <select id="bgRepeatSelect" class="form-control" onchange="livePreviewAppearance()">
+              <option value="no-repeat">بدون تكرار</option>
+              <option value="repeat">تكرار كامل</option>
+              <option value="repeat-x">تكرار أفقي</option>
+              <option value="repeat-y">تكرار عمودي</option>
+            </select>
+          </div>
         </div>
+
+        <div class="range-row">
+          <label for="bgBrightnessRange">إضاءة / سطوع الخلفية</label>
+          <span class="range-val" id="bgBrightnessVal">100%</span>
+        </div>
+        <input type="range" id="bgBrightnessRange" class="form-range" min="20" max="180" step="2" value="100" oninput="livePreviewAppearance()" />
+
+        <div class="range-row">
+          <label for="bgContrastRange">تباين الخلفية</label>
+          <span class="range-val" id="bgContrastVal">100%</span>
+        </div>
+        <input type="range" id="bgContrastRange" class="form-range" min="50" max="160" step="2" value="100" oninput="livePreviewAppearance()" />
+
+        <div class="range-row">
+          <label for="overlayOpacityRange">طبقة التعتيم / التفتيح فوق الخلفية</label>
+          <span class="range-val" id="overlayOpacityVal">45%</span>
+        </div>
+        <input type="range" id="overlayOpacityRange" class="form-range" min="0" max="95" step="1" value="45" oninput="livePreviewAppearance()" />
+
         <div class="bg-preview-box" id="bgPreviewBox">معاينة صورة الخلفية</div>
       </div>
 
-      <div class="grid-2-cols">
-        <div class="form-group">
-          <label class="form-label" for="bgSizeSelect">احتواء / تمدد الخلفية</label>
-          <select id="bgSizeSelect" class="form-control" onchange="previewLiveAppearance()">
-            <option value="cover">تغطية كاملة (Cover)</option>
-            <option value="contain">احتواء كامل (Contain)</option>
-            <option value="auto">حجم أصلي (Auto)</option>
-          </select>
+      <!-- 2. Cards, Inner Boxes & Text Colors -->
+      <div class="customizer-section-box">
+        <div class="customizer-section-title">
+          <span>🃏 ألوان الكارد، المربعات الداخلية، والخطوط</span>
         </div>
-        <div class="form-group">
-          <label class="form-label" for="bgRepeatSelect">تكرار الخلفية</label>
-          <select id="bgRepeatSelect" class="form-control" onchange="previewLiveAppearance()">
-            <option value="no-repeat">بدون تكرار</option>
-            <option value="repeat">تكرار كامل</option>
-            <option value="repeat-x">تكرار أفقي</option>
-            <option value="repeat-y">تكرار عمودي</option>
-          </select>
+
+        <div class="grid-2-cols">
+          <div class="form-group">
+            <label class="form-label" for="cardBgColorInput">لون الكارد (فارغ = تلقائي حسب الوضع)</label>
+            <div class="color-picker-row">
+              <input type="color" id="cardBgPicker" class="color-wheel-input" value="#ffffff" oninput="syncColorPair('cardBgColorInput', 'cardBgPicker', this.value)" />
+              <input type="text" id="cardBgColorInput" class="form-control ltr" placeholder="#ffffff أو rgba(...)" oninput="livePreviewAppearance()" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="textColorInput">لون الكتابة / النصوص الرئيسي</label>
+            <div class="color-picker-row">
+              <input type="color" id="textColorPicker" class="color-wheel-input" value="#0f172a" oninput="syncColorPair('textColorInput', 'textColorPicker', this.value)" />
+              <input type="text" id="textColorInput" class="form-control ltr" placeholder="تلقائي" oninput="livePreviewAppearance()" />
+            </div>
+          </div>
         </div>
+
+        <div class="grid-2-cols">
+          <div class="form-group">
+            <label class="form-label" for="innerBoxBgInput">لون المربعات داخل الكارد (المحتويات/الحلول)</label>
+            <div class="color-picker-row">
+              <input type="color" id="innerBoxBgPicker" class="color-wheel-input" value="#f8fafc" oninput="syncColorPair('innerBoxBgInput', 'innerBoxBgPicker', this.value)" />
+              <input type="text" id="innerBoxBgInput" class="form-control ltr" placeholder="تلقائي" oninput="livePreviewAppearance()" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="innerBoxTextInput">لون النص داخل المربعات الداخلية</label>
+            <div class="color-picker-row">
+              <input type="color" id="innerBoxTextPicker" class="color-wheel-input" value="#334155" oninput="syncColorPair('innerBoxTextInput', 'innerBoxTextPicker', this.value)" />
+              <input type="text" id="innerBoxTextInput" class="form-control ltr" placeholder="تلقائي" oninput="livePreviewAppearance()" />
+            </div>
+          </div>
+        </div>
+
+        <div class="grid-2-cols">
+          <div class="form-group">
+            <label class="form-label" for="priceBoxBgInput">لون صندوق السعر</label>
+            <div class="color-picker-row">
+              <input type="color" id="priceBoxBgPicker" class="color-wheel-input" value="#0f172a" oninput="syncColorPair('priceBoxBgInput', 'priceBoxBgPicker', this.value)" />
+              <input type="text" id="priceBoxBgInput" class="form-control ltr" placeholder="يتبع اللون الرئيسي" oninput="livePreviewAppearance()" />
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="cardBorderColorInput">لون إطار الكارد (Border)</label>
+            <div class="color-picker-row">
+              <input type="color" id="cardBorderColorPicker" class="color-wheel-input" value="#e2e8f0" oninput="syncColorPair('cardBorderColorInput', 'cardBorderColorPicker', this.value)" />
+              <input type="text" id="cardBorderColorInput" class="form-control ltr" placeholder="تلقائي" oninput="livePreviewAppearance()" />
+            </div>
+          </div>
+        </div>
+
+        <div class="range-row">
+          <label for="cardOpacityRange">شفافية الكارد (Card Opacity)</label>
+          <span class="range-val" id="cardOpacityVal">72%</span>
+        </div>
+        <input type="range" id="cardOpacityRange" class="form-range" min="10" max="100" step="1" value="72" oninput="livePreviewAppearance()" />
+
+        <div class="range-row">
+          <label for="cardBlurRange">درجة ضبابية الزجاج (Glass Blur)</label>
+          <span class="range-val" id="cardBlurVal">14px</span>
+        </div>
+        <input type="range" id="cardBlurRange" class="form-range" min="0" max="32" step="1" value="14" oninput="livePreviewAppearance()" />
       </div>
 
-      <div class="range-row">
-        <div class="range-header"><span>💡 إضاءة صورة الخلفية (Brightness)</span><span id="bgBrightnessVal">100%</span></div>
-        <input type="range" id="bgBrightnessSlider" class="range-slider" min="20" max="160" value="100" oninput="document.getElementById('bgBrightnessVal').textContent=this.value+'%'; previewLiveAppearance()" />
-      </div>
+      <!-- 3. Site Mode, Accent Color & Card Design -->
+      <div class="customizer-section-box">
+        <div class="customizer-section-title">
+          <span>✨ وضع الموقع، الألوان العامة، وتصميم الكارد</span>
+        </div>
 
-      <div class="range-row">
-        <div class="range-header"><span>🌗 تباين الخلفية (Contrast)</span><span id="bgContrastVal">100%</span></div>
-        <input type="range" id="bgContrastSlider" class="range-slider" min="50" max="160" value="100" oninput="document.getElementById('bgContrastVal').textContent=this.value+'%'; previewLiveAppearance()" />
-      </div>
-
-      <div class="range-row">
-        <div class="range-header"><span>🌫️ طبقة التعتيم / التفتيح فوق الخلفية</span><span id="overlayOpacityVal">45%</span></div>
-        <input type="range" id="overlayOpacitySlider" class="range-slider" min="0" max="95" value="45" oninput="document.getElementById('overlayOpacityVal').textContent=this.value+'%'; previewLiveAppearance()" />
-      </div>
-
-      <div class="section-divider-label">🃏 ألوان وتصميم الكاردات والمربعات الداخلية والخطوط</div>
-      <div class="grid-2-cols">
         <div class="form-group">
-          <label class="form-label" for="cardBgColorPicker">لون خلفية الكارد</label>
-          <div class="color-picker-row">
-            <input type="color" id="cardBgColorPicker" class="color-wheel-input" value="#ffffff" oninput="syncHexAndPreview('cardBgColorPicker','cardBgColorHexInput'); previewLiveAppearance()" />
-            <input type="text" id="cardBgColorHexInput" class="form-control ltr" style="width:110px;" value="#ffffff" maxlength="7" oninput="syncPickerFromHex('cardBgColorHexInput','cardBgColorPicker'); previewLiveAppearance()" />
+          <label class="form-label">وضع الإضاءة العام</label>
+          <div class="mode-toggle-group">
+            <button type="button" class="mode-toggle-btn" id="modeLightBtn" onclick="selectDarkMode(false)">☀️ وضع فاتح</button>
+            <button type="button" class="mode-toggle-btn" id="modeDarkBtn" onclick="selectDarkMode(true)">🌙 وضع داكن</button>
           </div>
         </div>
 
         <div class="form-group">
-          <label class="form-label" for="cardBorderColorPicker">لون إطار الكارد</label>
+          <label class="form-label" for="themeColorPicker">اللون الرئيسي للتبويبات والفلاتر</label>
           <div class="color-picker-row">
-            <input type="color" id="cardBorderColorPicker" class="color-wheel-input" value="#e2e8f0" oninput="syncHexAndPreview('cardBorderColorPicker','cardBorderColorHexInput'); previewLiveAppearance()" />
-            <input type="text" id="cardBorderColorHexInput" class="form-control ltr" style="width:110px;" value="#e2e8f0" maxlength="7" oninput="syncPickerFromHex('cardBorderColorHexInput','cardBgColorPicker'); previewLiveAppearance()" />
+            <input type="color" id="themeColorPicker" class="color-wheel-input" value="#0f172a" oninput="onThemeColorChange(this.value)" />
+            <input type="text" id="themeColorHexInput" class="form-control ltr" style="width:125px;" value="#0f172a" maxlength="7" oninput="onThemeHexTyped(this.value)" />
+            <div class="preset-dots">
+              <button type="button" class="preset-dot-btn" style="background:#0f172a" onclick="onThemeColorChange('#0f172a')" title="داكن كلاسيكي"></button>
+              <button type="button" class="preset-dot-btn" style="background:#2563eb" onclick="onThemeColorChange('#2563eb')" title="أزرق ملكي"></button>
+              <button type="button" class="preset-dot-btn" style="background:#059669" onclick="onThemeColorChange('#059669')" title="أخضر زمردي"></button>
+              <button type="button" class="preset-dot-btn" style="background:#7c3aed" onclick="onThemeColorChange('#7c3aed')" title="بنفسجي"></button>
+              <button type="button" class="preset-dot-btn" style="background:#d97706" onclick="onThemeColorChange('#d97706')" title="ذهبي كهرماني"></button>
+              <button type="button" class="preset-dot-btn" style="background:#dc2626" onclick="onThemeColorChange('#dc2626')" title="أحمر قرمزي"></button>
+            </div>
           </div>
         </div>
 
-        <div class="form-group">
-          <label class="form-label" for="textMainColorPicker">لون الكتابة الرئيسي (العناوين)</label>
-          <div class="color-picker-row">
-            <input type="color" id="textMainColorPicker" class="color-wheel-input" value="#0f172a" oninput="syncHexAndPreview('textMainColorPicker','textMainColorHexInput'); previewLiveAppearance()" />
-            <input type="text" id="textMainColorHexInput" class="form-control ltr" style="width:110px;" value="#0f172a" maxlength="7" oninput="syncPickerFromHex('textMainColorHexInput','textMainColorPicker'); previewLiveAppearance()" />
+        <div class="grid-2-cols">
+          <div class="form-group">
+            <label class="form-label" for="cardRadiusRange">استدارة حواف الكارد</label>
+            <span class="range-val" id="cardRadiusVal" style="float:left;">18px</span>
+            <input type="range" id="cardRadiusRange" class="form-range" min="0" max="36" step="2" value="18" oninput="livePreviewAppearance()" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="cardPaddingRange">المساحة الداخلية للكارد</label>
+            <span class="range-val" id="cardPaddingVal" style="float:left;">18px</span>
+            <input type="range" id="cardPaddingRange" class="form-range" min="10" max="32" step="2" value="18" oninput="livePreviewAppearance()" />
           </div>
         </div>
-
-        <div class="form-group">
-          <label class="form-label" for="textSecColorPicker">لون الكتابة الثانوي والوصف</label>
-          <div class="color-picker-row">
-            <input type="color" id="textSecColorPicker" class="color-wheel-input" value="#334155" oninput="syncHexAndPreview('textSecColorPicker','textSecColorHexInput'); previewLiveAppearance()" />
-            <input type="text" id="textSecColorHexInput" class="form-control ltr" style="width:110px;" value="#334155" maxlength="7" oninput="syncPickerFromHex('textSecColorHexInput','textSecColorPicker'); previewLiveAppearance()" />
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label" for="innerBoxBgPicker">لون المربعات الداخلية (المحتويات/الحلول)</label>
-          <div class="color-picker-row">
-            <input type="color" id="innerBoxBgPicker" class="color-wheel-input" value="#f8fafc" oninput="syncHexAndPreview('innerBoxBgPicker','innerBoxBgHexInput'); previewLiveAppearance()" />
-            <input type="text" id="innerBoxBgHexInput" class="form-control ltr" style="width:110px;" value="#f8fafc" maxlength="7" oninput="syncPickerFromHex('innerBoxBgHexInput','innerBoxBgPicker'); previewLiveAppearance()" />
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label" for="innerBoxTextPicker">لون نص المربعات الداخلية</label>
-          <div class="color-picker-row">
-            <input type="color" id="innerBoxTextPicker" class="color-wheel-input" value="#334155" oninput="syncHexAndPreview('innerBoxTextPicker','innerBoxTextHexInput'); previewLiveAppearance()" />
-            <input type="text" id="innerBoxTextHexInput" class="form-control ltr" style="width:110px;" value="#334155" maxlength="7" oninput="syncPickerFromHex('innerBoxTextHexInput','innerBoxTextPicker'); previewLiveAppearance()" />
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label" for="pillBgPicker">لون شارات الفرع والتصنيف والرقاقات</label>
-          <div class="color-picker-row">
-            <input type="color" id="pillBgPicker" class="color-wheel-input" value="#f8fafc" oninput="syncHexAndPreview('pillBgPicker','pillBgHexInput'); previewLiveAppearance()" />
-            <input type="text" id="pillBgHexInput" class="form-control ltr" style="width:110px;" value="#f8fafc" maxlength="7" oninput="syncPickerFromHex('pillBgHexInput','pillBgPicker'); previewLiveAppearance()" />
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label" for="pillTextPicker">لون نص شارات الفرع والتصنيف</label>
-          <div class="color-picker-row">
-            <input type="color" id="pillTextPicker" class="color-wheel-input" value="#1e293b" oninput="syncHexAndPreview('pillTextPicker','pillTextHexInput'); previewLiveAppearance()" />
-            <input type="text" id="pillTextHexInput" class="form-control ltr" style="width:110px;" value="#1e293b" maxlength="7" oninput="syncPickerFromHex('pillTextHexInput','pillTextPicker'); previewLiveAppearance()" />
-          </div>
-        </div>
-      </div>
-
-      <div class="range-row">
-        <div class="range-header"><span>🪟 شفافية الكاردات والعناصر</span><span id="cardOpacityVal">72%</span></div>
-        <input type="range" id="cardOpacitySlider" class="range-slider" min="15" max="100" value="72" oninput="document.getElementById('cardOpacityVal').textContent=this.value+'%'; previewLiveAppearance()" />
-      </div>
-
-      <div class="range-row">
-        <div class="range-header"><span>🔮 درجة التغبيش الزجاجي (Blur)</span><span id="cardBlurVal">14px</span></div>
-        <input type="range" id="cardBlurSlider" class="range-slider" min="0" max="32" value="14" oninput="document.getElementById('cardBlurVal').textContent=this.value+'px'; previewLiveAppearance()" />
-      </div>
-
-      <div class="range-row">
-        <div class="range-header"><span>📐 استدارة حواف الكاردات</span><span id="cardRadiusVal">18px</span></div>
-        <input type="range" id="cardRadiusSlider" class="range-slider" min="4" max="36" value="18" oninput="document.getElementById('cardRadiusVal').textContent=this.value+'px'; previewLiveAppearance()" />
       </div>
 
       <div class="modal-actions">
         <button type="submit" class="btn-m btn-m-success">💾 حفظ ونشر للجميع</button>
-        <button type="button" class="btn-m btn-m-danger" onclick="resetAppearanceDefaults()">↩️ إعادة ضبط التصميم</button>
+        <button type="button" class="btn-m btn-m-danger" onclick="resetAppearanceToDefault()">↩️ إعادة المظهر الافتراضي</button>
         <button type="button" class="btn-m btn-m-light" onclick="closeAppearanceModal()">إلغاء</button>
       </div>
     </form>
@@ -2155,12 +2116,16 @@
     {
       title: "تأخر السائق عن الموعد المحدد للتوصيل",
       category: "التوصيل",
-      solution: "1. التواصل فوراً مع السائق لتحديد موقعه الحالي والوقت المتوقع للوصول.\n2. إبلاغ الزبون بالوقت المحدث بشفافية واعتذار لطيف.\n3. في حال تجاوز التأخير 20 دقيقة، يتم التنسيق مع مشرف الفرع لتقديم تعويض مناسب."
+      solution: "1. التواصل فوراً مع السائق لتحديد موقعه الحالي والوقت المتوقع للوصول.
+2. إبلاغ الزبون بالوقت المحدث بشفافية واعتذار لطيف.
+3. في حال تجاوز التأخير 20 دقيقة، يتم التنسيق مع مشرف الفرع لتقديم تعويض مناسب."
     },
     {
       title: "وصول طلب ناقص أو صنف مختلف للزبون",
       category: "الطلبات",
-      solution: "1. الاعتذار من الزبون وتأكيد تفاصيل الصنف الناقص.\n2. تجهيز الصنف فوراً وإرساله بأقرب سائق متاح على نفقة المطعم.\n3. تسجيل ملاحظة لمتابعة التغليف في الفرع."
+      solution: "1. الاعتذار من الزبون وتأكيد تفاصيل الصنف الناقص.
+2. تجهيز الصنف فوراً وإرساله بأقرب سائق متاح على نفقة المطعم.
+3. تسجيل ملاحظة لمتابعة التغليف في الفرع."
     }
   ];
 
@@ -2426,211 +2391,1292 @@
     }).join("");
   }
 
-  function hexToRgbTuple(hex) {
-    const clean = (hex || "#ffffff").replace("#", "");
-    if (clean.length !== 6) return "255, 255, 255";
-    const r = parseInt(clean.substring(0, 2), 16);
-    const g = parseInt(clean.substring(2, 4), 16);
-    const b = parseInt(clean.substring(4, 6), 16);
-    return `${r}, ${g}, ${b}`;
-  }
-
   function getDefaultAppearance() {
     return {
       darkMode: false,
       accentColor: "#0f172a",
       cardOpacity: 72,
       cardBlur: 14,
-      cardRadius: 18,
-      cardBgColor: "#ffffff",
-      cardBorderColor: "#e2e8f0",
-      textMainColor: "#0f172a",
-      textSecColor: "#334155",
-      innerBoxBg: "#f8fafc",
-      innerBoxText: "#334155",
-      pillBg: "#f8fafc",
-      pillText: "#1e293b",
       bgImage: "",
       bgSize: "cover",
       bgRepeat: "no-repeat",
       bgBrightness: 100,
       bgContrast: 100,
-      overlayOpacity: 45
+      overlayOpacity: 45,
+      cardBgColor: "",
+      textColor: "",
+      innerBoxBg: "",
+      innerBoxText: "",
+      priceBoxBg: "",
+      cardBorderColor: "",
+      cardRadius: 18,
+      cardPadding: 18
     };
+  }
+
+  function loadSavedAppearance() {
+    try {
+      const raw = localStorage.getItem(APPEARANCE_STORAGE_KEY);
+      if (raw) return { ...getDefaultAppearance(), ...JSON.parse(raw) };
+    } catch (e) {}
+    return getDefaultAppearance();
+  }
+
+  function saveAppearanceToStorage() {
+    localStorage.setItem(APPEARANCE_STORAGE_KEY, JSON.stringify(siteAppearance));
+  }
+
+  function getContrastTextColor(hexColor) {
+    const clean = (hexColor || "#0f172a").replace("#", "");
+    if (clean.length !== 6) return "#ffffff";
+    const r = parseInt(clean.substring(0, 2), 16);
+    const g = parseInt(clean.substring(2, 4), 16);
+    const b = parseInt(clean.substring(4, 6), 16);
+    const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+    return luminance > 0.62 ? "#0f172a" : "#ffffff";
   }
 
   function applySiteAppearance(appCfg) {
     const cfg = { ...getDefaultAppearance(), ...(appCfg || siteAppearance) };
     if (cfg.darkMode) document.body.setAttribute("data-mode", "dark");
     else document.body.removeAttribute("data-mode");
+
     const rootStyle = document.documentElement.style;
     rootStyle.setProperty("--accent-color", cfg.accentColor);
     rootStyle.setProperty("--dark-pill", cfg.accentColor);
     rootStyle.setProperty("--accent-text", getContrastTextColor(cfg.accentColor));
+
     rootStyle.setProperty("--card-alpha", (cfg.cardOpacity / 100).toFixed(2));
     rootStyle.setProperty("--card-blur", `${cfg.cardBlur}px`);
-    rootStyle.setProperty("--card-radius", `${cfg.cardRadius ?? 18}px`);
-    rootStyle.setProperty("--radius-lg", `${cfg.cardRadius ?? 18}px`);
 
-    const cBg = cfg.cardBgColor || (cfg.darkMode ? "#1e293b" : "#ffffff");
-    rootStyle.setProperty("--card-bg-color", cBg);
-    rootStyle.setProperty("--surface-rgb", hexToRgbTuple(cBg));
-    rootStyle.setProperty("--card-border-color", cfg.cardBorderColor || (cfg.darkMode ? "#334155" : "#e2e8f0"));
-    rootStyle.setProperty("--text-main", cfg.textMainColor || (cfg.darkMode ? "#f8fafc" : "#0f172a"));
-    rootStyle.setProperty("--text-secondary", cfg.textSecColor || (cfg.darkMode ? "#cbd5e1" : "#334155"));
-    rootStyle.setProperty("--inner-box-bg", cfg.innerBoxBg || (cfg.darkMode ? "#0f172a" : "#f8fafc"));
-    rootStyle.setProperty("--inner-box-text", cfg.innerBoxText || (cfg.darkMode ? "#e2e8f0" : "#334155"));
-    rootStyle.setProperty("--pill-bg", cfg.pillBg || (cfg.darkMode ? "#0f172a" : "#f8fafc"));
-    rootStyle.setProperty("--pill-text", cfg.pillText || (cfg.darkMode ? "#e2e8f0" : "#1e293b"));
-
-    const overlayAlpha = ((cfg.overlayOpacity ?? 45) / 100).toFixed(2);
+    const overlayAlpha = (cfg.overlayOpacity / 100).toFixed(2);
     const baseRgb = cfg.darkMode ? "11, 17, 32" : "241, 245, 249";
     rootStyle.setProperty("--bg-overlay", `rgba(${baseRgb}, ${overlayAlpha})`);
+
+    const bg = (cfg.bgImage || "").trim();
+    rootStyle.setProperty("--bg-image", bg ? `url("${bg.replace(/"/g, '\"')}")` : "none");
     rootStyle.setProperty("--bg-size", cfg.bgSize || "cover");
     rootStyle.setProperty("--bg-repeat", cfg.bgRepeat || "no-repeat");
     rootStyle.setProperty("--bg-brightness", `${cfg.bgBrightness ?? 100}%`);
     rootStyle.setProperty("--bg-contrast", `${cfg.bgContrast ?? 100}%`);
 
-    const bg = (cfg.bgImage || "").trim();
-    rootStyle.setProperty("--bg-image", bg ? `url("${bg.replace(/"/g, '\"')}")` : "none");
-  }
-
-  function syncHexAndPreview(pickerId, hexId) {
-    const picker = document.getElementById(pickerId);
-    const hex = document.getElementById(hexId);
-    if (picker && hex) hex.value = picker.value;
-  }
-
-  function syncPickerFromHex(hexId, pickerId) {
-    const hex = document.getElementById(hexId);
-    const picker = document.getElementById(pickerId);
-    if (hex && picker && /^#[0-9a-fA-F]{6}$/.test(hex.value.trim())) {
-      picker.value = hex.value.trim();
-    }
-  }
-
-  function setQuickColor(pickerId, hexId, val) {
-    const picker = document.getElementById(pickerId);
-    const hex = document.getElementById(hexId);
-    if (picker) picker.value = val;
-    if (hex) hex.value = val;
-    previewLiveAppearance();
-  }
-
-  function collectAppearanceFormValues() {
-    const bgImg = document.getElementById("bgImageUrlInput")?.value.trim() || "";
-    const brightness = Number(document.getElementById("bgBrightnessSlider")?.value ?? 100);
-    const contrast = Number(document.getElementById("bgContrastSlider")?.value ?? 100);
-    const overlayOpacity = Number(document.getElementById("overlayOpacitySlider")?.value ?? 45);
-    const cardOpacity = Number(document.getElementById("cardOpacitySlider")?.value ?? 72);
-    const cardBlur = Number(document.getElementById("cardBlurSlider")?.value ?? 14);
-    const cardRadius = Number(document.getElementById("cardRadiusSlider")?.value ?? 18);
-
-    const previewBox = document.getElementById("bgPreviewBox");
-    if (previewBox) {
-      previewBox.style.backgroundImage = bgImg ? `url("${bgImg.replace(/"/g, '\"')}")` : "none";
-      previewBox.style.filter = `brightness(${brightness}%) contrast(${contrast}%)`;
-      previewBox.textContent = bgImg ? "" : "لا توجد صورة خلفية مختارة";
+    // Card override color
+    const cardBg = (cfg.cardBgColor || "").trim();
+    if (cardBg) {
+      rootStyle.setProperty("--card-bg-override", cardBg);
+    } else {
+      rootStyle.removeProperty("--card-bg-override");
     }
 
-    return {
-      darkMode: tempDarkMode,
-      accentColor: document.getElementById("themeColorPicker")?.value || "#0f172a",
-      cardOpacity,
-      cardBlur,
-      cardRadius,
-      cardBgColor: document.getElementById("cardBgColorPicker")?.value || "#ffffff",
-      cardBorderColor: document.getElementById("cardBorderColorPicker")?.value || "#e2e8f0",
-      textMainColor: document.getElementById("textMainColorPicker")?.value || "#0f172a",
-      textSecColor: document.getElementById("textSecColorPicker")?.value || "#334155",
-      innerBoxBg: document.getElementById("innerBoxBgPicker")?.value || "#f8fafc",
-      innerBoxText: document.getElementById("innerBoxTextPicker")?.value || "#334155",
-      pillBg: document.getElementById("pillBgPicker")?.value || "#f8fafc",
-      pillText: document.getElementById("pillTextPicker")?.value || "#1e293b",
-      bgImage: bgImg,
-      bgSize: document.getElementById("bgSizeSelect")?.value || "cover",
-      bgRepeat: document.getElementById("bgRepeatSelect")?.value || "no-repeat",
-      bgBrightness: brightness,
-      bgContrast: contrast,
-      overlayOpacity
-    };
+    // Text color override
+    const txtColor = (cfg.textColor || "").trim();
+    if (txtColor) {
+      rootStyle.setProperty("--text-main", txtColor);
+    } else {
+      rootStyle.setProperty("--text-main", cfg.darkMode ? "#f8fafc" : "#0f172a");
+    }
+
+    // Inner box background & text overrides
+    const innerBg = (cfg.innerBoxBg || "").trim();
+    if (innerBg) {
+      rootStyle.setProperty("--inner-box-bg", innerBg);
+    } else {
+      rootStyle.setProperty("--inner-box-bg", cfg.darkMode ? "rgba(15, 23, 42, 0.72)" : "rgba(248, 250, 252, 0.85)");
+    }
+
+    const innerTxt = (cfg.innerBoxText || "").trim();
+    if (innerTxt) {
+      rootStyle.setProperty("--inner-box-text", innerTxt);
+    } else {
+      rootStyle.setProperty("--inner-box-text", cfg.darkMode ? "#cbd5e1" : "#334155");
+    }
+
+    // Price box color
+    const priceBg = (cfg.priceBoxBg || "").trim();
+    if (priceBg) {
+      rootStyle.setProperty("--price-box-bg", priceBg);
+      rootStyle.setProperty("--price-box-text", getContrastTextColor(priceBg));
+    } else {
+      rootStyle.setProperty("--price-box-bg", cfg.accentColor);
+      rootStyle.setProperty("--price-box-text", getContrastTextColor(cfg.accentColor));
+    }
+
+    // Card border color
+    const borderCol = (cfg.cardBorderColor || "").trim();
+    if (borderCol) {
+      rootStyle.setProperty("--card-border-color", borderCol);
+    } else {
+      rootStyle.setProperty("--card-border-color", cfg.darkMode ? "rgba(148, 163, 184, 0.22)" : "rgba(255, 255, 255, 0.55)");
+    }
+
+    // Card design dimensions
+    rootStyle.setProperty("--card-radius", `${cfg.cardRadius ?? 18}px`);
+    rootStyle.setProperty("--radius-lg", `${cfg.cardRadius ?? 18}px`);
+    rootStyle.setProperty("--card-padding-v", `${cfg.cardPadding ?? 18}px`);
+    rootStyle.setProperty("--card-padding-h", `${(cfg.cardPadding ?? 18) + 2}px`);
   }
 
-  function previewLiveAppearance() {
-    applySiteAppearance(collectAppearanceFormValues());
+  function syncColorPair(textInputId, pickerId, colorVal) {
+    const txtEl = document.getElementById(textInputId);
+    const picEl = document.getElementById(pickerId);
+    if (txtEl) txtEl.value = colorVal;
+    if (picEl && /^#[0-9a-fA-F]{6}$/.test(colorVal)) picEl.value = colorVal;
+    livePreviewAppearance();
   }
 
   function handleBgFileUpload(e) {
     const file = e.target.files && e.target.files[0];
     if (!file) return;
     const reader = new FileReader();
-    reader.onload = function(ev) {
-      const urlInput = document.getElementById("bgImageUrlInput");
-      if (urlInput) urlInput.value = ev.target.result;
-      previewLiveAppearance();
+    reader.onload = function(evt) {
+      const dataUrl = evt.target.result;
+      document.getElementById("bgImageUrlInput").value = dataUrl;
+      livePreviewAppearance();
+      showToast("تم تحميل صورة الخلفية");
     };
     reader.readAsDataURL(file);
   }
 
-  function clearBgImage() {
-    const urlInput = document.getElementById("bgImageUrlInput");
-    const fileInput = document.getElementById("bgImageFileInput");
-    if (urlInput) urlInput.value = "";
-    if (fileInput) fileInput.value = "";
-    previewLiveAppearance();
+  function clearBackgroundImage() {
+    document.getElementById("bgImageUrlInput").value = "";
+    const fileEl = document.getElementById("bgImageFileInput");
+    if (fileEl) fileEl.value = "";
+    livePreviewAppearance();
+    showToast("تمت إزالة صورة الخلفية");
   }
 
-  function populateAppearanceInputs(cfg) {
-    const d = { ...getDefaultAppearance(), ...(cfg || siteAppearance) };
-    tempDarkMode = Boolean(d.darkMode);
-    document.getElementById("modeLightBtn").classList.toggle("active", !tempDarkMode);
-    document.getElementById("modeDarkBtn").classList.toggle("active", tempDarkMode);
+  function readAppearanceFormValues() {
+    const bgBrightness = Number(document.getElementById("bgBrightnessRange").value);
+    const bgContrast = Number(document.getElementById("bgContrastRange").value);
+    const overlayOpacity = Number(document.getElementById("overlayOpacityRange").value);
+    const cardOpacity = Number(document.getElementById("cardOpacityRange").value);
+    const cardBlur = Number(document.getElementById("cardBlurRange").value);
+    const cardRadius = Number(document.getElementById("cardRadiusRange").value);
+    const cardPadding = Number(document.getElementById("cardPaddingRange").value);
 
-    const pairs = [
-      ["themeColorPicker", "themeColorHexInput", d.accentColor],
-      ["cardBgColorPicker", "cardBgColorHexInput", d.cardBgColor],
-      ["cardBorderColorPicker", "cardBorderColorHexInput", d.cardBorderColor],
-      ["textMainColorPicker", "textMainColorHexInput", d.textMainColor],
-      ["textSecColorPicker", "textSecColorHexInput", d.textSecColor],
-      ["innerBoxBgPicker", "innerBoxBgHexInput", d.innerBoxBg],
-      ["innerBoxTextPicker", "innerBoxTextHexInput", d.innerBoxText],
-      ["pillBgPicker", "pillBgHexInput", d.pillBg],
-      ["pillTextPicker", "pillTextHexInput", d.pillText]
-    ];
-    pairs.forEach(([pId, hId, val]) => {
-      const p = document.getElementById(pId);
-      const h = document.getElementById(hId);
-      if (p) p.value = val;
-      if (h) h.value = val;
+    return {
+      darkMode: tempDarkMode,
+      accentColor: document.getElementById("themeColorPicker").value,
+      bgImage: document.getElementById("bgImageUrlInput").value.trim(),
+      bgSize: document.getElementById("bgSizeSelect").value,
+      bgRepeat: document.getElementById("bgRepeatSelect").value,
+      bgBrightness,
+      bgContrast,
+      overlayOpacity,
+      cardBgColor: document.getElementById("cardBgColorInput").value.trim(),
+      textColor: document.getElementById("textColorInput").value.trim(),
+      innerBoxBg: document.getElementById("innerBoxBgInput").value.trim(),
+      innerBoxText: document.getElementById("innerBoxTextInput").value.trim(),
+      priceBoxBg: document.getElementById("priceBoxBgInput").value.trim(),
+      cardBorderColor: document.getElementById("cardBorderColorInput").value.trim(),
+      cardOpacity,
+      cardBlur,
+      cardRadius,
+      cardPadding
+    };
+  }
+
+  function livePreviewAppearance() {
+    const draft = readAppearanceFormValues();
+    document.getElementById("bgBrightnessVal").textContent = `${draft.bgBrightness}%`;
+    document.getElementById("bgContrastVal").textContent = `${draft.bgContrast}%`;
+    document.getElementById("overlayOpacityVal").textContent = `${draft.overlayOpacity}%`;
+    document.getElementById("cardOpacityVal").textContent = `${draft.cardOpacity}%`;
+    document.getElementById("cardBlurVal").textContent = `${draft.cardBlur}px`;
+    document.getElementById("cardRadiusVal").textContent = `${draft.cardRadius}px`;
+    document.getElementById("cardPaddingVal").textContent = `${draft.cardPadding}px`;
+
+    const prevBox = document.getElementById("bgPreviewBox");
+    if (prevBox) {
+      if (draft.bgImage) {
+        prevBox.style.backgroundImage = `url("${draft.bgImage.replace(/"/g, '\"')}")`;
+        prevBox.style.backgroundSize = draft.bgSize;
+        prevBox.style.backgroundRepeat = draft.bgRepeat;
+        prevBox.style.filter = `brightness(${draft.bgBrightness}%) contrast(${draft.bgContrast}%)`;
+        prevBox.textContent = "";
+      } else {
+        prevBox.style.backgroundImage = "none";
+        prevBox.style.filter = "none";
+        prevBox.textContent = "لا توجد صورة خلفية محددة (الخلفية الافتراضية)";
+      }
+    }
+    applySiteAppearance(draft);
+  }
+
+  function resetAppearanceToDefault() {
+    if (!confirm("هل تريد إعادة جميع ألوان وتصميمات المظهر إلى الوضع الافتراضي؟")) return;
+    siteAppearance = getDefaultAppearance();
+    saveAppearanceToStorage();
+    applySiteAppearance(siteAppearance);
+    openAppearanceModal();
+    showToast("تمت إعادة المظهر إلى الافتراضي");
+    pushDataToCloud(false);
+  }
+
+  function triggerSectionAnimation(sectionEl) {
+    if (!sectionEl) return;
+    sectionEl.classList.remove("section-animating");
+    void sectionEl.offsetWidth;
+    sectionEl.classList.add("section-animating");
+  }
+
+  function switchMainSection(sectionId) {
+    activeMainSection = sectionId;
+    renderMainTabs();
+
+    const delEl = document.getElementById("deliverySection");
+    const menuEl = document.getElementById("menuSection");
+    const troubleEl = document.getElementById("troubleshootSection");
+    const customEl = document.getElementById("customSectionView");
+
+    delEl.classList.add("hidden");
+    menuEl.classList.add("hidden");
+    troubleEl.classList.add("hidden");
+    customEl.classList.add("hidden");
+
+    if (sectionId === "delivery") {
+      delEl.classList.remove("hidden");
+      renderChips();
+      renderCards();
+      triggerSectionAnimation(delEl);
+    } else if (sectionId === "menu") {
+      menuEl.classList.remove("hidden");
+      renderMenuChips();
+      renderMenuCards();
+      triggerSectionAnimation(menuEl);
+    } else if (sectionId === "troubleshoot") {
+      troubleEl.classList.remove("hidden");
+      renderTroubleChips();
+      renderTroubleCards();
+      triggerSectionAnimation(troubleEl);
+    } else {
+      const secObj = sectionsConfig.find(s => s.id === sectionId);
+      if (secObj) {
+        customEl.classList.remove("hidden");
+        document.getElementById("customSectionSearchIcon").textContent = secObj.icon || "📌";
+        document.getElementById("customSectionSearchInput").placeholder = `ابحث في قسم ${secObj.name}...`;
+        document.getElementById("customSectionSubtitle").textContent = `محتويات وكاردات قسم: ${secObj.name}`;
+        renderCustomSectionCards();
+        triggerSectionAnimation(customEl);
+      }
+    }
+  }
+
+  function updateTopTabCounts() {
+    renderMainTabs();
+  }
+
+  function getCloudConfig() {
+    try {
+      const raw = localStorage.getItem(CLOUD_CONFIG_KEY);
+      const parsed = raw ? JSON.parse(raw) : {};
+      return {
+        owner: (parsed.owner || DEFAULT_GH_OWNER || "").trim(),
+        repo: (parsed.repo || DEFAULT_GH_REPO || "").trim(),
+        branch: (parsed.branch || DEFAULT_GH_BRANCH || "main").trim() || "main",
+        path: (parsed.path || DEFAULT_GH_PATH || "data/store.json").trim().replace(/^\/+/, "") || "data/store.json",
+        apiKey: (parsed.apiKey || DEFAULT_GH_TOKEN || "").trim()
+      };
+    } catch (e) {
+      return { owner: DEFAULT_GH_OWNER, repo: DEFAULT_GH_REPO, branch: DEFAULT_GH_BRANCH, path: DEFAULT_GH_PATH, apiKey: DEFAULT_GH_TOKEN };
+    }
+  }
+
+  function setCloudConfig(cfg) {
+    localStorage.setItem(CLOUD_CONFIG_KEY, JSON.stringify(cfg));
+  }
+
+  function loadSavedData() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          return parsed.map(item => ({
+            area: String(item.area || "").trim(),
+            branch: cleanBranchName(String(item.branch || "")),
+            price: Number(item.price) || 0
+          }));
+        }
+      }
+    } catch (e) {}
+    return DEFAULT_DATA.map(d => ({ ...d, branch: cleanBranchName(d.branch), price: Number(d.price) }));
+  }
+
+  function saveDataToStorage() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(activeData));
+    updateTopTabCounts();
+  }
+
+  function loadSavedMenu() {
+    try {
+      const raw = localStorage.getItem(MENU_STORAGE_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed)) return normalizeMenuEntries(parsed);
+      }
+    } catch (e) {}
+    return [];
+  }
+
+  function saveMenuToStorage() {
+    localStorage.setItem(MENU_STORAGE_KEY, JSON.stringify(menuItems));
+    updateTopTabCounts();
+  }
+
+  function normalizeMenuEntries(arr) {
+    return arr.map(item => ({
+      name: String(item.name || "").trim(),
+      category: String(item.category || "عام").trim() || "عام",
+      price: item.price !== undefined && item.price !== null && item.price !== "" ? Number(item.price) : 0,
+      contents: String(item.contents || "").trim()
+    })).filter(item => item.name);
+  }
+
+  function setSyncIndicator(ok, label) {
+    const dot = document.getElementById("syncDot");
+    const txt = document.getElementById("syncStatusText");
+    if (dot) dot.style.background = ok ? "#10b981" : "#f59e0b";
+    if (txt) txt.textContent = label;
+  }
+
+  async function pullDataFromCloud(showFeedback = false) {
+    const cfg = getCloudConfig();
+    if (!cfg.owner || !cfg.repo) {
+      if (showFeedback) openCloudModal();
+      return;
+    }
+    try {
+      const url = `https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${cfg.path}?ref=${cfg.branch}&t=${Date.now()}`;
+      const headers = { Accept: "application/vnd.github.v3+json" };
+      if (cfg.apiKey) headers.Authorization = `token ${cfg.apiKey}`;
+      const res = await fetch(url, { headers });
+      if (!res.ok) throw new Error("Fetch failed");
+      const fileData = await res.json();
+      const decoded = decodeURIComponent(escape(atob(fileData.content.replace(/
+/g, ""))));
+      const store = JSON.parse(decoded);
+      if (Array.isArray(store.areas) && store.areas.length > 0) {
+        activeData = store.areas;
+        saveDataToStorage();
+      }
+      if (Array.isArray(store.menu)) {
+        menuItems = normalizeMenuEntries(store.menu);
+        saveMenuToStorage();
+      }
+      if (Array.isArray(store.troubles)) {
+        troubleItems = store.troubles;
+        saveTroublesToStorage();
+      }
+      if (Array.isArray(store.sections) && store.sections.length > 0) {
+        sectionsConfig = store.sections;
+        saveSectionsToStorage();
+      }
+      if (store.customCards && typeof store.customCards === "object") {
+        customSectionCards = store.customCards;
+        saveCustomCardsToStorage();
+      }
+      if (store.appearance) {
+        siteAppearance = { ...getDefaultAppearance(), ...siteAppearance, ...store.appearance };
+        saveAppearanceToStorage();
+        applySiteAppearance(siteAppearance);
+      }
+      renderMainTabs();
+      switchMainSection(activeMainSection);
+      setSyncIndicator(true, "متصل بالسحابة");
+      if (showFeedback) showToast("تم جلب أحدث البيانات بنجاح");
+    } catch (e) {
+      setSyncIndicator(true, "جاهز (محلي)");
+      if (showFeedback) showToast("تعذر الجلب من السحابة، تحقق من الإعدادات");
+    }
+  }
+
+  async function pushDataToCloud(showFeedback = false) {
+    const cfg = getCloudConfig();
+    if (!cfg.owner || !cfg.repo || !cfg.apiKey) {
+      if (showFeedback) showToast("تم الحفظ محلياً (أضف توكن GitHub للمزامنة السحابية)");
+      return false;
+    }
+    try {
+      const apiUrl = `https://api.github.com/repos/${cfg.owner}/${cfg.repo}/contents/${cfg.path}`;
+      const headers = {
+        Accept: "application/vnd.github.v3+json",
+        Authorization: `token ${cfg.apiKey}`,
+        "Content-Type": "application/json"
+      };
+      let sha = undefined;
+      const getRes = await fetch(`${apiUrl}?ref=${cfg.branch}`, { headers });
+      if (getRes.ok) {
+        const existing = await getRes.json();
+        sha = existing.sha;
+      }
+      const payloadObj = {
+        updatedAt: new Date().toISOString(),
+        areas: activeData,
+        menu: menuItems,
+        troubles: troubleItems,
+        sections: sectionsConfig,
+        customCards: customSectionCards,
+        appearance: siteAppearance
+      };
+      const contentB64 = btoa(unescape(encodeURIComponent(JSON.stringify(payloadObj, null, 2))));
+      const putRes = await fetch(apiUrl, {
+        method: "PUT",
+        headers,
+        body: JSON.stringify({
+          message: "Update store data from web panel",
+          content: contentB64,
+          branch: cfg.branch,
+          sha
+        })
+      });
+      if (!putRes.ok) throw new Error("Push failed");
+      setSyncIndicator(true, "متصل بالسحابة");
+      if (showFeedback) showToast("تم حفظ ونشر البيانات إلى GitHub بنجاح");
+      return true;
+    } catch (e) {
+      if (showFeedback) showToast("تم الحفظ محلياً، تعذر النشر إلى GitHub");
+      return false;
+    }
+  }
+
+  function applyAdminUI() {
+    document.body.classList.toggle("admin-mode", isAdminUnlocked);
+    document.querySelectorAll(".admin-toolbar-btn").forEach(el => {
+      el.classList.toggle("visible", isAdminUnlocked);
     });
+  }
 
-    document.getElementById("bgImageUrlInput").value = d.bgImage || "";
-    document.getElementById("bgSizeSelect").value = d.bgSize || "cover";
-    document.getElementById("bgRepeatSelect").value = d.bgRepeat || "no-repeat";
+  function showToast(msg) {
+    const t = document.getElementById("toast");
+    t.textContent = msg;
+    t.classList.add("show");
+    clearTimeout(window.__toastTimer);
+    window.__toastTimer = setTimeout(() => t.classList.remove("show"), 2300);
+  }
 
-    document.getElementById("bgBrightnessSlider").value = d.bgBrightness ?? 100;
-    document.getElementById("bgBrightnessVal").textContent = `${d.bgBrightness ?? 100}%`;
+  function handleMenuCountTap() {
+    handleSecretTap();
+  }
 
-    document.getElementById("bgContrastSlider").value = d.bgContrast ?? 100;
-    document.getElementById("bgContrastVal").textContent = `${d.bgContrast ?? 100}%`;
+  function handleSecretTap() {
+    secretTapCount++;
+    clearTimeout(secretTapTimer);
+    secretTapTimer = setTimeout(() => { secretTapCount = 0; }, 1800);
+    if (secretTapCount >= 5) {
+      secretTapCount = 0;
+      isAdminUnlocked = !isAdminUnlocked;
+      applyAdminUI();
+      renderCards();
+      renderMenuCards();
+      renderTroubleCards();
+      renderCustomSectionCards();
+      showToast(isAdminUnlocked ? "تم تفعيل وضع الإدارة والتعديل" : "تم إخفاء خيارات الإدارة");
+    }
+  }
 
-    document.getElementById("overlayOpacitySlider").value = d.overlayOpacity ?? 45;
-    document.getElementById("overlayOpacityVal").textContent = `${d.overlayOpacity ?? 45}%`;
+  function normalizeArabic(text) {
+    if (!text) return "";
+    return text.toString().trim().toLowerCase()
+      .replace(/[أإآ]/g, "ا").replace(/ة/g, "ه").replace(/ى/g, "ي")
+      .replace(/^ال/, "").replace(/\s+ال/g, " ").replace(/\s+/g, " ");
+  }
 
-    document.getElementById("cardOpacitySlider").value = d.cardOpacity ?? 72;
-    document.getElementById("cardOpacityVal").textContent = `${d.cardOpacity ?? 72}%`;
+  function cleanBranchName(name) {
+    return (name || "").replace(/^فرع\s+/, "").trim();
+  }
 
-    document.getElementById("cardBlurSlider").value = d.cardBlur ?? 14;
-    document.getElementById("cardBlurVal").textContent = `${d.cardBlur ?? 14}px`;
+  function getBranchColor(branch) {
+    return BRANCH_COLORS[cleanBranchName(branch)] || "#0f766e";
+  }
 
-    document.getElementById("cardRadiusSlider").value = d.cardRadius ?? 18;
-    document.getElementById("cardRadiusVal").textContent = `${d.cardRadius ?? 18}px`;
+  function getCategoryColor(cat) {
+    return CATEGORY_COLORS[cat] || "#2563eb";
+  }
 
-    previewLiveAppearance();
+  function getBranchCounts(data) {
+    const counts = {};
+    data.forEach(item => {
+      const b = cleanBranchName(item.branch);
+      counts[b] = (counts[b] || 0) + 1;
+    });
+    return counts;
+  }
+
+  function renderChips() {
+    const counts = getBranchCounts(activeData);
+    const branchOrder = ["المدينة المنورة", "غوشة", "دابوق", "جبيهة", "صويفية", "المقابلين"];
+    const extraBranches = Object.keys(counts).filter(b => !branchOrder.includes(b));
+    const allBranches = [...branchOrder.filter(b => counts[b] > 0), ...extraBranches];
+    const bar = document.getElementById("filtersBar");
+    let html = `<button type="button" class="chip ${selectedBranch === "الكل" ? "active" : ""}" onclick="selectBranch('الكل')"><span>الكل</span><span class="chip-count">(${activeData.length})</span></button>`;
+    allBranches.forEach(b => {
+      const isActive = selectedBranch === b;
+      html += `<button type="button" class="chip ${isActive ? "active" : ""}" onclick="selectBranch('${b.replace(/'/g, "\'")}')"><span class="chip-dot" style="background:${getBranchColor(b)}"></span><span>${b}</span><span class="chip-count">(${counts[b]})</span></button>`;
+    });
+    bar.innerHTML = html;
+  }
+
+  function selectBranch(branch) {
+    selectedBranch = branch;
+    renderChips();
+    renderCards();
+  }
+
+  function clearSearch() {
+    const input = document.getElementById("searchInput");
+    input.value = "";
+    input.focus();
+    renderCards();
+  }
+
+  function copyCardDetails(btn, text) {
+    navigator.clipboard.writeText(text).then(() => {
+      const orig = btn.innerHTML;
+      btn.classList.add("copied");
+      btn.innerHTML = "✓ تم النسخ";
+      setTimeout(() => { btn.classList.remove("copied"); btn.innerHTML = orig; }, 1500);
+    });
+  }
+
+  function renderCards() {
+    const query = document.getElementById("searchInput").value;
+    const normQuery = normalizeArabic(query);
+    const areaBranchCount = new Map();
+    const areaMinPrice = new Map();
+    activeData.forEach(item => {
+      const key = normalizeArabic(item.area);
+      if (!areaBranchCount.has(key)) areaBranchCount.set(key, new Set());
+      areaBranchCount.get(key).add(cleanBranchName(item.branch));
+      const p = Number(item.price);
+      if (!areaMinPrice.has(key) || p < areaMinPrice.get(key)) areaMinPrice.set(key, p);
+    });
+    const filtered = activeData.filter(item => {
+      const bName = cleanBranchName(item.branch);
+      const matchBranch = selectedBranch === "الكل" || bName === selectedBranch;
+      const matchQuery = !normQuery || normalizeArabic(item.area).includes(normQuery);
+      return matchBranch && matchQuery;
+    });
+    filtered.sort((a, b) => Number(a.price) - Number(b.price));
+    document.getElementById("totalBadge").textContent = filtered.length;
+    document.getElementById("countLabel").textContent = selectedBranch === "الكل" ? "منطقة في جميع الأفرع" : `منطقة في فرع ${selectedBranch}`;
+    const grid = document.getElementById("cardsGrid");
+    if (filtered.length === 0) {
+      grid.innerHTML = `<div class="empty-state"><h3>لا توجد نتائج مطابقة</h3><p style="margin-top:6px;">جرّب البحث باسم منطقة أخرى أو اضغط على "الكل"</p></div>`;
+      return;
+    }
+    grid.innerHTML = filtered.map((item, renderIdx) => {
+      const staggerCap = Math.min(renderIdx, 14);
+      const bName = cleanBranchName(item.branch);
+      const color = getBranchColor(bName);
+      const key = normalizeArabic(item.area);
+      const totalBranchesForArea = areaBranchCount.get(key)?.size || 1;
+      const minPrice = areaMinPrice.get(key);
+      const priceNum = Number(item.price);
+      const isLowest = totalBranchesForArea > 1 && priceNum === minPrice;
+      const isMulti = totalBranchesForArea > 1;
+      const dataIdx = activeData.indexOf(item);
+      const copyText = `المنطقة: ${item.area} | الفرع: ${bName} | التوصيل: ${priceNum.toFixed(2)} دينار`;
+      return `
+        <div class="area-card ${isLowest ? "recommended" : ""}" style="--stagger-idx:${staggerCap}">
+          <div class="card-top">
+            <div class="card-info">
+              <div class="tags-row">
+                <span class="branch-pill"><span class="chip-dot" style="background:${color}"></span><span>${bName}</span></span>
+                ${isLowest ? `<span class="best-pill">★ الأقرب / الأقل تكلفة</span>` : ""}
+              </div>
+              <div class="area-name">${escapeHtml(item.area)}</div>
+            </div>
+            <div class="price-box">
+              <span class="price-num">${priceNum.toFixed(2)}</span>
+              <span class="price-currency">دينار</span>
+            </div>
+          </div>
+          <div class="card-bottom">
+            <div class="card-actions-left">
+              <button type="button" class="copy-btn" onclick="copyCardDetails(this, '${copyText.replace(/'/g, "\'")}')"><span>📋</span><span>نسخ التفاصيل</span></button>
+              <button type="button" class="card-edit-btn" onclick="openEditAreaByIndex(${dataIdx})">✏️ تعديل</button>
+              <button type="button" class="card-del-btn" onclick="deleteAreaByIndex(${dataIdx})">🗑️ حذف</button>
+            </div>
+            <span class="coverage-text">${isMulti ? `متوفرة في ${totalBranchesForArea} أفرع` : "تغطية حصرية لهذا الفرع"}</span>
+          </div>
+        </div>
+      `;
+    }).join("");
+  }
+
+  function escapeHtml(str) {
+    return String(str || "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+
+  function parseContentsList(contentsStr) {
+    return String(contentsStr || "").split(/[
+،,]+/).map(s => s.trim()).filter(Boolean);
+  }
+
+  function renderMenuChips() {
+    const counts = {};
+    menuItems.forEach(item => { const c = item.category || "عام"; counts[c] = (counts[c] || 0) + 1; });
+    const bar = document.getElementById("menuFiltersBar");
+    let html = `<button type="button" class="chip ${selectedMenuCategory === "الكل" ? "active" : ""}" onclick="selectMenuCategory('الكل')"><span>كل الأصناف</span><span class="chip-count">(${menuItems.length})</span></button>`;
+    Object.keys(counts).forEach(cat => {
+      html += `<button type="button" class="chip ${selectedMenuCategory === cat ? "active" : ""}" onclick="selectMenuCategory('${cat.replace(/'/g, "\'")}')"><span class="chip-dot" style="background:${getCategoryColor(cat)}"></span><span>${escapeHtml(cat)}</span><span class="chip-count">(${counts[cat]})</span></button>`;
+    });
+    bar.innerHTML = html;
+  }
+
+  function selectMenuCategory(cat) { selectedMenuCategory = cat; renderMenuChips(); renderMenuCards(); }
+  function clearMenuSearch() { const i = document.getElementById("menuSearchInput"); i.value = ""; i.focus(); renderMenuCards(); }
+
+  function renderMenuCards() {
+    const normQuery = normalizeArabic(document.getElementById("menuSearchInput").value);
+    const filtered = menuItems.filter(item => {
+      const cat = item.category || "عام";
+      return (selectedMenuCategory === "الكل" || cat === selectedMenuCategory) &&
+        (!normQuery || normalizeArabic(item.name).includes(normQuery) || normalizeArabic(item.contents).includes(normQuery) || normalizeArabic(cat).includes(normQuery));
+    });
+    document.getElementById("menuTotalBadge").textContent = filtered.length;
+    document.getElementById("menuCountLabel").textContent = selectedMenuCategory === "الكل" ? "صنف في القائمة" : `صنف في قسم ${selectedMenuCategory}`;
+    const grid = document.getElementById("menuCardsGrid");
+    if (filtered.length === 0) {
+      grid.innerHTML = `<div class="empty-state"><h3>${menuItems.length === 0 ? "لم يتم إضافة أصناف بعد" : "لا توجد أصناف مطابقة للبحث"}</h3></div>`;
+      return;
+    }
+    grid.innerHTML = filtered.map((item, renderIdx) => {
+      const idx = menuItems.indexOf(item);
+      const parts = parseContentsList(item.contents);
+      const priceNum = Number(item.price) || 0;
+      const copyText = `الصنف: ${item.name}${priceNum > 0 ? ` (${priceNum.toFixed(2)} دينار)` : ""} | المحتويات: ${parts.join("، ")}`;
+      return `
+        <div class="area-card" style="--stagger-idx:${Math.min(renderIdx, 14)}">
+          <div class="card-top">
+            <div class="card-info">
+              <div class="tags-row">
+                <span class="branch-pill"><span class="chip-dot" style="background:${getCategoryColor(item.category || 'عام')}"></span><span>${escapeHtml(item.category || 'عام')}</span></span>
+              </div>
+              <div class="area-name">${escapeHtml(item.name)}</div>
+              <div class="item-contents-box"><span class="item-contents-title">محتويات الصنف:</span><div class="item-notes-text">${escapeHtml(item.contents)}</div></div>
+            </div>
+            ${priceNum > 0 ? `<div class="price-box"><span class="price-num">${priceNum.toFixed(2)}</span><span class="price-currency">دينار</span></div>` : ""}
+          </div>
+          <div class="card-bottom">
+            <div class="card-actions-left">
+              <button type="button" class="copy-btn" onclick="copyCardDetails(this, '${copyText.replace(/'/g, "\'")}')"><span>📋</span><span>نسخ الصنف والمكونات</span></button>
+              <button type="button" class="card-edit-btn" onclick="openEditMenuByIndex(${idx})">✏️ تعديل</button>
+              <button type="button" class="card-del-btn" onclick="deleteMenuByIndex(${idx})">🗑️ حذف</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join("");
+  }
+
+  // Troubleshooting Guide Functions
+  function renderTroubleChips() {
+    const counts = {};
+    troubleItems.forEach(item => { const c = item.category || "عام"; counts[c] = (counts[c] || 0) + 1; });
+    const bar = document.getElementById("troubleFiltersBar");
+    let html = `<button type="button" class="chip ${selectedTroubleCategory === "الكل" ? "active" : ""}" onclick="selectTroubleCategory('الكل')"><span>كل المشاكل</span><span class="chip-count">(${troubleItems.length})</span></button>`;
+    Object.keys(counts).forEach(cat => {
+      html += `<button type="button" class="chip ${selectedTroubleCategory === cat ? "active" : ""}" onclick="selectTroubleCategory('${cat.replace(/'/g, "\'")}')"><span class="chip-dot" style="background:${getCategoryColor(cat)}"></span><span>${escapeHtml(cat)}</span><span class="chip-count">(${counts[cat]})</span></button>`;
+    });
+    bar.innerHTML = html;
+  }
+
+  function selectTroubleCategory(cat) {
+    selectedTroubleCategory = cat;
+    renderTroubleChips();
+    renderTroubleCards();
+  }
+
+  function clearTroubleshootSearch() {
+    const i = document.getElementById("troubleshootSearchInput");
+    i.value = "";
+    i.focus();
+    renderTroubleCards();
+  }
+
+  function renderTroubleCards() {
+    const normQuery = normalizeArabic(document.getElementById("troubleshootSearchInput").value);
+    const filtered = troubleItems.filter(item => {
+      const cat = item.category || "عام";
+      return (selectedTroubleCategory === "الكل" || cat === selectedTroubleCategory) &&
+        (!normQuery || normalizeArabic(item.title).includes(normQuery) || normalizeArabic(item.solution).includes(normQuery) || normalizeArabic(cat).includes(normQuery));
+    });
+    document.getElementById("troubleTotalBadge").textContent = filtered.length;
+    document.getElementById("troubleCountLabel").textContent = selectedTroubleCategory === "الكل" ? "مشكلة وحل في الدليل" : `مشكلة في تصنيف ${selectedTroubleCategory}`;
+    const grid = document.getElementById("troubleCardsGrid");
+    if (filtered.length === 0) {
+      grid.innerHTML = `<div class="empty-state"><h3>${troubleItems.length === 0 ? "لم يتم إضافة مشاكل وحلول بعد" : "لا توجد نتائج مطابقة للبحث"}</h3><p style="margin-top:6px;">فعّل وضع الإدارة لإضافة عنوان المشكلة وطريقة حلها</p></div>`;
+      return;
+    }
+    grid.innerHTML = filtered.map((item, renderIdx) => {
+      const idx = troubleItems.indexOf(item);
+      const cat = item.category || "عام";
+      const copyText = `المشكلة: ${item.title}
+الحل: ${item.solution}`;
+      return `
+        <div class="area-card" style="--stagger-idx:${Math.min(renderIdx, 14)}">
+          <div class="card-top">
+            <div class="card-info">
+              <div class="tags-row">
+                <span class="branch-pill"><span class="chip-dot" style="background:${getCategoryColor(cat)}"></span><span>${escapeHtml(cat)}</span></span>
+              </div>
+              <div class="area-name">${escapeHtml(item.title)}</div>
+              <div class="item-contents-box">
+                <span class="item-contents-title">✅ خطوات الحل المعتمدة:</span>
+                <div class="item-notes-text">${escapeHtml(item.solution)}</div>
+              </div>
+            </div>
+          </div>
+          <div class="card-bottom">
+            <div class="card-actions-left">
+              <button type="button" class="copy-btn" onclick="copyCardDetails(this, '${copyText.replace(/'/g, "\'")}')"><span>📋</span><span>نسخ المشكلة والحل</span></button>
+              <button type="button" class="card-edit-btn" onclick="openEditTroubleByIndex(${idx})">✏️ تعديل</button>
+              <button type="button" class="card-del-btn" onclick="deleteTroubleByIndex(${idx})">🗑️ حذف</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join("");
+  }
+
+  function openAddTroubleModal() {
+    editingTroubleRef = null;
+    document.getElementById("troubleModalTitle").textContent = "➕ إضافة مشكلة وحل جديد";
+    document.getElementById("troubleTitleInput").value = "";
+    document.getElementById("troubleCategoryInput").value = "";
+    document.getElementById("troubleSolutionInput").value = "";
+    document.getElementById("troubleItemModal").classList.add("open");
+  }
+
+  function openEditTroubleByIndex(idx) {
+    const item = troubleItems[idx];
+    if (!item) return;
+    editingTroubleRef = idx;
+    document.getElementById("troubleModalTitle").textContent = "✏️ تعديل المشكلة والحل";
+    document.getElementById("troubleTitleInput").value = item.title || "";
+    document.getElementById("troubleCategoryInput").value = item.category || "";
+    document.getElementById("troubleSolutionInput").value = item.solution || "";
+    document.getElementById("troubleItemModal").classList.add("open");
+  }
+
+  function closeTroubleModal() {
+    document.getElementById("troubleItemModal").classList.remove("open");
+    editingTroubleRef = null;
+  }
+
+  function saveTroubleForm(e) {
+    e.preventDefault();
+    const title = document.getElementById("troubleTitleInput").value.trim();
+    const category = document.getElementById("troubleCategoryInput").value.trim() || "عام";
+    const solution = document.getElementById("troubleSolutionInput").value.trim();
+    if (!title || !solution) return;
+
+    if (editingTroubleRef !== null && troubleItems[editingTroubleRef]) {
+      troubleItems[editingTroubleRef] = { title, category, solution };
+      showToast("تم تعديل المشكلة والحل بنجاح");
+    } else {
+      troubleItems.unshift({ title, category, solution });
+      showToast("تمت إضافة المشكلة والحل إلى الدليل");
+    }
+    saveTroublesToStorage();
+    renderTroubleChips();
+    renderTroubleCards();
+    renderManageTroubleList();
+    closeTroubleModal();
+    pushDataToCloud(false);
+  }
+
+  function deleteTroubleByIndex(idx) {
+    if (!confirm("هل أنت متأكد من حذف هذه المشكلة وحلها؟")) return;
+    troubleItems.splice(idx, 1);
+    saveTroublesToStorage();
+    renderTroubleChips();
+    renderTroubleCards();
+    renderManageTroubleList();
+    showToast("تم الحذف بنجاح");
+    pushDataToCloud(false);
+  }
+
+  function openManageTroubleModal() {
+    renderManageTroubleList();
+    document.getElementById("manageTroubleModal").classList.add("open");
+  }
+
+  function closeManageTroubleModal() {
+    document.getElementById("manageTroubleModal").classList.remove("open");
+  }
+
+  function renderManageTroubleList() {
+    const listEl = document.getElementById("manageTroubleList");
+    if (!listEl) return;
+    const q = normalizeArabic(document.getElementById("manageTroubleFilterInput")?.value || "");
+    const filtered = troubleItems.map((item, idx) => ({ item, idx }))
+      .filter(({ item }) => !q || normalizeArabic(item.title).includes(q) || normalizeArabic(item.solution).includes(q));
+    if (filtered.length === 0) {
+      listEl.innerHTML = `<div style="padding:16px; text-align:center; color:#64748b; font-weight:700;">لا توجد مشاكل مضافة</div>`;
+      return;
+    }
+    listEl.innerHTML = filtered.map(({ item, idx }) => `
+      <div class="manage-row">
+        <div>
+          <div class="manage-meta">${escapeHtml(item.title)}</div>
+          <div class="manage-sub">${escapeHtml(item.category || "عام")}</div>
+        </div>
+        <div style="display:flex; gap:6px;">
+          <button type="button" class="btn-m btn-m-light" onclick="openEditTroubleByIndex(${idx})">✏️</button>
+          <button type="button" class="btn-m btn-m-danger" onclick="deleteTroubleByIndex(${idx})">🗑️</button>
+        </div>
+      </div>
+    `).join("");
+  }
+
+  // Custom Dynamic Sections & Cards
+  function clearCustomSectionSearch() {
+    const i = document.getElementById("customSectionSearchInput");
+    i.value = "";
+    i.focus();
+    renderCustomSectionCards();
+  }
+
+  function renderCustomSectionCards() {
+    const grid = document.getElementById("customSectionCardsGrid");
+    if (!grid) return;
+    const cards = customSectionCards[activeMainSection] || [];
+    const normQuery = normalizeArabic(document.getElementById("customSectionSearchInput").value);
+    const filtered = cards.filter(c => !normQuery || normalizeArabic(c.title).includes(normQuery) || normalizeArabic(c.body).includes(normQuery) || normalizeArabic(c.tag).includes(normQuery));
+    document.getElementById("customSectionTotalBadge").textContent = filtered.length;
+    if (filtered.length === 0) {
+      grid.innerHTML = `<div class="empty-state"><h3>${cards.length === 0 ? "لا توجد كاردات في هذا السكشن بعد" : "لا توجد نتائج مطابقة"}</h3><p style="margin-top:6px;">يمكنك إضافة كاردات جديدة من زر (+ إضافة كارد جديد) في وضع الإدارة</p></div>`;
+      return;
+    }
+    grid.innerHTML = filtered.map((item, renderIdx) => {
+      const idx = cards.indexOf(item);
+      const copyText = `${item.title}
+${item.body}`;
+      return `
+        <div class="area-card" style="--stagger-idx:${Math.min(renderIdx, 14)}">
+          <div class="card-top">
+            <div class="card-info">
+              ${item.tag ? `<div class="tags-row"><span class="branch-pill"><span class="chip-dot" style="background:#0284c7"></span><span>${escapeHtml(item.tag)}</span></span></div>` : ""}
+              <div class="area-name">${escapeHtml(item.title)}</div>
+              <div class="item-contents-box">
+                <div class="item-notes-text">${escapeHtml(item.body)}</div>
+              </div>
+            </div>
+          </div>
+          <div class="card-bottom">
+            <div class="card-actions-left">
+              <button type="button" class="copy-btn" onclick="copyCardDetails(this, '${copyText.replace(/'/g, "\'")}')"><span>📋</span><span>نسخ المحتوى</span></button>
+              <button type="button" class="card-edit-btn" onclick="openEditCustomCardByIndex(${idx})">✏️ تعديل</button>
+              <button type="button" class="card-del-btn" onclick="deleteCustomCardByIndex(${idx})">🗑️ حذف</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join("");
+  }
+
+  function openAddCustomCardModal() {
+    editingCustomCardRef = null;
+    document.getElementById("customCardModalTitle").textContent = "➕ إضافة كارد جديد";
+    document.getElementById("customCardTitleInput").value = "";
+    document.getElementById("customCardTagInput").value = "";
+    document.getElementById("customCardBodyInput").value = "";
+    document.getElementById("customCardModal").classList.add("open");
+  }
+
+  function openEditCustomCardByIndex(idx) {
+    const cards = customSectionCards[activeMainSection] || [];
+    const item = cards[idx];
+    if (!item) return;
+    editingCustomCardRef = idx;
+    document.getElementById("customCardModalTitle").textContent = "✏️ تعديل الكارد";
+    document.getElementById("customCardTitleInput").value = item.title || "";
+    document.getElementById("customCardTagInput").value = item.tag || "";
+    document.getElementById("customCardBodyInput").value = item.body || "";
+    document.getElementById("customCardModal").classList.add("open");
+  }
+
+  function closeCustomCardModal() {
+    document.getElementById("customCardModal").classList.remove("open");
+    editingCustomCardRef = null;
+  }
+
+  function saveCustomCardForm(e) {
+    e.preventDefault();
+    const title = document.getElementById("customCardTitleInput").value.trim();
+    const tag = document.getElementById("customCardTagInput").value.trim();
+    const body = document.getElementById("customCardBodyInput").value.trim();
+    if (!title || !body) return;
+    if (!customSectionCards[activeMainSection]) customSectionCards[activeMainSection] = [];
+    if (editingCustomCardRef !== null && customSectionCards[activeMainSection][editingCustomCardRef]) {
+      customSectionCards[activeMainSection][editingCustomCardRef] = { title, tag, body };
+      showToast("تم تعديل الكارد بنجاح");
+    } else {
+      customSectionCards[activeMainSection].unshift({ title, tag, body });
+      showToast("تمت إضافة الكارد بنجاح");
+    }
+    saveCustomCardsToStorage();
+    renderCustomSectionCards();
+    closeCustomCardModal();
+    pushDataToCloud(false);
+  }
+
+  function deleteCustomCardByIndex(idx) {
+    if (!confirm("هل أنت متأكد من حذف هذا الكارد؟")) return;
+    if (customSectionCards[activeMainSection]) {
+      customSectionCards[activeMainSection].splice(idx, 1);
+      saveCustomCardsToStorage();
+      renderCustomSectionCards();
+      showToast("تم حذف الكارد");
+      pushDataToCloud(false);
+    }
+  }
+
+  // Admin Section Management (Add / Rename / Delete Sections)
+  function openManageSectionsModal() {
+    renderManageSectionsList();
+    document.getElementById("manageSectionsModal").classList.add("open");
+  }
+
+  function closeManageSectionsModal() {
+    document.getElementById("manageSectionsModal").classList.remove("open");
+  }
+
+  function renderManageSectionsList() {
+    const listEl = document.getElementById("manageSectionsList");
+    if (!listEl) return;
+    listEl.innerHTML = sectionsConfig.map((sec, idx) => `
+      <div class="manage-row">
+        <div style="display:flex; align-items:center; gap:8px; flex:1;">
+          <input type="text" id="secIcon_${idx}" class="form-control" style="width:52px; padding:6px; text-align:center;" value="${escapeHtml(sec.icon || '📌')}" maxlength="4" />
+          <input type="text" id="secName_${idx}" class="form-control" style="flex:1; padding:6px 10px;" value="${escapeHtml(sec.name)}" />
+        </div>
+        <div style="display:flex; gap:6px;">
+          <button type="button" class="btn-m btn-m-success" onclick="renameSectionAt(${idx})" title="حفظ التعديل">💾</button>
+          <button type="button" class="btn-m btn-m-danger" onclick="deleteSectionAt(${idx})" title="حذف السكشن">🗑️</button>
+        </div>
+      </div>
+    `).join("");
+  }
+
+  function addNewSection(e) {
+    e.preventDefault();
+    const icon = document.getElementById("newSectionIconInput").value.trim() || "📌";
+    const name = document.getElementById("newSectionNameInput").value.trim();
+    if (!name) return;
+    const newId = "sec_" + Date.now();
+    sectionsConfig.push({ id: newId, name, icon, type: "custom" });
+    customSectionCards[newId] = [];
+    saveSectionsToStorage();
+    saveCustomCardsToStorage();
+    document.getElementById("newSectionNameInput").value = "";
+    renderManageSectionsList();
+    switchMainSection(newId);
+    showToast(`تمت إضافة سكشن "${name}" بنجاح`);
+    pushDataToCloud(false);
+  }
+
+  function renameSectionAt(idx) {
+    const sec = sectionsConfig[idx];
+    if (!sec) return;
+    const newName = document.getElementById(`secName_${idx}`).value.trim();
+    const newIcon = document.getElementById(`secIcon_${idx}`).value.trim() || "📌";
+    if (!newName) return;
+    sec.name = newName;
+    sec.icon = newIcon;
+    saveSectionsToStorage();
+    renderManageSectionsList();
+    if (activeMainSection === sec.id) switchMainSection(sec.id);
+    showToast("تم تعديل اسم السكشن بنجاح");
+    pushDataToCloud(false);
+  }
+
+  function deleteSectionAt(idx) {
+    if (sectionsConfig.length <= 1) {
+      showToast("يجب الإبقاء على سكشن واحد على الأقل");
+      return;
+    }
+    const sec = sectionsConfig[idx];
+    if (!confirm(`هل أنت متأكد من حذف سكشن "${sec.name}"؟`)) return;
+    sectionsConfig.splice(idx, 1);
+    if (sec.type === "custom") {
+      delete customSectionCards[sec.id];
+      saveCustomCardsToStorage();
+    }
+    saveSectionsToStorage();
+    renderManageSectionsList();
+    if (activeMainSection === sec.id) {
+      switchMainSection(sectionsConfig[0].id);
+    }
+    showToast("تم حذف السكشن بنجاح");
+    pushDataToCloud(false);
+  }
+
+  // Area Modals
+  function openAddAreaModal() {
+    isAdminUnlocked = true;
+    applyAdminUI();
+    editingItemRef = null;
+    document.getElementById("areaModalTitle").textContent = "➕ إضافة منطقة جديدة";
+    document.getElementById("areaNameInput").value = "";
+    document.getElementById("areaBranchSelect").value = "المدينة المنورة";
+    document.getElementById("areaPriceInput").value = "2.00";
+    document.getElementById("areaModal").classList.add("open");
+  }
+
+  function openEditAreaByIndex(idx) {
+    const item = activeData[idx];
+    if (!item) return;
+    editingItemRef = idx;
+    document.getElementById("areaModalTitle").textContent = "✏️ تعديل بيانات المنطقة";
+    document.getElementById("areaNameInput").value = item.area;
+    document.getElementById("areaBranchSelect").value = cleanBranchName(item.branch);
+    document.getElementById("areaPriceInput").value = Number(item.price).toFixed(2);
+    document.getElementById("areaModal").classList.add("open");
+  }
+
+  function closeAreaModal() {
+    document.getElementById("areaModal").classList.remove("open");
+    editingItemRef = null;
+  }
+
+  function saveAreaForm(e) {
+    e.preventDefault();
+    const area = document.getElementById("areaNameInput").value.trim();
+    const branch = cleanBranchName(document.getElementById("areaBranchSelect").value);
+    const price = parseFloat(document.getElementById("areaPriceInput").value);
+    if (!area || !branch || isNaN(price)) return;
+
+    if (editingItemRef !== null && activeData[editingItemRef]) {
+      activeData[editingItemRef] = { area, branch, price };
+      showToast("تم تعديل المنطقة بنجاح");
+    } else {
+      activeData.unshift({ area, branch, price });
+      showToast("تمت إضافة المنطقة بنجاح");
+    }
+    saveDataToStorage();
+    renderChips();
+    renderCards();
+    renderManageList();
+    closeAreaModal();
+    pushDataToCloud(false);
+  }
+
+  function deleteAreaByIndex(idx) {
+    if (confirm("هل أنت متأكد من حذف هذه المنطقة؟")) {
+      activeData.splice(idx, 1);
+      saveDataToStorage();
+      renderChips();
+      renderCards();
+      renderManageList();
+      showToast("تم حذف المنطقة");
+      pushDataToCloud(false);
+    }
+  }
+
+  function openManageModal() {
+    renderManageList();
+    document.getElementById("manageModal").classList.add("open");
+  }
+
+  function closeManageModal() {
+    document.getElementById("manageModal").classList.remove("open");
+  }
+
+  function renderManageList() {
+    const listEl = document.getElementById("manageList");
+    if (!listEl) return;
+    const q = normalizeArabic(document.getElementById("manageFilterInput")?.value || "");
+    const filtered = activeData.map((item, idx) => ({ item, idx }))
+      .filter(({ item }) => !q || normalizeArabic(item.area).includes(q) || normalizeArabic(item.branch).includes(q));
+    listEl.innerHTML = filtered.slice(0, 80).map(({ item, idx }) => `
+      <div class="manage-row">
+        <div>
+          <div class="manage-meta">${escapeHtml(item.area)}</div>
+          <div class="manage-sub">${escapeHtml(item.branch)} — ${Number(item.price).toFixed(2)} دينار</div>
+        </div>
+        <div style="display:flex; gap:6px;">
+          <button type="button" class="btn-m btn-m-light" onclick="openEditAreaByIndex(${idx})">✏️</button>
+          <button type="button" class="btn-m btn-m-danger" onclick="deleteAreaByIndex(${idx})">🗑️</button>
+        </div>
+      </div>
+    `).join("");
+  }
+
+  // Menu Modals
+  function openAddMenuModal() {
+    editingMenuRef = null;
+    document.getElementById("menuModalTitle").textContent = "➕ إضافة صنف جديد";
+    document.getElementById("menuNameInput").value = "";
+    document.getElementById("menuCategoryInput").value = "";
+    document.getElementById("menuPriceInput").value = "";
+    document.getElementById("menuContentsInput").value = "";
+    document.getElementById("menuItemModal").classList.add("open");
+  }
+
+  function openEditMenuByIndex(idx) {
+    const item = menuItems[idx];
+    if (!item) return;
+    editingMenuRef = idx;
+    document.getElementById("menuModalTitle").textContent = "✏️ تعديل الصنف";
+    document.getElementById("menuNameInput").value = item.name || "";
+    document.getElementById("menuCategoryInput").value = item.category || "";
+    document.getElementById("menuPriceInput").value = item.price || "";
+    document.getElementById("menuContentsInput").value = item.contents || "";
+    document.getElementById("menuItemModal").classList.add("open");
+  }
+
+  function closeMenuModal() {
+    document.getElementById("menuItemModal").classList.remove("open");
+    editingMenuRef = null;
+  }
+
+  function saveMenuForm(e) {
+    e.preventDefault();
+    const name = document.getElementById("menuNameInput").value.trim();
+    const category = document.getElementById("menuCategoryInput").value.trim() || "عام";
+    const price = parseFloat(document.getElementById("menuPriceInput").value) || 0;
+    const contents = document.getElementById("menuContentsInput").value.trim();
+    if (!name || !contents) return;
+
+    if (editingMenuRef !== null && menuItems[editingMenuRef]) {
+      menuItems[editingMenuRef] = { name, category, price, contents };
+      showToast("تم تعديل الصنف بنجاح");
+    } else {
+      menuItems.unshift({ name, category, price, contents });
+      showToast("تمت إضافة الصنف بنجاح");
+    }
+    saveMenuToStorage();
+    renderMenuChips();
+    renderMenuCards();
+    renderManageMenuList();
+    closeMenuModal();
+    pushDataToCloud(false);
+  }
+
+  function deleteMenuByIndex(idx) {
+    if (!confirm("حذف هذا الصنف؟")) return;
+    menuItems.splice(idx, 1);
+    saveMenuToStorage();
+    renderMenuChips();
+    renderMenuCards();
+    renderManageMenuList();
+    showToast("تم حذف الصنف");
+    pushDataToCloud(false);
+  }
+
+  function openManageMenuModal() {
+    renderManageMenuList();
+    document.getElementById("manageMenuModal").classList.add("open");
+  }
+
+  function closeManageMenuModal() {
+    document.getElementById("manageMenuModal").classList.remove("open");
+  }
+
+  function renderManageMenuList() {
+    const listEl = document.getElementById("manageMenuList");
+    if (!listEl) return;
+    const q = normalizeArabic(document.getElementById("manageMenuFilterInput")?.value || "");
+    const filtered = menuItems.map((item, idx) => ({ item, idx }))
+      .filter(({ item }) => !q || normalizeArabic(item.name).includes(q));
+    listEl.innerHTML = filtered.map(({ item, idx }) => `
+      <div class="manage-row">
+        <div>
+          <div class="manage-meta">${escapeHtml(item.name)}</div>
+          <div class="manage-sub">${escapeHtml(item.category || "عام")}</div>
+        </div>
+        <div style="display:flex; gap:6px;">
+          <button type="button" class="btn-m btn-m-light" onclick="openEditMenuByIndex(${idx})">✏️</button>
+          <button type="button" class="btn-m btn-m-danger" onclick="deleteMenuByIndex(${idx})">🗑️</button>
+        </div>
+      </div>
+    `).join("");
+  }
+
+  // Cloud & Appearance Modals
+  function openCloudModal() {
+    const cfg = getCloudConfig();
+    document.getElementById("ghOwnerInput").value = cfg.owner;
+    document.getElementById("ghRepoInput").value = cfg.repo;
+    document.getElementById("ghBranchInput").value = cfg.branch;
+    document.getElementById("ghPathInput").value = cfg.path;
+    document.getElementById("apiKeyInput").value = cfg.apiKey;
+    document.getElementById("cloudModal").classList.add("open");
+  }
+
+  function closeCloudModal() {
+    document.getElementById("cloudModal").classList.remove("open");
+  }
+
+  function saveCloudConfig(e) {
+    e.preventDefault();
+    setCloudConfig({
+      owner: document.getElementById("ghOwnerInput").value.trim(),
+      repo: document.getElementById("ghRepoInput").value.trim(),
+      branch: document.getElementById("ghBranchInput").value.trim() || "main",
+      path: document.getElementById("ghPathInput").value.trim() || "data/store.json",
+      apiKey: document.getElementById("apiKeyInput").value.trim()
+    });
+    closeCloudModal();
+    showToast("تم حفظ إعدادات GitHub");
   }
 
   function openAppearanceModal() {
-    populateAppearanceInputs(siteAppearance);
+    const cfg = { ...getDefaultAppearance(), ...siteAppearance };
+    tempDarkMode = Boolean(cfg.darkMode);
+
+    document.getElementById("themeColorPicker").value = cfg.accentColor || "#0f172a";
+    document.getElementById("themeColorHexInput").value = cfg.accentColor || "#0f172a";
+    document.getElementById("modeLightBtn").classList.toggle("active", !tempDarkMode);
+    document.getElementById("modeDarkBtn").classList.toggle("active", tempDarkMode);
+
+    document.getElementById("bgImageUrlInput").value = cfg.bgImage || "";
+    document.getElementById("bgSizeSelect").value = cfg.bgSize || "cover";
+    document.getElementById("bgRepeatSelect").value = cfg.bgRepeat || "no-repeat";
+    document.getElementById("bgBrightnessRange").value = cfg.bgBrightness ?? 100;
+    document.getElementById("bgContrastRange").value = cfg.bgContrast ?? 100;
+    document.getElementById("overlayOpacityRange").value = cfg.overlayOpacity ?? 45;
+
+    document.getElementById("cardBgColorInput").value = cfg.cardBgColor || "";
+    if (/^#[0-9a-fA-F]{6}$/.test(cfg.cardBgColor)) {
+      document.getElementById("cardBgPicker").value = cfg.cardBgColor;
+    }
+
+    document.getElementById("textColorInput").value = cfg.textColor || "";
+    if (/^#[0-9a-fA-F]{6}$/.test(cfg.textColor)) {
+      document.getElementById("textColorPicker").value = cfg.textColor;
+    }
+
+    document.getElementById("innerBoxBgInput").value = cfg.innerBoxBg || "";
+    if (/^#[0-9a-fA-F]{6}$/.test(cfg.innerBoxBg)) {
+      document.getElementById("innerBoxBgPicker").value = cfg.innerBoxBg;
+    }
+
+    document.getElementById("innerBoxTextInput").value = cfg.innerBoxText || "";
+    if (/^#[0-9a-fA-F]{6}$/.test(cfg.innerBoxText)) {
+      document.getElementById("innerBoxTextPicker").value = cfg.innerBoxText;
+    }
+
+    document.getElementById("priceBoxBgInput").value = cfg.priceBoxBg || "";
+    if (/^#[0-9a-fA-F]{6}$/.test(cfg.priceBoxBg)) {
+      document.getElementById("priceBoxBgPicker").value = cfg.priceBoxBg;
+    }
+
+    document.getElementById("cardBorderColorInput").value = cfg.cardBorderColor || "";
+    if (/^#[0-9a-fA-F]{6}$/.test(cfg.cardBorderColor)) {
+      document.getElementById("cardBorderColorPicker").value = cfg.cardBorderColor;
+    }
+
+    document.getElementById("cardOpacityRange").value = cfg.cardOpacity ?? 72;
+    document.getElementById("cardBlurRange").value = cfg.cardBlur ?? 14;
+    document.getElementById("cardRadiusRange").value = cfg.cardRadius ?? 18;
+    document.getElementById("cardPaddingRange").value = cfg.cardPadding ?? 18;
+
+    livePreviewAppearance();
     document.getElementById("appearanceModal").classList.add("open");
   }
 
@@ -2643,28 +3689,36 @@
     tempDarkMode = d;
     document.getElementById("modeLightBtn").classList.toggle("active", !d);
     document.getElementById("modeDarkBtn").classList.toggle("active", d);
-    previewLiveAppearance();
+    livePreviewAppearance();
   }
 
-  function resetAppearanceDefaults() {
-    const def = getDefaultAppearance();
-    populateAppearanceInputs(def);
-    showToast("تمت إعادة تعيين حقول التصميم للافتراضي");
+  function onThemeColorChange(v) {
+    document.getElementById("themeColorPicker").value = v;
+    document.getElementById("themeColorHexInput").value = v;
+    livePreviewAppearance();
+  }
+
+  function onThemeHexTyped(v) {
+    if (/^#[0-9a-fA-F]{6}$/.test(v)) {
+      document.getElementById("themeColorPicker").value = v;
+      livePreviewAppearance();
+    }
   }
 
   function saveAppearanceForm(e) {
     e.preventDefault();
-    siteAppearance = collectAppearanceFormValues();
+    siteAppearance = readAppearanceFormValues();
     saveAppearanceToStorage();
     applySiteAppearance(siteAppearance);
     document.getElementById("appearanceModal").classList.remove("open");
-    showToast("تم حفظ وتطبيق كافة إعدادات التصميم والألوان");
+    showToast("تم حفظ وتطبيق إعدادات المظهر بنجاح");
     pushDataToCloud(false);
   }
 
   function exportCSV() {
     const rows = [["المنطقة", "الفرع", "السعر"], ...activeData.map(d => [d.area, d.branch, d.price])];
-    const csv = "\uFEFF" + rows.map(r => r.join(",")).join("\n");
+    const csv = "﻿" + rows.map(r => r.join(",")).join("
+");
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
@@ -2735,7 +3789,5 @@
       : '<span>⛶</span><span>تكبير الخريطة</span>';
   }
 </script>
-  <script data-goatcounter="https://YOUR-SITE.goatcounter.com/count"
-          async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>
