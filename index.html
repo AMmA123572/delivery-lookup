@@ -25,11 +25,6 @@
       --green-border: #34d399;
       --shadow-sm: 0 8px 24px rgba(15, 23, 42, 0.08);
       --radius-lg: 18px;
-      --card-radius: 18px;
-      --card-padding-v: 18px;
-      --card-padding-h: 20px;
-      --card-border-color: rgba(255, 255, 255, 0.55);
-      --card-border-width: 1.5px;
       --bg-image: none;
       --bg-overlay: rgba(241, 245, 249, 0.45);
       --bg-size: cover;
@@ -40,10 +35,6 @@
       --card-bg-override: "";
       --inner-box-bg: rgba(248, 250, 252, 0.85);
       --inner-box-border: #e2e8f0;
-      --inner-box-text: #334155;
-      --inner-box-radius: 12px;
-      --price-box-bg: var(--accent-color);
-      --price-box-text: var(--accent-text);
       --tab-bg-override: "";
     }
 
@@ -58,8 +49,6 @@
       --bg-overlay: rgba(11, 17, 32, 0.55);
       --inner-box-bg: rgba(15, 23, 42, 0.72);
       --inner-box-border: rgba(148, 163, 184, 0.25);
-      --inner-box-text: #cbd5e1;
-      --card-border-color: rgba(148, 163, 184, 0.22);
     }
 
     * {
@@ -104,18 +93,18 @@
 
     .area-card,
     .search-wrapper,
-    .empty-state,
-    .map-section-card {
+    .empty-state {
       background: var(--card-bg-override, rgba(var(--surface-rgb), var(--card-alpha))) !important;
       backdrop-filter: blur(var(--card-blur)) saturate(150%);
       -webkit-backdrop-filter: blur(var(--card-blur)) saturate(150%);
-      border: var(--card-border-width) solid var(--card-border-color) !important;
-      border-radius: var(--card-radius) !important;
+      border: 1.5px solid rgba(255, 255, 255, var(--border-alpha)) !important;
       box-shadow: var(--shadow-sm);
     }
 
-    .area-card {
-      padding: var(--card-padding-v) var(--card-padding-h) !important;
+    body[data-mode="dark"] .area-card,
+    body[data-mode="dark"] .search-wrapper,
+    body[data-mode="dark"] .empty-state {
+      border-color: rgba(148, 163, 184, 0.22) !important;
     }
 
     .area-card.recommended {
@@ -125,7 +114,7 @@
 
     .chip,
     .sync-status-pill {
-      background: var(--card-bg-override, rgba(var(--surface-rgb), calc(var(--card-alpha) * 0.92 + 0.08)));
+      background: rgba(var(--surface-rgb), calc(var(--card-alpha) * 0.92 + 0.08));
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
     }
@@ -142,10 +131,10 @@
     }
 
     .main-tab-btn {
-      background: var(--tab-bg-override, var(--card-bg-override, rgba(var(--surface-rgb), var(--card-alpha)))) !important;
+      background: var(--card-bg-override, rgba(var(--surface-rgb), var(--card-alpha))) !important;
       backdrop-filter: blur(var(--card-blur)) saturate(150%) !important;
       -webkit-backdrop-filter: blur(var(--card-blur)) saturate(150%) !important;
-      border: var(--card-border-width) solid var(--card-border-color) !important;
+      border: 1.5px solid rgba(255, 255, 255, var(--border-alpha)) !important;
       box-shadow: var(--shadow-sm) !important;
       border-radius: 16px !important;
       padding: 10px 18px !important;
@@ -153,6 +142,7 @@
     }
 
     body[data-mode="dark"] .main-tab-btn:not(.active) {
+      border-color: rgba(148, 163, 184, 0.22) !important;
       color: #f8fafc !important;
     }
 
@@ -179,31 +169,21 @@
     }
 
     .item-contents-box {
-      background: var(--inner-box-bg) !important;
-      border: 1px solid var(--inner-box-border) !important;
-      border-radius: var(--inner-box-radius) !important;
-      color: var(--inner-box-text);
-    }
-
-    .item-notes-text {
-      color: var(--inner-box-text) !important;
+      background: var(--inner-box-bg);
+      border-color: var(--inner-box-border);
     }
 
     .main-tab-btn.active,
-    .chip.active {
+    .chip.active,
+    .price-box {
       background: var(--accent-color) !important;
       border-color: var(--accent-color) !important;
       color: var(--accent-text) !important;
     }
 
-    .price-box {
-      background: var(--price-box-bg) !important;
-      color: var(--price-box-text) !important;
-    }
-
-    .price-box .price-currency,
+    .price-currency,
     .chip.active .chip-count {
-      color: inherit !important;
+      color: var(--accent-text) !important;
       opacity: 0.9;
     }
 
@@ -224,6 +204,7 @@
       color: #f8fafc;
     }
     body[data-mode="dark"] .branch-pill,
+    body[data-mode="dark"] .item-contents-box,
     body[data-mode="dark"] .help-note,
     body[data-mode="dark"] .esc-btn,
     body[data-mode="dark"] .copy-btn,
@@ -236,6 +217,9 @@
       background: rgba(30, 41, 59, 0.85);
       border-color: #475569;
       color: #f1f5f9;
+    }
+    body[data-mode="dark"] .item-notes-text {
+      color: #cbd5e1;
     }
     body[data-mode="dark"] .modal {
       background: #1e293b;
@@ -301,8 +285,8 @@
     }
 
     .color-wheel-input {
-      width: 52px;
-      height: 42px;
+      width: 54px;
+      height: 44px;
       padding: 2px;
       border: 1.5px solid #cbd5e1;
       border-radius: 10px;
@@ -319,8 +303,8 @@
     }
 
     .preset-dot-btn {
-      width: 26px;
-      height: 26px;
+      width: 28px;
+      height: 28px;
       border-radius: 50%;
       border: 2px solid #ffffff;
       box-shadow: 0 0 0 1.5px #cbd5e1;
@@ -344,68 +328,18 @@
       }
     }
 
-    .customizer-section-box {
-      background: rgba(148, 163, 184, 0.08);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 14px;
-      margin-bottom: 14px;
-    }
-
-    .customizer-section-title {
-      font-size: 0.92rem;
-      font-weight: 900;
-      margin-bottom: 10px;
-      color: var(--text-main);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-    }
-
-    .range-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      margin-bottom: 8px;
-    }
-
-    .range-row label {
-      font-size: 0.82rem;
-      font-weight: 800;
-    }
-
-    .range-val {
-      font-size: 0.78rem;
-      font-weight: 800;
-      background: rgba(124, 58, 237, 0.14);
-      padding: 2px 8px;
-      border-radius: 8px;
-      min-width: 50px;
-      text-align: center;
-    }
-
-    input[type="range"].form-range {
-      width: 100%;
-      accent-color: #7c3aed;
-      cursor: pointer;
-      margin-bottom: 10px;
-    }
-
     .bg-preview-box {
       margin-top: 8px;
-      height: 110px;
+      height: 120px;
       border-radius: 12px;
       border: 1.5px dashed #cbd5e1;
-      background-color: #0f172a;
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #e2e8f0;
+      color: #64748b;
       font-size: 0.8rem;
       font-weight: 700;
       overflow: hidden;
@@ -1025,15 +959,15 @@
     .area-name {
       font-size: 1.3rem;
       font-weight: 900;
-      color: var(--text-main);
+      color: #0f172a;
       line-height: 1.25;
       margin-top: 2px;
     }
 
     .item-contents-box {
       margin-top: 6px;
-      background: var(--inner-box-bg);
-      border: 1px solid var(--inner-box-border);
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
       border-radius: 12px;
       padding: 10px 12px;
       width: 100%;
@@ -1222,7 +1156,7 @@
     .modal {
       background: #fff;
       width: 100%;
-      max-width: 620px;
+      max-width: 550px;
       border-radius: 18px;
       padding: 22px;
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.24);
@@ -1245,12 +1179,12 @@
     }
 
     .form-group {
-      margin-bottom: 12px;
+      margin-bottom: 14px;
     }
 
     .form-label {
       display: block;
-      font-size: 0.86rem;
+      font-size: 0.88rem;
       font-weight: 800;
       color: #1e293b;
       margin-bottom: 6px;
@@ -1258,10 +1192,10 @@
 
     .form-control {
       width: 100%;
-      padding: 10px 12px;
+      padding: 11px 13px;
       border: 1.5px solid #cbd5e1;
       border-radius: 11px;
-      font-size: 0.92rem;
+      font-size: 0.95rem;
       font-weight: 700;
       color: #0f172a;
       background: #fff;
@@ -1276,7 +1210,7 @@
     .form-control.ltr {
       direction: ltr;
       text-align: left;
-      font-size: 0.85rem;
+      font-size: 0.86rem;
     }
 
     .form-control:focus {
@@ -1300,7 +1234,7 @@
       display: flex;
       gap: 8px;
       flex-wrap: wrap;
-      margin-top: 16px;
+      margin-top: 18px;
     }
 
     .btn-m {
@@ -1385,6 +1319,10 @@
       transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease;
     }
 
+    body[data-mode="dark"] .map-section-card {
+      border-color: rgba(148, 163, 184, 0.22) !important;
+    }
+
     .map-section-header {
       display: flex;
       align-items: center;
@@ -1467,6 +1405,7 @@
       border: 0;
       display: block;
     }
+
   </style>
 </head>
 <body>
@@ -1482,6 +1421,7 @@
     </div>
   </div>
 </div>
+
 
 <script>
   setTimeout(function () {
@@ -1538,6 +1478,7 @@
         <span id="countLabel">منطقة في جميع الأفرع</span>
       </div>
     </div>
+
 
     <!-- Embedded Google Map -->
     <div class="map-section-card" id="deliveryMapCard">
@@ -1892,189 +1833,26 @@
 <div class="modal-backdrop" id="appearanceModal">
   <div class="modal">
     <div class="modal-header">
-      <h2>🎨 التحكم الكامل بالمظهر، الخلفية، والألوان</h2>
+      <h2>🎨 تخصيص المظهر، الشفافية، والخلفية</h2>
       <button type="button" class="btn-m btn-m-light" onclick="closeAppearanceModal()">إغلاق</button>
     </div>
     <form id="appearanceForm" onsubmit="saveAppearanceForm(event)">
-
-      <!-- 1. Background Image & Lighting -->
-      <div class="customizer-section-box">
-        <div class="customizer-section-title">
-          <span>🖼️ صورة الخلفية والإضاءة</span>
-          <button type="button" class="btn-m btn-m-danger" style="padding:4px 10px; font-size:0.75rem;" onclick="clearBackgroundImage()">إزالة الصورة</button>
-        </div>
-        <div class="grid-2-cols">
-          <div class="form-group">
-            <label class="form-label" for="bgImageUrlInput">رابط صورة الخلفية (URL)</label>
-            <input type="text" id="bgImageUrlInput" class="form-control ltr" placeholder="https://..." oninput="livePreviewAppearance()" />
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="bgImageFileInput">أو رفع صورة من الجهاز</label>
-            <input type="file" id="bgImageFileInput" class="form-control" style="padding:7px;" accept="image/*" onchange="handleBgFileUpload(event)" />
-          </div>
-        </div>
-
-        <div class="grid-2-cols">
-          <div class="form-group">
-            <label class="form-label" for="bgSizeSelect">طريقة ملاءمة الخلفية</label>
-            <select id="bgSizeSelect" class="form-control" onchange="livePreviewAppearance()">
-              <option value="cover">تغطية كاملة (Cover)</option>
-              <option value="contain">احتواء كامل (Contain)</option>
-              <option value="auto">حجم طبيعي (Auto)</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="bgRepeatSelect">تكرار الخلفية</label>
-            <select id="bgRepeatSelect" class="form-control" onchange="livePreviewAppearance()">
-              <option value="no-repeat">بدون تكرار</option>
-              <option value="repeat">تكرار كامل</option>
-              <option value="repeat-x">تكرار أفقي</option>
-              <option value="repeat-y">تكرار عمودي</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="range-row">
-          <label for="bgBrightnessRange">إضاءة / سطوع الخلفية</label>
-          <span class="range-val" id="bgBrightnessVal">100%</span>
-        </div>
-        <input type="range" id="bgBrightnessRange" class="form-range" min="20" max="180" step="2" value="100" oninput="livePreviewAppearance()" />
-
-        <div class="range-row">
-          <label for="bgContrastRange">تباين الخلفية</label>
-          <span class="range-val" id="bgContrastVal">100%</span>
-        </div>
-        <input type="range" id="bgContrastRange" class="form-range" min="50" max="160" step="2" value="100" oninput="livePreviewAppearance()" />
-
-        <div class="range-row">
-          <label for="overlayOpacityRange">طبقة التعتيم / التفتيح فوق الخلفية</label>
-          <span class="range-val" id="overlayOpacityVal">45%</span>
-        </div>
-        <input type="range" id="overlayOpacityRange" class="form-range" min="0" max="95" step="1" value="45" oninput="livePreviewAppearance()" />
-
-        <div class="bg-preview-box" id="bgPreviewBox">معاينة صورة الخلفية</div>
-      </div>
-
-      <!-- 2. Cards, Inner Boxes & Text Colors -->
-      <div class="customizer-section-box">
-        <div class="customizer-section-title">
-          <span>🃏 ألوان الكارد، المربعات الداخلية، والخطوط</span>
-        </div>
-
-        <div class="grid-2-cols">
-          <div class="form-group">
-            <label class="form-label" for="cardBgColorInput">لون الكارد (فارغ = تلقائي حسب الوضع)</label>
-            <div class="color-picker-row">
-              <input type="color" id="cardBgPicker" class="color-wheel-input" value="#ffffff" oninput="syncColorPair('cardBgColorInput', 'cardBgPicker', this.value)" />
-              <input type="text" id="cardBgColorInput" class="form-control ltr" placeholder="#ffffff أو rgba(...)" oninput="livePreviewAppearance()" />
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label" for="textColorInput">لون الكتابة / النصوص الرئيسي</label>
-            <div class="color-picker-row">
-              <input type="color" id="textColorPicker" class="color-wheel-input" value="#0f172a" oninput="syncColorPair('textColorInput', 'textColorPicker', this.value)" />
-              <input type="text" id="textColorInput" class="form-control ltr" placeholder="تلقائي" oninput="livePreviewAppearance()" />
-            </div>
-          </div>
-        </div>
-
-        <div class="grid-2-cols">
-          <div class="form-group">
-            <label class="form-label" for="innerBoxBgInput">لون المربعات داخل الكارد (المحتويات/الحلول)</label>
-            <div class="color-picker-row">
-              <input type="color" id="innerBoxBgPicker" class="color-wheel-input" value="#f8fafc" oninput="syncColorPair('innerBoxBgInput', 'innerBoxBgPicker', this.value)" />
-              <input type="text" id="innerBoxBgInput" class="form-control ltr" placeholder="تلقائي" oninput="livePreviewAppearance()" />
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label" for="innerBoxTextInput">لون النص داخل المربعات الداخلية</label>
-            <div class="color-picker-row">
-              <input type="color" id="innerBoxTextPicker" class="color-wheel-input" value="#334155" oninput="syncColorPair('innerBoxTextInput', 'innerBoxTextPicker', this.value)" />
-              <input type="text" id="innerBoxTextInput" class="form-control ltr" placeholder="تلقائي" oninput="livePreviewAppearance()" />
-            </div>
-          </div>
-        </div>
-
-        <div class="grid-2-cols">
-          <div class="form-group">
-            <label class="form-label" for="priceBoxBgInput">لون صندوق السعر</label>
-            <div class="color-picker-row">
-              <input type="color" id="priceBoxBgPicker" class="color-wheel-input" value="#0f172a" oninput="syncColorPair('priceBoxBgInput', 'priceBoxBgPicker', this.value)" />
-              <input type="text" id="priceBoxBgInput" class="form-control ltr" placeholder="يتبع اللون الرئيسي" oninput="livePreviewAppearance()" />
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label" for="cardBorderColorInput">لون إطار الكارد (Border)</label>
-            <div class="color-picker-row">
-              <input type="color" id="cardBorderColorPicker" class="color-wheel-input" value="#e2e8f0" oninput="syncColorPair('cardBorderColorInput', 'cardBorderColorPicker', this.value)" />
-              <input type="text" id="cardBorderColorInput" class="form-control ltr" placeholder="تلقائي" oninput="livePreviewAppearance()" />
-            </div>
-          </div>
-        </div>
-
-        <div class="range-row">
-          <label for="cardOpacityRange">شفافية الكارد (Card Opacity)</label>
-          <span class="range-val" id="cardOpacityVal">72%</span>
-        </div>
-        <input type="range" id="cardOpacityRange" class="form-range" min="10" max="100" step="1" value="72" oninput="livePreviewAppearance()" />
-
-        <div class="range-row">
-          <label for="cardBlurRange">درجة ضبابية الزجاج (Glass Blur)</label>
-          <span class="range-val" id="cardBlurVal">14px</span>
-        </div>
-        <input type="range" id="cardBlurRange" class="form-range" min="0" max="32" step="1" value="14" oninput="livePreviewAppearance()" />
-      </div>
-
-      <!-- 3. Site Mode, Accent Color & Card Design -->
-      <div class="customizer-section-box">
-        <div class="customizer-section-title">
-          <span>✨ وضع الموقع، الألوان العامة، وتصميم الكارد</span>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">وضع الإضاءة العام</label>
-          <div class="mode-toggle-group">
-            <button type="button" class="mode-toggle-btn" id="modeLightBtn" onclick="selectDarkMode(false)">☀️ وضع فاتح</button>
-            <button type="button" class="mode-toggle-btn" id="modeDarkBtn" onclick="selectDarkMode(true)">🌙 وضع داكن</button>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label" for="themeColorPicker">اللون الرئيسي للتبويبات والفلاتر</label>
-          <div class="color-picker-row">
-            <input type="color" id="themeColorPicker" class="color-wheel-input" value="#0f172a" oninput="onThemeColorChange(this.value)" />
-            <input type="text" id="themeColorHexInput" class="form-control ltr" style="width:125px;" value="#0f172a" maxlength="7" oninput="onThemeHexTyped(this.value)" />
-            <div class="preset-dots">
-              <button type="button" class="preset-dot-btn" style="background:#0f172a" onclick="onThemeColorChange('#0f172a')" title="داكن كلاسيكي"></button>
-              <button type="button" class="preset-dot-btn" style="background:#2563eb" onclick="onThemeColorChange('#2563eb')" title="أزرق ملكي"></button>
-              <button type="button" class="preset-dot-btn" style="background:#059669" onclick="onThemeColorChange('#059669')" title="أخضر زمردي"></button>
-              <button type="button" class="preset-dot-btn" style="background:#7c3aed" onclick="onThemeColorChange('#7c3aed')" title="بنفسجي"></button>
-              <button type="button" class="preset-dot-btn" style="background:#d97706" onclick="onThemeColorChange('#d97706')" title="ذهبي كهرماني"></button>
-              <button type="button" class="preset-dot-btn" style="background:#dc2626" onclick="onThemeColorChange('#dc2626')" title="أحمر قرمزي"></button>
-            </div>
-          </div>
-        </div>
-
-        <div class="grid-2-cols">
-          <div class="form-group">
-            <label class="form-label" for="cardRadiusRange">استدارة حواف الكارد</label>
-            <span class="range-val" id="cardRadiusVal" style="float:left;">18px</span>
-            <input type="range" id="cardRadiusRange" class="form-range" min="0" max="36" step="2" value="18" oninput="livePreviewAppearance()" />
-          </div>
-          <div class="form-group">
-            <label class="form-label" for="cardPaddingRange">المساحة الداخلية للكارد</label>
-            <span class="range-val" id="cardPaddingVal" style="float:left;">18px</span>
-            <input type="range" id="cardPaddingRange" class="form-range" min="10" max="32" step="2" value="18" oninput="livePreviewAppearance()" />
-          </div>
+      <div class="form-group">
+        <label class="form-label">وضع الإضاءة</label>
+        <div class="mode-toggle-group">
+          <button type="button" class="mode-toggle-btn" id="modeLightBtn" onclick="selectDarkMode(false)">☀️ وضع فاتح</button>
+          <button type="button" class="mode-toggle-btn" id="modeDarkBtn" onclick="selectDarkMode(true)">🌙 وضع داكن</button>
         </div>
       </div>
-
+      <div class="form-group">
+        <label class="form-label" for="themeColorPicker">لون الثيم الرئيسي</label>
+        <div class="color-picker-row">
+          <input type="color" id="themeColorPicker" class="color-wheel-input" value="#0f172a" oninput="onThemeColorChange(this.value)" />
+          <input type="text" id="themeColorHexInput" class="form-control ltr" style="width:115px;" value="#0f172a" maxlength="7" oninput="onThemeHexTyped(this.value)" />
+        </div>
+      </div>
       <div class="modal-actions">
         <button type="submit" class="btn-m btn-m-success">💾 حفظ ونشر للجميع</button>
-        <button type="button" class="btn-m btn-m-danger" onclick="resetAppearanceToDefault()">↩️ إعادة المظهر الافتراضي</button>
         <button type="button" class="btn-m btn-m-light" onclick="closeAppearanceModal()">إلغاء</button>
       </div>
     </form>
@@ -2116,16 +1894,12 @@
     {
       title: "تأخر السائق عن الموعد المحدد للتوصيل",
       category: "التوصيل",
-      solution: "1. التواصل فوراً مع السائق لتحديد موقعه الحالي والوقت المتوقع للوصول.
-2. إبلاغ الزبون بالوقت المحدث بشفافية واعتذار لطيف.
-3. في حال تجاوز التأخير 20 دقيقة، يتم التنسيق مع مشرف الفرع لتقديم تعويض مناسب."
+      solution: "1. التواصل فوراً مع السائق لتحديد موقعه الحالي والوقت المتوقع للوصول.\n2. إبلاغ الزبون بالوقت المحدث بشفافية واعتذار لطيف.\n3. في حال تجاوز التأخير 20 دقيقة، يتم التنسيق مع مشرف الفرع لتقديم تعويض مناسب."
     },
     {
       title: "وصول طلب ناقص أو صنف مختلف للزبون",
       category: "الطلبات",
-      solution: "1. الاعتذار من الزبون وتأكيد تفاصيل الصنف الناقص.
-2. تجهيز الصنف فوراً وإرساله بأقرب سائق متاح على نفقة المطعم.
-3. تسجيل ملاحظة لمتابعة التغليف في الفرع."
+      solution: "1. الاعتذار من الزبون وتأكيد تفاصيل الصنف الناقص.\n2. تجهيز الصنف فوراً وإرساله بأقرب سائق متاح على نفقة المطعم.\n3. تسجيل ملاحظة لمتابعة التغليف في الفرع."
     }
   ];
 
@@ -2398,19 +2172,7 @@
       cardOpacity: 72,
       cardBlur: 14,
       bgImage: "",
-      bgSize: "cover",
-      bgRepeat: "no-repeat",
-      bgBrightness: 100,
-      bgContrast: 100,
-      overlayOpacity: 45,
-      cardBgColor: "",
-      textColor: "",
-      innerBoxBg: "",
-      innerBoxText: "",
-      priceBoxBg: "",
-      cardBorderColor: "",
-      cardRadius: 18,
-      cardPadding: 18
+      overlayOpacity: 45
     };
   }
 
@@ -2440,177 +2202,17 @@
     const cfg = { ...getDefaultAppearance(), ...(appCfg || siteAppearance) };
     if (cfg.darkMode) document.body.setAttribute("data-mode", "dark");
     else document.body.removeAttribute("data-mode");
-
     const rootStyle = document.documentElement.style;
     rootStyle.setProperty("--accent-color", cfg.accentColor);
     rootStyle.setProperty("--dark-pill", cfg.accentColor);
     rootStyle.setProperty("--accent-text", getContrastTextColor(cfg.accentColor));
-
     rootStyle.setProperty("--card-alpha", (cfg.cardOpacity / 100).toFixed(2));
     rootStyle.setProperty("--card-blur", `${cfg.cardBlur}px`);
-
     const overlayAlpha = (cfg.overlayOpacity / 100).toFixed(2);
     const baseRgb = cfg.darkMode ? "11, 17, 32" : "241, 245, 249";
     rootStyle.setProperty("--bg-overlay", `rgba(${baseRgb}, ${overlayAlpha})`);
-
     const bg = (cfg.bgImage || "").trim();
     rootStyle.setProperty("--bg-image", bg ? `url("${bg.replace(/"/g, '\"')}")` : "none");
-    rootStyle.setProperty("--bg-size", cfg.bgSize || "cover");
-    rootStyle.setProperty("--bg-repeat", cfg.bgRepeat || "no-repeat");
-    rootStyle.setProperty("--bg-brightness", `${cfg.bgBrightness ?? 100}%`);
-    rootStyle.setProperty("--bg-contrast", `${cfg.bgContrast ?? 100}%`);
-
-    // Card override color
-    const cardBg = (cfg.cardBgColor || "").trim();
-    if (cardBg) {
-      rootStyle.setProperty("--card-bg-override", cardBg);
-    } else {
-      rootStyle.removeProperty("--card-bg-override");
-    }
-
-    // Text color override
-    const txtColor = (cfg.textColor || "").trim();
-    if (txtColor) {
-      rootStyle.setProperty("--text-main", txtColor);
-    } else {
-      rootStyle.setProperty("--text-main", cfg.darkMode ? "#f8fafc" : "#0f172a");
-    }
-
-    // Inner box background & text overrides
-    const innerBg = (cfg.innerBoxBg || "").trim();
-    if (innerBg) {
-      rootStyle.setProperty("--inner-box-bg", innerBg);
-    } else {
-      rootStyle.setProperty("--inner-box-bg", cfg.darkMode ? "rgba(15, 23, 42, 0.72)" : "rgba(248, 250, 252, 0.85)");
-    }
-
-    const innerTxt = (cfg.innerBoxText || "").trim();
-    if (innerTxt) {
-      rootStyle.setProperty("--inner-box-text", innerTxt);
-    } else {
-      rootStyle.setProperty("--inner-box-text", cfg.darkMode ? "#cbd5e1" : "#334155");
-    }
-
-    // Price box color
-    const priceBg = (cfg.priceBoxBg || "").trim();
-    if (priceBg) {
-      rootStyle.setProperty("--price-box-bg", priceBg);
-      rootStyle.setProperty("--price-box-text", getContrastTextColor(priceBg));
-    } else {
-      rootStyle.setProperty("--price-box-bg", cfg.accentColor);
-      rootStyle.setProperty("--price-box-text", getContrastTextColor(cfg.accentColor));
-    }
-
-    // Card border color
-    const borderCol = (cfg.cardBorderColor || "").trim();
-    if (borderCol) {
-      rootStyle.setProperty("--card-border-color", borderCol);
-    } else {
-      rootStyle.setProperty("--card-border-color", cfg.darkMode ? "rgba(148, 163, 184, 0.22)" : "rgba(255, 255, 255, 0.55)");
-    }
-
-    // Card design dimensions
-    rootStyle.setProperty("--card-radius", `${cfg.cardRadius ?? 18}px`);
-    rootStyle.setProperty("--radius-lg", `${cfg.cardRadius ?? 18}px`);
-    rootStyle.setProperty("--card-padding-v", `${cfg.cardPadding ?? 18}px`);
-    rootStyle.setProperty("--card-padding-h", `${(cfg.cardPadding ?? 18) + 2}px`);
-  }
-
-  function syncColorPair(textInputId, pickerId, colorVal) {
-    const txtEl = document.getElementById(textInputId);
-    const picEl = document.getElementById(pickerId);
-    if (txtEl) txtEl.value = colorVal;
-    if (picEl && /^#[0-9a-fA-F]{6}$/.test(colorVal)) picEl.value = colorVal;
-    livePreviewAppearance();
-  }
-
-  function handleBgFileUpload(e) {
-    const file = e.target.files && e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = function(evt) {
-      const dataUrl = evt.target.result;
-      document.getElementById("bgImageUrlInput").value = dataUrl;
-      livePreviewAppearance();
-      showToast("تم تحميل صورة الخلفية");
-    };
-    reader.readAsDataURL(file);
-  }
-
-  function clearBackgroundImage() {
-    document.getElementById("bgImageUrlInput").value = "";
-    const fileEl = document.getElementById("bgImageFileInput");
-    if (fileEl) fileEl.value = "";
-    livePreviewAppearance();
-    showToast("تمت إزالة صورة الخلفية");
-  }
-
-  function readAppearanceFormValues() {
-    const bgBrightness = Number(document.getElementById("bgBrightnessRange").value);
-    const bgContrast = Number(document.getElementById("bgContrastRange").value);
-    const overlayOpacity = Number(document.getElementById("overlayOpacityRange").value);
-    const cardOpacity = Number(document.getElementById("cardOpacityRange").value);
-    const cardBlur = Number(document.getElementById("cardBlurRange").value);
-    const cardRadius = Number(document.getElementById("cardRadiusRange").value);
-    const cardPadding = Number(document.getElementById("cardPaddingRange").value);
-
-    return {
-      darkMode: tempDarkMode,
-      accentColor: document.getElementById("themeColorPicker").value,
-      bgImage: document.getElementById("bgImageUrlInput").value.trim(),
-      bgSize: document.getElementById("bgSizeSelect").value,
-      bgRepeat: document.getElementById("bgRepeatSelect").value,
-      bgBrightness,
-      bgContrast,
-      overlayOpacity,
-      cardBgColor: document.getElementById("cardBgColorInput").value.trim(),
-      textColor: document.getElementById("textColorInput").value.trim(),
-      innerBoxBg: document.getElementById("innerBoxBgInput").value.trim(),
-      innerBoxText: document.getElementById("innerBoxTextInput").value.trim(),
-      priceBoxBg: document.getElementById("priceBoxBgInput").value.trim(),
-      cardBorderColor: document.getElementById("cardBorderColorInput").value.trim(),
-      cardOpacity,
-      cardBlur,
-      cardRadius,
-      cardPadding
-    };
-  }
-
-  function livePreviewAppearance() {
-    const draft = readAppearanceFormValues();
-    document.getElementById("bgBrightnessVal").textContent = `${draft.bgBrightness}%`;
-    document.getElementById("bgContrastVal").textContent = `${draft.bgContrast}%`;
-    document.getElementById("overlayOpacityVal").textContent = `${draft.overlayOpacity}%`;
-    document.getElementById("cardOpacityVal").textContent = `${draft.cardOpacity}%`;
-    document.getElementById("cardBlurVal").textContent = `${draft.cardBlur}px`;
-    document.getElementById("cardRadiusVal").textContent = `${draft.cardRadius}px`;
-    document.getElementById("cardPaddingVal").textContent = `${draft.cardPadding}px`;
-
-    const prevBox = document.getElementById("bgPreviewBox");
-    if (prevBox) {
-      if (draft.bgImage) {
-        prevBox.style.backgroundImage = `url("${draft.bgImage.replace(/"/g, '\"')}")`;
-        prevBox.style.backgroundSize = draft.bgSize;
-        prevBox.style.backgroundRepeat = draft.bgRepeat;
-        prevBox.style.filter = `brightness(${draft.bgBrightness}%) contrast(${draft.bgContrast}%)`;
-        prevBox.textContent = "";
-      } else {
-        prevBox.style.backgroundImage = "none";
-        prevBox.style.filter = "none";
-        prevBox.textContent = "لا توجد صورة خلفية محددة (الخلفية الافتراضية)";
-      }
-    }
-    applySiteAppearance(draft);
-  }
-
-  function resetAppearanceToDefault() {
-    if (!confirm("هل تريد إعادة جميع ألوان وتصميمات المظهر إلى الوضع الافتراضي؟")) return;
-    siteAppearance = getDefaultAppearance();
-    saveAppearanceToStorage();
-    applySiteAppearance(siteAppearance);
-    openAppearanceModal();
-    showToast("تمت إعادة المظهر إلى الافتراضي");
-    pushDataToCloud(false);
   }
 
   function triggerSectionAnimation(sectionEl) {
@@ -2753,8 +2355,7 @@
       const res = await fetch(url, { headers });
       if (!res.ok) throw new Error("Fetch failed");
       const fileData = await res.json();
-      const decoded = decodeURIComponent(escape(atob(fileData.content.replace(/
-/g, ""))));
+      const decoded = decodeURIComponent(escape(atob(fileData.content.replace(/\n/g, ""))));
       const store = JSON.parse(decoded);
       if (Array.isArray(store.areas) && store.areas.length > 0) {
         activeData = store.areas;
@@ -2777,7 +2378,7 @@
         saveCustomCardsToStorage();
       }
       if (store.appearance) {
-        siteAppearance = { ...getDefaultAppearance(), ...siteAppearance, ...store.appearance };
+        siteAppearance = { ...siteAppearance, ...store.appearance };
         saveAppearanceToStorage();
         applySiteAppearance(siteAppearance);
       }
@@ -2912,7 +2513,7 @@
     let html = `<button type="button" class="chip ${selectedBranch === "الكل" ? "active" : ""}" onclick="selectBranch('الكل')"><span>الكل</span><span class="chip-count">(${activeData.length})</span></button>`;
     allBranches.forEach(b => {
       const isActive = selectedBranch === b;
-      html += `<button type="button" class="chip ${isActive ? "active" : ""}" onclick="selectBranch('${b.replace(/'/g, "\'")}')"><span class="chip-dot" style="background:${getBranchColor(b)}"></span><span>${b}</span><span class="chip-count">(${counts[b]})</span></button>`;
+      html += `<button type="button" class="chip ${isActive ? "active" : ""}" onclick="selectBranch('${b.replace(/'/g, "\\'")}')"><span class="chip-dot" style="background:${getBranchColor(b)}"></span><span>${b}</span><span class="chip-count">(${counts[b]})</span></button>`;
     });
     bar.innerHTML = html;
   }
@@ -2994,7 +2595,7 @@
           </div>
           <div class="card-bottom">
             <div class="card-actions-left">
-              <button type="button" class="copy-btn" onclick="copyCardDetails(this, '${copyText.replace(/'/g, "\'")}')"><span>📋</span><span>نسخ التفاصيل</span></button>
+              <button type="button" class="copy-btn" onclick="copyCardDetails(this, '${copyText.replace(/'/g, "\\'")}')"><span>📋</span><span>نسخ التفاصيل</span></button>
               <button type="button" class="card-edit-btn" onclick="openEditAreaByIndex(${dataIdx})">✏️ تعديل</button>
               <button type="button" class="card-del-btn" onclick="deleteAreaByIndex(${dataIdx})">🗑️ حذف</button>
             </div>
@@ -3010,8 +2611,7 @@
   }
 
   function parseContentsList(contentsStr) {
-    return String(contentsStr || "").split(/[
-،,]+/).map(s => s.trim()).filter(Boolean);
+    return String(contentsStr || "").split(/[\n،,]+/).map(s => s.trim()).filter(Boolean);
   }
 
   function renderMenuChips() {
@@ -3020,7 +2620,7 @@
     const bar = document.getElementById("menuFiltersBar");
     let html = `<button type="button" class="chip ${selectedMenuCategory === "الكل" ? "active" : ""}" onclick="selectMenuCategory('الكل')"><span>كل الأصناف</span><span class="chip-count">(${menuItems.length})</span></button>`;
     Object.keys(counts).forEach(cat => {
-      html += `<button type="button" class="chip ${selectedMenuCategory === cat ? "active" : ""}" onclick="selectMenuCategory('${cat.replace(/'/g, "\'")}')"><span class="chip-dot" style="background:${getCategoryColor(cat)}"></span><span>${escapeHtml(cat)}</span><span class="chip-count">(${counts[cat]})</span></button>`;
+      html += `<button type="button" class="chip ${selectedMenuCategory === cat ? "active" : ""}" onclick="selectMenuCategory('${cat.replace(/'/g, "\\'")}')"><span class="chip-dot" style="background:${getCategoryColor(cat)}"></span><span>${escapeHtml(cat)}</span><span class="chip-count">(${counts[cat]})</span></button>`;
     });
     bar.innerHTML = html;
   }
@@ -3061,7 +2661,7 @@
           </div>
           <div class="card-bottom">
             <div class="card-actions-left">
-              <button type="button" class="copy-btn" onclick="copyCardDetails(this, '${copyText.replace(/'/g, "\'")}')"><span>📋</span><span>نسخ الصنف والمكونات</span></button>
+              <button type="button" class="copy-btn" onclick="copyCardDetails(this, '${copyText.replace(/'/g, "\\'")}')"><span>📋</span><span>نسخ الصنف والمكونات</span></button>
               <button type="button" class="card-edit-btn" onclick="openEditMenuByIndex(${idx})">✏️ تعديل</button>
               <button type="button" class="card-del-btn" onclick="deleteMenuByIndex(${idx})">🗑️ حذف</button>
             </div>
@@ -3078,7 +2678,7 @@
     const bar = document.getElementById("troubleFiltersBar");
     let html = `<button type="button" class="chip ${selectedTroubleCategory === "الكل" ? "active" : ""}" onclick="selectTroubleCategory('الكل')"><span>كل المشاكل</span><span class="chip-count">(${troubleItems.length})</span></button>`;
     Object.keys(counts).forEach(cat => {
-      html += `<button type="button" class="chip ${selectedTroubleCategory === cat ? "active" : ""}" onclick="selectTroubleCategory('${cat.replace(/'/g, "\'")}')"><span class="chip-dot" style="background:${getCategoryColor(cat)}"></span><span>${escapeHtml(cat)}</span><span class="chip-count">(${counts[cat]})</span></button>`;
+      html += `<button type="button" class="chip ${selectedTroubleCategory === cat ? "active" : ""}" onclick="selectTroubleCategory('${cat.replace(/'/g, "\\'")}')"><span class="chip-dot" style="background:${getCategoryColor(cat)}"></span><span>${escapeHtml(cat)}</span><span class="chip-count">(${counts[cat]})</span></button>`;
     });
     bar.innerHTML = html;
   }
@@ -3113,8 +2713,7 @@
     grid.innerHTML = filtered.map((item, renderIdx) => {
       const idx = troubleItems.indexOf(item);
       const cat = item.category || "عام";
-      const copyText = `المشكلة: ${item.title}
-الحل: ${item.solution}`;
+      const copyText = `المشكلة: ${item.title}\nالحل: ${item.solution}`;
       return `
         <div class="area-card" style="--stagger-idx:${Math.min(renderIdx, 14)}">
           <div class="card-top">
@@ -3131,7 +2730,7 @@
           </div>
           <div class="card-bottom">
             <div class="card-actions-left">
-              <button type="button" class="copy-btn" onclick="copyCardDetails(this, '${copyText.replace(/'/g, "\'")}')"><span>📋</span><span>نسخ المشكلة والحل</span></button>
+              <button type="button" class="copy-btn" onclick="copyCardDetails(this, '${copyText.replace(/'/g, "\\'")}')"><span>📋</span><span>نسخ المشكلة والحل</span></button>
               <button type="button" class="card-edit-btn" onclick="openEditTroubleByIndex(${idx})">✏️ تعديل</button>
               <button type="button" class="card-del-btn" onclick="deleteTroubleByIndex(${idx})">🗑️ حذف</button>
             </div>
@@ -3253,8 +2852,7 @@
     }
     grid.innerHTML = filtered.map((item, renderIdx) => {
       const idx = cards.indexOf(item);
-      const copyText = `${item.title}
-${item.body}`;
+      const copyText = `${item.title}\n${item.body}`;
       return `
         <div class="area-card" style="--stagger-idx:${Math.min(renderIdx, 14)}">
           <div class="card-top">
@@ -3268,7 +2866,7 @@ ${item.body}`;
           </div>
           <div class="card-bottom">
             <div class="card-actions-left">
-              <button type="button" class="copy-btn" onclick="copyCardDetails(this, '${copyText.replace(/'/g, "\'")}')"><span>📋</span><span>نسخ المحتوى</span></button>
+              <button type="button" class="copy-btn" onclick="copyCardDetails(this, '${copyText.replace(/'/g, "\\'")}')"><span>📋</span><span>نسخ المحتوى</span></button>
               <button type="button" class="card-edit-btn" onclick="openEditCustomCardByIndex(${idx})">✏️ تعديل</button>
               <button type="button" class="card-del-btn" onclick="deleteCustomCardByIndex(${idx})">🗑️ حذف</button>
             </div>
@@ -3626,62 +3224,15 @@ ${item.body}`;
   }
 
   function openAppearanceModal() {
-    const cfg = { ...getDefaultAppearance(), ...siteAppearance };
-    tempDarkMode = Boolean(cfg.darkMode);
-
-    document.getElementById("themeColorPicker").value = cfg.accentColor || "#0f172a";
-    document.getElementById("themeColorHexInput").value = cfg.accentColor || "#0f172a";
+    tempDarkMode = Boolean(siteAppearance.darkMode);
+    document.getElementById("themeColorPicker").value = siteAppearance.accentColor || "#0f172a";
+    document.getElementById("themeColorHexInput").value = siteAppearance.accentColor || "#0f172a";
     document.getElementById("modeLightBtn").classList.toggle("active", !tempDarkMode);
     document.getElementById("modeDarkBtn").classList.toggle("active", tempDarkMode);
-
-    document.getElementById("bgImageUrlInput").value = cfg.bgImage || "";
-    document.getElementById("bgSizeSelect").value = cfg.bgSize || "cover";
-    document.getElementById("bgRepeatSelect").value = cfg.bgRepeat || "no-repeat";
-    document.getElementById("bgBrightnessRange").value = cfg.bgBrightness ?? 100;
-    document.getElementById("bgContrastRange").value = cfg.bgContrast ?? 100;
-    document.getElementById("overlayOpacityRange").value = cfg.overlayOpacity ?? 45;
-
-    document.getElementById("cardBgColorInput").value = cfg.cardBgColor || "";
-    if (/^#[0-9a-fA-F]{6}$/.test(cfg.cardBgColor)) {
-      document.getElementById("cardBgPicker").value = cfg.cardBgColor;
-    }
-
-    document.getElementById("textColorInput").value = cfg.textColor || "";
-    if (/^#[0-9a-fA-F]{6}$/.test(cfg.textColor)) {
-      document.getElementById("textColorPicker").value = cfg.textColor;
-    }
-
-    document.getElementById("innerBoxBgInput").value = cfg.innerBoxBg || "";
-    if (/^#[0-9a-fA-F]{6}$/.test(cfg.innerBoxBg)) {
-      document.getElementById("innerBoxBgPicker").value = cfg.innerBoxBg;
-    }
-
-    document.getElementById("innerBoxTextInput").value = cfg.innerBoxText || "";
-    if (/^#[0-9a-fA-F]{6}$/.test(cfg.innerBoxText)) {
-      document.getElementById("innerBoxTextPicker").value = cfg.innerBoxText;
-    }
-
-    document.getElementById("priceBoxBgInput").value = cfg.priceBoxBg || "";
-    if (/^#[0-9a-fA-F]{6}$/.test(cfg.priceBoxBg)) {
-      document.getElementById("priceBoxBgPicker").value = cfg.priceBoxBg;
-    }
-
-    document.getElementById("cardBorderColorInput").value = cfg.cardBorderColor || "";
-    if (/^#[0-9a-fA-F]{6}$/.test(cfg.cardBorderColor)) {
-      document.getElementById("cardBorderColorPicker").value = cfg.cardBorderColor;
-    }
-
-    document.getElementById("cardOpacityRange").value = cfg.cardOpacity ?? 72;
-    document.getElementById("cardBlurRange").value = cfg.cardBlur ?? 14;
-    document.getElementById("cardRadiusRange").value = cfg.cardRadius ?? 18;
-    document.getElementById("cardPaddingRange").value = cfg.cardPadding ?? 18;
-
-    livePreviewAppearance();
     document.getElementById("appearanceModal").classList.add("open");
   }
 
   function closeAppearanceModal() {
-    applySiteAppearance(siteAppearance);
     document.getElementById("appearanceModal").classList.remove("open");
   }
 
@@ -3689,36 +3240,31 @@ ${item.body}`;
     tempDarkMode = d;
     document.getElementById("modeLightBtn").classList.toggle("active", !d);
     document.getElementById("modeDarkBtn").classList.toggle("active", d);
-    livePreviewAppearance();
   }
 
   function onThemeColorChange(v) {
-    document.getElementById("themeColorPicker").value = v;
     document.getElementById("themeColorHexInput").value = v;
-    livePreviewAppearance();
   }
 
   function onThemeHexTyped(v) {
-    if (/^#[0-9a-fA-F]{6}$/.test(v)) {
-      document.getElementById("themeColorPicker").value = v;
-      livePreviewAppearance();
-    }
+    if (/^#[0-9a-fA-F]{6}$/.test(v)) document.getElementById("themeColorPicker").value = v;
   }
 
   function saveAppearanceForm(e) {
     e.preventDefault();
-    siteAppearance = readAppearanceFormValues();
+    const color = document.getElementById("themeColorPicker").value;
+    siteAppearance.darkMode = tempDarkMode;
+    siteAppearance.accentColor = color;
     saveAppearanceToStorage();
     applySiteAppearance(siteAppearance);
-    document.getElementById("appearanceModal").classList.remove("open");
-    showToast("تم حفظ وتطبيق إعدادات المظهر بنجاح");
+    closeAppearanceModal();
+    showToast("تم حفظ إعدادات المظهر");
     pushDataToCloud(false);
   }
 
   function exportCSV() {
     const rows = [["المنطقة", "الفرع", "السعر"], ...activeData.map(d => [d.area, d.branch, d.price])];
-    const csv = "﻿" + rows.map(r => r.join(",")).join("
-");
+    const csv = "\uFEFF" + rows.map(r => r.join(",")).join("\n");
     const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
     const a = document.createElement("a");
     a.href = URL.createObjectURL(blob);
@@ -3776,7 +3322,7 @@ ${item.body}`;
     setSyncIndicator(true, "جاهز");
     pullDataFromCloud(false);
   });
-</script>
+</script></script>
 
 <script>
   function toggleMapSize() {
