@@ -3678,13 +3678,16 @@ t">149</span>
   function dismissOpeningPresentation() {
     const splash = document.getElementById("splashPresentation");
     const container = document.querySelector(".container");
-    if (splash && !splash.classList.contains("hide-splash")) {
+    if (splash) {
       splash.classList.add("hide-splash");
+      splash.style.pointerEvents = "none";
       setTimeout(() => {
         if (splash && splash.parentNode) splash.remove();
-      }, 700);
+      }, 500);
     }
-    if (container && !container.classList.contains("app-revealed")) {
+    if (container) {
+      container.style.opacity = "1";
+      container.style.transform = "none";
       container.classList.add("app-revealed");
     }
   }
@@ -4031,20 +4034,35 @@ document.getElementById("mapSearchInput")?.addEventListener("input", () => {
   renderMapMarkers(true);
 });
 
-  window.addEventListener("DOMContentLoaded", async () => {
-    applySiteAppearance(siteAppearance);
-    applyAdminUI();
-    updateTopTabCounts();
-    renderChips();
-    renderCards();
-    renderMenuChips();
-    renderMenuCards();
+  window.addEventListener("DOMContentLoaded", () => {
+    const splashEl = document.getElementById("splashPresentation");
+    if (splashEl) {
+      splashEl.addEventListener("click", dismissOpeningPresentation);
+    }
 
-    // Smooth luxury presentation reveal
-    setTimeout(dismissOpeningPresentation, 1600);
+    const safeRun = (fn) => {
+      try { fn(); } catch (e) { console.warn("Init step warning:", e); }
+    };
 
-    setSyncIndicator(true, "جاري التحقق من أحدث البيانات...");
-    await fetchPublicStoreForVisitors();
+    safeRun(() => applySiteAppearance(siteAppearance));
+    safeRun(() => applyAdminUI());
+    safeRun(() => updateTopTabCounts());
+    safeRun(() => renderChips());
+    safeRun(() => renderCards());
+    safeRun(() => renderMenuChips());
+    safeRun(() => renderMenuCards());
+
+    // Ensure splash never stalls entry
+    setTimeout(dismissOpeningPresentation, 900);
+    setTimeout(dismissOpeningPresentation, 2200);
+
+    if (typeof fetchPublicStoreForVisitors === "function") {
+      setSyncIndicator(true, "جاري التحقق من أحدث البيانات...");
+      Promise.resolve(fetchPublicStoreForVisitors()).catch((e) => {
+        console.warn("Background store sync warning:", e);
+        setSyncIndicator(false, "وضع العرض المحلي");
+      });
+    }
   });
 </script>
 
