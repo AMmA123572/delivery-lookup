@@ -32,6 +32,10 @@
       --bg-repeat: no-repeat;
       --bg-brightness: 100%;
       --bg-contrast: 100%;
+      --card-bg-override: "";
+      --inner-box-bg: rgba(248, 250, 252, 0.85);
+      --inner-box-border: #e2e8f0;
+      --tab-bg-override: "";
     }
 
     body[data-mode="dark"] {
@@ -43,6 +47,8 @@
       --border: #334155;
       --shadow-sm: 0 8px 28px rgba(0, 0, 0, 0.36);
       --bg-overlay: rgba(11, 17, 32, 0.55);
+      --inner-box-bg: rgba(15, 23, 42, 0.72);
+      --inner-box-border: rgba(148, 163, 184, 0.25);
     }
 
     * {
@@ -89,7 +95,7 @@
     .area-card,
     .search-wrapper,
     .empty-state {
-      background: rgba(var(--surface-rgb), var(--card-alpha)) !important;
+      background: var(--card-bg-override, rgba(var(--surface-rgb), var(--card-alpha))) !important;
       backdrop-filter: blur(var(--card-blur)) saturate(150%);
       -webkit-backdrop-filter: blur(var(--card-blur)) saturate(150%);
       border: 1.5px solid rgba(255, 255, 255, var(--border-alpha)) !important;
@@ -115,10 +121,15 @@
     }
 
     .main-tabs {
-      background: rgba(var(--surface-rgb), 0.65);
+      background: var(--tab-bg-override, rgba(var(--surface-rgb), 0.65));
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
       border: 1px solid rgba(148, 163, 184, 0.25);
+    }
+
+    .item-contents-box {
+      background: var(--inner-box-bg);
+      border-color: var(--inner-box-border);
     }
 
     .main-tab-btn.active,
@@ -1282,7 +1293,140 @@
     .view-section.hidden {
       display: none;
     }
-  </style>
+  /* ==================== INTERACTIVE MAP & GLASS MARKERS ==================== */
+.map-shell {
+  position: relative;
+  width: 100%;
+  height: 74vh;
+  min-height: 520px;
+  border-radius: 22px;
+  overflow: hidden;
+  border: 1.5px solid rgba(255, 255, 255, var(--border-alpha));
+  box-shadow: var(--shadow-sm);
+}
+
+#deliveryMap {
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+body[data-mode="dark"] .leaflet-tile-pane {
+  filter: invert(100%) hue-rotate(180deg) brightness(92%) contrast(92%);
+}
+
+.map-glass-card {
+  background: rgba(var(--surface-rgb), calc(var(--card-alpha) * 0.94 + 0.06));
+  backdrop-filter: blur(var(--card-blur)) saturate(160%);
+  -webkit-backdrop-filter: blur(var(--card-blur)) saturate(160%);
+  border: 1.5px solid rgba(255, 255, 255, 0.55);
+  border-radius: 14px;
+  padding: 6px 10px;
+  box-shadow: 0 8px 22px rgba(15, 23, 42, 0.22);
+  color: var(--text-main);
+  min-width: 126px;
+  max-width: 175px;
+  text-align: right;
+  direction: rtl;
+  transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+  cursor: pointer;
+}
+
+body[data-mode="dark"] .map-glass-card {
+  border-color: rgba(148, 163, 184, 0.35);
+}
+
+.map-glass-card:hover {
+  transform: translateY(-3px) scale(1.04);
+  z-index: 900 !important;
+}
+
+.map-glass-card.highlighted {
+  border: 2.5px solid #10b981 !important;
+  box-shadow: 0 0 0 6px rgba(16, 185, 129, 0.28), 0 14px 32px rgba(16, 185, 129, 0.45) !important;
+  transform: scale(1.13);
+  animation: mapCardPulse 1.5s infinite;
+}
+
+@keyframes mapCardPulse {
+  0%, 100% { box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.35), 0 10px 26px rgba(16, 185, 129, 0.4); }
+  50% { box-shadow: 0 0 0 11px rgba(16, 185, 129, 0.08), 0 14px 34px rgba(16, 185, 129, 0.55); }
+}
+
+.mgc-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  margin-bottom: 3px;
+}
+
+.mgc-branch {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.mgc-price {
+  background: var(--accent-color);
+  color: var(--accent-text);
+  font-size: 0.74rem;
+  font-weight: 900;
+  padding: 1px 7px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.mgc-area {
+  font-size: 0.85rem;
+  font-weight: 900;
+  line-height: 1.25;
+  color: var(--text-main);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.branch-hub-pin {
+  background: #0f172a;
+  color: #ffffff;
+  border: 2px solid #facc15;
+  border-radius: 999px;
+  padding: 5px 11px;
+  font-size: 0.76rem;
+  font-weight: 900;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.map-overlay-legend {
+  position: absolute;
+  bottom: 14px;
+  right: 14px;
+  z-index: 500;
+  background: rgba(var(--surface-rgb), 0.84);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  border-radius: 14px;
+  padding: 8px 12px;
+  font-size: 0.76rem;
+  font-weight: 800;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  max-width: calc(100% - 28px);
+}
+</style>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 </head>
 <body>
 
@@ -1306,12 +1450,48 @@
       <button type="button" class="main-tab-btn active" id="tabDeliveryBtn" onclick="switchMainSection('delivery')">
         <span>🛵</span>
         <span>التوصيل والأفرع</span>
-        <span class="tab-pill-count" id="deliveryTabCount">149</span>
+        <span class="tab-pill-count" id="deliveryTabCoun  <!-- ==================== SECTION 3: INTERACTIVE MAP ==================== -->
+  <div id="mapSection" class="view-section hidden">
+    <div class="search-wrapper">
+      <span class="search-icon">🗺️</span>
+      <input
+        type="text"
+        id="mapSearchInput"
+        class="search-input"
+        placeholder="ابحث عن منطقة أو معلم مضاف للانتقال إليه وتمييز بطاقته... (مثلاً: خلدا، عبدون، تلاع العلي)"
+        autocomplete="off"
+      />
+      <button type="button" class="esc-btn" onclick="clearMapSearch()">مسح البحث</button>
+      <button type="button" class="btn-m btn-m-primary" onclick="resetMapView()">🎯 وسط عمّان</button>
+    </div>
+
+    <div class="filters-bar" id="mapFiltersBar"></div>
+
+    <div class="map-shell">
+      <div id="deliveryMap"></div>
+      <div class="map-overlay-legend" id="mapLegendBar">
+        <span>🏪 الأفرع:</span>
+        <span><i class="chip-dot" style="background:#2563eb"></i> المدينة المنورة</span>
+        <span><i class="chip-dot" style="background:#f59e0b"></i> غوشة</span>
+        <span><i class="chip-dot" style="background:#f43f5e"></i> دابوق</span>
+        <span><i class="chip-dot" style="background:#8b5cf6"></i> جبيهة</span>
+        <span><i class="chip-dot" style="background:#0d9488"></i> صويفية</span>
+        <span><i class="chip-dot" style="background:#ec4899"></i> المقابلين</span>
+      </div>
+    </div>
+  </div>
+
+t">149</span>
       </button>
       <button type="button" class="main-tab-btn" id="tabMenuBtn" onclick="switchMainSection('menu')">
         <span>🍽️</span>
         <span>الأصناف ومحتوياتها</span>
         <span class="tab-pill-count" id="menuTabCount">0</span>
+      </button>
+      <button type="button" class="main-tab-btn" id="tabMapBtn" onclick="switchMainSection('map')">
+        <span>🗺️</span>
+        <span>الخريطة التفاعلية</span>
+        <span class="tab-pill-count" id="mapTabCount">0</span>
       </button>
     </div>
 
@@ -1422,6 +1602,20 @@
       <div class="form-group">
         <label class="form-label" for="areaPriceInput">قيمة توصيل المنطقة (دينار)</label>
         <input type="number" id="areaPriceInput" class="form-control" step="0.05" min="0" placeholder="مثال: 2.50" required />
+      </div>
+
+      <div class="grid-2-cols">
+        <div class="form-group">
+          <label class="form-label" for="areaLatInput">خط العرض (Latitude) - اختياري</label>
+          <input type="number" id="areaLatInput" class="form-control ltr" step="any" placeholder="31.9850" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="areaLngInput">خط الطول (Longitude) - اختياري</label>
+          <input type="number" id="areaLngInput" class="form-control ltr" step="any" placeholder="35.8650" />
+        </div>
+      </div>
+      <div class="help-note">
+        يمكنك نسخ الإحداثيات من خرائط جوجل أو النقر مباشرة على الخريطة التفاعلية لالتقاط الإحداثيات تلقائياً.
       </div>
 
       <div class="modal-actions">
@@ -1619,6 +1813,36 @@
             <button type="button" class="preset-dot-btn" style="background:#0891b2;" onclick="onThemeColorChange('#0891b2')" title="سماوي"></button>
             <button type="button" class="preset-dot-btn" style="background:#db2777;" onclick="onThemeColorChange('#db2777')" title="وردي"></button>
           </div>
+        </div>
+      </div>
+
+      <!-- 2b. Custom Colors for Cards, Inner Contents Box & Top Tabs -->
+      <div class="grid-2-cols">
+        <div class="form-group">
+          <label class="form-label" for="cardBgColorPicker">لون البطاقة الرئيسية</label>
+          <div class="color-picker-row">
+            <input type="color" id="cardBgColorPicker" class="color-wheel-input" value="#1e293b" oninput="onCustomColorInput('cardBgColorPicker', 'cardBgColorHex')" />
+            <input type="text" id="cardBgColorHex" class="form-control ltr" style="width:105px;" placeholder="تلقائي" maxlength="7" oninput="onCustomHexTyped('cardBgColorHex', 'cardBgColorPicker')" />
+            <button type="button" class="btn-m btn-m-light" style="padding:6px 10px;" onclick="clearCustomColorField('cardBgColorHex')">تلقائي</button>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="innerBoxColorPicker">لون مربع محتويات الصنف الداخلي</label>
+          <div class="color-picker-row">
+            <input type="color" id="innerBoxColorPicker" class="color-wheel-input" value="#0f172a" oninput="onCustomColorInput('innerBoxColorPicker', 'innerBoxColorHex')" />
+            <input type="text" id="innerBoxColorHex" class="form-control ltr" style="width:105px;" placeholder="تلقائي" maxlength="7" oninput="onCustomHexTyped('innerBoxColorHex', 'innerBoxColorPicker')" />
+            <button type="button" class="btn-m btn-m-light" style="padding:6px 10px;" onclick="clearCustomColorField('innerBoxColorHex')">تلقائي</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="tabsBgColorPicker">لون شريط التبويبات العلوي (التوصيل / الأصناف)</label>
+        <div class="color-picker-row">
+          <input type="color" id="tabsBgColorPicker" class="color-wheel-input" value="#1e293b" oninput="onCustomColorInput('tabsBgColorPicker', 'tabsBgColorHex')" />
+          <input type="text" id="tabsBgColorHex" class="form-control ltr" style="width:115px;" placeholder="تلقائي" maxlength="7" oninput="onCustomHexTyped('tabsBgColorHex', 'tabsBgColorPicker')" />
+          <button type="button" class="btn-m btn-m-light" style="padding:6px 10px;" onclick="clearCustomColorField('tabsBgColorHex')">تلقائي</button>
         </div>
       </div>
 
@@ -1907,10 +2131,27 @@
   let siteAppearance = loadSavedAppearance();
   let tempDarkMode = Boolean(siteAppearance.darkMode);
 
+  function hexToRgba(hexColor, alpha) {
+    const clean = (hexColor || "").replace("#", "").trim();
+    if (!/^[0-9a-fA-F]{6}$/.test(clean)) return "";
+    const r = parseInt(clean.substring(0, 2), 16);
+    const g = parseInt(clean.substring(2, 4), 16);
+    const b = parseInt(clean.substring(4, 6), 16);
+    return `rgba(${r}, ${g}, ${b}, ${Number(alpha).toFixed(2)})`;
+  }
+
+  function normalizeHexOrEmpty(val) {
+    const clean = String(val || "").trim();
+    return /^#[0-9a-fA-F]{6}$/.test(clean) ? clean.toLowerCase() : "";
+  }
+
   function getDefaultAppearance() {
     return {
       darkMode: false,
       accentColor: "#0f172a",
+      cardColor: "",
+      innerBoxColor: "",
+      tabsColor: "",
       cardOpacity: 72,
       cardBlur: 14,
       bgImage: "",
@@ -1943,6 +2184,9 @@
     return {
       darkMode: dark,
       accentColor: accent,
+      cardColor: normalizeHexOrEmpty(rawObj.cardColor),
+      innerBoxColor: normalizeHexOrEmpty(rawObj.innerBoxColor),
+      tabsColor: normalizeHexOrEmpty(rawObj.tabsColor),
       cardOpacity: rawObj.cardOpacity !== undefined ? Math.min(100, Math.max(15, Number(rawObj.cardOpacity))) : def.cardOpacity,
       cardBlur: rawObj.cardBlur !== undefined ? Math.min(30, Math.max(0, Number(rawObj.cardBlur))) : def.cardBlur,
       bgImage: String(rawObj.bgImage || ""),
@@ -1998,6 +2242,26 @@
     rootStyle.setProperty("--card-alpha", cardAlpha);
     rootStyle.setProperty("--card-blur", `${cfg.cardBlur}px`);
 
+    if (cfg.cardColor) {
+      rootStyle.setProperty("--card-bg-override", hexToRgba(cfg.cardColor, Number(cardAlpha)));
+    } else {
+      rootStyle.removeProperty("--card-bg-override");
+    }
+
+    if (cfg.innerBoxColor) {
+      rootStyle.setProperty("--inner-box-bg", hexToRgba(cfg.innerBoxColor, 0.86));
+      rootStyle.setProperty("--inner-box-border", cfg.innerBoxColor);
+    } else {
+      rootStyle.removeProperty("--inner-box-bg");
+      rootStyle.removeProperty("--inner-box-border");
+    }
+
+    if (cfg.tabsColor) {
+      rootStyle.setProperty("--tab-bg-override", hexToRgba(cfg.tabsColor, 0.82));
+    } else {
+      rootStyle.removeProperty("--tab-bg-override");
+    }
+
     // Background overlay tint
     const overlayAlpha = (cfg.overlayOpacity / 100).toFixed(2);
     const baseRgb = cfg.darkMode ? "11, 17, 32" : "241, 245, 249";
@@ -2028,28 +2292,38 @@
 
   function switchMainSection(section) {
     activeMainSection = section;
-    const isDelivery = section === "delivery";
     const delEl = document.getElementById("deliverySection");
     const menuEl = document.getElementById("menuSection");
-    delEl.classList.toggle("hidden", !isDelivery);
-    menuEl.classList.toggle("hidden", isDelivery);
-    document.getElementById("tabDeliveryBtn").classList.toggle("active", isDelivery);
-    document.getElementById("tabMenuBtn").classList.toggle("active", !isDelivery);
+    const mapEl = document.getElementById("mapSection");
+    delEl.classList.toggle("hidden", section !== "delivery");
+    menuEl.classList.toggle("hidden", section !== "menu");
+    mapEl.classList.toggle("hidden", section !== "map");
+    document.getElementById("tabDeliveryBtn").classList.toggle("active", section === "delivery");
+    document.getElementById("tabMenuBtn").classList.toggle("active", section === "menu");
+    if (document.getElementById("tabMapBtn")) {
+      document.getElementById("tabMapBtn").classList.toggle("active", section === "map");
+    }
 
-    if (isDelivery) {
+    if (section === "delivery") {
       renderChips();
       renderCards();
       triggerSectionAnimation(delEl);
-    } else {
+    } else if (section === "menu") {
       renderMenuChips();
       renderMenuCards();
       triggerSectionAnimation(menuEl);
+    } else if (section === "map") {
+      triggerSectionAnimation(mapEl);
+      initDeliveryMap();
+      renderMapMarkers(false);
     }
   }
 
   function updateTopTabCounts() {
     document.getElementById("deliveryTabCount").textContent = activeData.length;
     document.getElementById("menuTabCount").textContent = menuItems.length;
+    const mapCnt = document.getElementById("mapTabCount");
+    if (mapCnt) mapCnt.textContent = activeData.length;
   }
 
   function getCloudConfig() {
@@ -2145,11 +2419,20 @@
 
   function normalizeEntries(arr) {
     return arr
-      .map(item => ({
-        area: String(item.area || "").trim(),
-        branch: cleanBranchName(String(item.branch || "")),
-        price: Number(item.price)
-      }))
+      .map(item => {
+        const obj = {
+          area: String(item.area || "").trim(),
+          branch: cleanBranchName(String(item.branch || "")),
+          price: Number(item.price)
+        };
+        if (item.lat !== undefined && item.lat !== "" && !isNaN(Number(item.lat))) {
+          obj.lat = Number(item.lat);
+        }
+        if (item.lng !== undefined && item.lng !== "" && !isNaN(Number(item.lng))) {
+          obj.lng = Number(item.lng);
+        }
+        return obj;
+      })
       .filter(item => item.area && item.branch && !isNaN(item.price));
   }
 
@@ -2874,6 +3157,8 @@
     ensureBranchOption(defaultBranch);
     document.getElementById("areaBranchSelect").value = defaultBranch;
     document.getElementById("areaPriceInput").value = "";
+    if (document.getElementById("areaLatInput")) document.getElementById("areaLatInput").value = "";
+    if (document.getElementById("areaLngInput")) document.getElementById("areaLngInput").value = "";
 
     document.getElementById("areaModal").classList.add("open");
     setTimeout(() => document.getElementById("areaNameInput").focus(), 40);
@@ -2893,6 +3178,8 @@
     document.getElementById("areaNameInput").value = item.area;
     document.getElementById("areaBranchSelect").value = branchClean;
     document.getElementById("areaPriceInput").value = Number(item.price);
+    if (document.getElementById("areaLatInput")) document.getElementById("areaLatInput").value = item.lat ?? "";
+    if (document.getElementById("areaLngInput")) document.getElementById("areaLngInput").value = item.lng ?? "";
 
     document.getElementById("areaModal").classList.add("open");
     setTimeout(() => document.getElementById("areaNameInput").focus(), 40);
@@ -2934,17 +3221,27 @@
       return;
     }
 
+    const latRaw = document.getElementById("areaLatInput")?.value;
+    const lngRaw = document.getElementById("areaLngInput")?.value;
+    const latVal = latRaw !== "" && latRaw !== undefined ? parseFloat(latRaw) : NaN;
+    const lngVal = lngRaw !== "" && lngRaw !== undefined ? parseFloat(lngRaw) : NaN;
+    const entryObj = { area, branch, price };
+    if (!isNaN(latVal) && !isNaN(lngVal)) {
+      entryObj.lat = latVal;
+      entryObj.lng = lngVal;
+    }
+
     let msg = "تمت إضافة المنطقة الجديدة";
     if (editingItemRef) {
       const targetIdx = activeData.indexOf(editingItemRef);
       if (targetIdx !== -1) {
-        activeData[targetIdx] = { area, branch, price };
+        activeData[targetIdx] = entryObj;
         msg = "تم حفظ التعديلات على المنطقة";
       } else {
-        activeData.push({ area, branch, price });
+        activeData.push(entryObj);
       }
     } else {
-      activeData.push({ area, branch, price });
+      activeData.push(entryObj);
     }
 
     closeAreaModal();
@@ -3078,6 +3375,27 @@
   });
 
   /* ==================== APPEARANCE & THEME FUNCTIONS ==================== */
+  function onCustomColorInput(pickerId, hexId) {
+    const val = document.getElementById(pickerId).value;
+    document.getElementById(hexId).value = val;
+    updateLivePreviewFromControls();
+  }
+
+  function onCustomHexTyped(hexId, pickerId) {
+    const clean = document.getElementById(hexId).value.trim();
+    if (/^#[0-9a-fA-F]{6}$/.test(clean)) {
+      document.getElementById(pickerId).value = clean;
+      updateLivePreviewFromControls();
+    } else if (clean === "") {
+      updateLivePreviewFromControls();
+    }
+  }
+
+  function clearCustomColorField(hexId) {
+    document.getElementById(hexId).value = "";
+    updateLivePreviewFromControls();
+  }
+
   function populateAppearanceControls(cfg) {
     const c = normalizeAppearanceObj(cfg);
     tempDarkMode = c.darkMode;
@@ -3086,6 +3404,15 @@
 
     document.getElementById("themeColorPicker").value = c.accentColor;
     document.getElementById("themeColorHexInput").value = c.accentColor;
+
+    document.getElementById("cardBgColorPicker").value = c.cardColor || (c.darkMode ? "#1e293b" : "#ffffff");
+    document.getElementById("cardBgColorHex").value = c.cardColor || "";
+
+    document.getElementById("innerBoxColorPicker").value = c.innerBoxColor || (c.darkMode ? "#0f172a" : "#f8fafc");
+    document.getElementById("innerBoxColorHex").value = c.innerBoxColor || "";
+
+    document.getElementById("tabsBgColorPicker").value = c.tabsColor || (c.darkMode ? "#1e293b" : "#e2e8f0");
+    document.getElementById("tabsBgColorHex").value = c.tabsColor || "";
 
     document.getElementById("cardOpacityRange").value = c.cardOpacity;
     document.getElementById("cardOpacityLabel").textContent = `${c.cardOpacity}%`;
@@ -3126,6 +3453,9 @@
     return normalizeAppearanceObj({
       darkMode: tempDarkMode,
       accentColor: hex,
+      cardColor: document.getElementById("cardBgColorHex").value.trim(),
+      innerBoxColor: document.getElementById("innerBoxColorHex").value.trim(),
+      tabsColor: document.getElementById("tabsBgColorHex").value.trim(),
       cardOpacity: Number(document.getElementById("cardOpacityRange").value),
       cardBlur: Number(document.getElementById("cardBlurRange").value),
       bgImage: document.getElementById("bgImageUrlInput").value.trim(),
@@ -3358,6 +3688,348 @@
       container.classList.add("app-revealed");
     }
   }
+
+
+/* ==================== INTERACTIVE MAP, GLASS CARDS & SEARCH FOCUS ==================== */
+const BRANCH_COORDS = {
+  "المدينة المنورة": { lat: 31.9885, lng: 35.8695 },
+  "غوشة": { lat: 31.9545, lng: 35.8565 },
+  "دابوق": { lat: 31.9955, lng: 35.8180 },
+  "جبيهة": { lat: 32.0245, lng: 35.8685 },
+  "صويفية": { lat: 31.9570, lng: 35.8630 },
+  "المقابلين": { lat: 31.9078, lng: 35.9359 }
+};
+
+const KNOWN_AREA_COORDS = {
+  "الجاردنز": [31.9892, 35.8758],
+  "تلاع العلي": [31.9965, 35.8632],
+  "المدينة الرياضية": [31.9854, 35.9012],
+  "ضاحية الرشيد": [32.0085, 35.8825],
+  "شارع الجامعة": [32.0052, 35.8725],
+  "خلدا": [31.9985, 35.8395],
+  "العبدلي": [31.9645, 35.9082],
+  "ضاحية الروضة": [31.9875, 35.8860],
+  "عرجان": [31.9912, 35.9155],
+  "طلوع نفين": [32.0040, 35.8640],
+  "جبل الحسين": [31.9665, 35.9165],
+  "شميساني": [31.9745, 35.8995],
+  "الرابية": [31.9752, 35.8768],
+  "ضاحية الاستقلال": [31.9825, 35.9265],
+  "ضاحية الاقصي": [31.9880, 35.9360],
+  "ضاحية الامير حسن": [31.9735, 35.9410],
+  "ماركا الشماليه": [31.9945, 35.9750],
+  "ماركا الجنوبيه": [31.9715, 35.9765],
+  "الهاشمي": [31.9685, 35.9485],
+  "طلوع هافانا": [31.9860, 35.8680],
+  "جبل النزهه": [31.9795, 35.9325],
+  "السابع": [31.9535, 35.8548],
+  "دير غبار": [31.9465, 35.8625],
+  "ام اذينه": [31.9625, 35.8735],
+  "الثامن": [31.9522, 35.8425],
+  "الجندويل": [31.9565, 35.8345],
+  "عبدون": [31.9468, 35.8835],
+  "جبل عمان": [31.9520, 35.9165],
+  "الرابع": [31.9595, 35.8925],
+  "الخامس": [31.9575, 35.8815],
+  "السادس": [31.9555, 35.8695],
+  "الكرسي": [31.9665, 35.8315],
+  "مرج الحمام": [31.9015, 35.8515],
+  "اللويبده": [31.9575, 35.9245],
+  "جبل اللويبده": [31.9575, 35.9245],
+  "البيادر": [31.9535, 35.8245],
+  "البيادر الصناعه": [31.9465, 35.8220],
+  "الامير راشد": [31.9685, 35.8475],
+  "ام السماق": [31.9765, 35.8485],
+  "الروابي": [31.9615, 35.8515],
+  "شارع مكه": [31.9725, 35.8575],
+  "وادي صقره": [31.9645, 35.8965],
+  "ماحص": [32.0125, 35.7645],
+  "الفحيص": [32.0085, 35.7815],
+  "الفردوس": [31.9895, 35.8055],
+  "ام الاسود": [31.9815, 35.7895],
+  "الرباحيه الشماليه": [31.9795, 35.8295],
+  "الرباحيه الجنوبيه": [31.9725, 35.8265],
+  "صافوط": [32.0385, 35.8265],
+  "الحمر": [32.0155, 35.7985],
+  "صويلح": [32.0255, 35.8385],
+  "الكماليه": [32.0245, 35.8145],
+  "ديره هلي": [31.9925, 35.8140],
+  "المشرق": [31.9960, 35.8240],
+  "المدينه الطبيه": [31.9815, 35.8285],
+  "باب الهوا": [32.0185, 35.7745],
+  "بدر الجديده": [31.9525, 35.7795],
+  "السرو": [32.0365, 35.7895],
+  "عين الباشا": [32.0545, 35.8315],
+  "البقعه": [32.0715, 35.8385],
+  "ابو نصير": [32.0525, 35.8815],
+  "شفابدران": [32.0595, 35.9085],
+  "الكوم": [32.0435, 35.9025],
+  "حي المنصور": [32.0215, 35.8775],
+  "اشاره النبعه": [32.0315, 35.8885],
+  "حي الخزنه": [32.0385, 35.8945],
+  "ضاحيه الامام الغزالي": [32.0325, 35.8745],
+  "حي ام زويتينه": [32.0165, 35.8795],
+  "طبربور": [32.0085, 35.9445],
+  "بيرين": [32.0945, 35.9565],
+  "قريه ابو نصير": [32.0465, 35.8695],
+  "وادي عبدون": [31.9435, 35.8945],
+  "حي الصحابه": [31.9510, 35.8740],
+  "حي الرونق": [31.9495, 35.8365],
+  "ابو السوس": [31.9365, 35.8195],
+  "كردور عبدون": [31.9315, 35.8885],
+  "ضاحيه الحسين": [31.9685, 35.8665],
+  "الظهير": [31.9445, 35.8475],
+  "ربوه عبدون": [31.9415, 35.8785],
+  "حي السهل": [31.9530, 35.8605],
+  "وادي السير": [31.9545, 35.8145],
+  "ضاحيه الحاج حسن": [31.9185, 35.9285],
+  "جبل الزهور": [31.9265, 35.9365],
+  "ضاحيه الياسمين": [31.9155, 35.9165],
+  "شارع الاذاعه": [31.9135, 35.9295],
+  "الوحدات": [31.9315, 35.9385],
+  "دوار الشرق الاوسط": [31.9295, 35.9455],
+  "الدبايبه": [31.9195, 35.9415],
+  "الاشرفيه": [31.9395, 35.9415],
+  "جبل الجوفه": [31.9465, 35.9385],
+  "ابو علندا": [31.9045, 35.9645],
+  "جبل الحديد": [31.9245, 35.9515],
+  "القويسمه": [31.9185, 35.9565],
+  "ام قصير": [31.8985, 35.9225],
+  "كليه ناعور": [31.8895, 35.8785],
+  "ناعور": [31.8745, 35.8265],
+  "جبل المريخ": [31.9345, 35.9525],
+  "البنيات": [31.8935, 35.8965],
+  "الجمرك": [31.8965, 35.9395],
+  "الحويان": [31.8865, 35.9445],
+  "الحمايده": [31.8915, 35.9485],
+  "كليه حطين": [31.8845, 35.9345],
+  "ام الحيران": [31.9025, 35.9315],
+  "العلكوميه": [31.8815, 35.9245],
+  "اليادوده": [31.8565, 35.9215],
+  "حي الباير": [31.9085, 35.9215],
+  "حي نزال": [31.9325, 35.9145],
+  "جبل الاخضر": [31.9365, 35.9215],
+  "الذراع": [31.9285, 35.9185],
+  "ضاحيه الفاروق": [31.9245, 35.9085],
+  "ضاحيه الامير علي": [31.9215, 35.9225],
+  "الجويده": [31.8945, 35.9545],
+  "خريبه السوق": [31.8785, 35.9485],
+  "المهاجرين": [31.9465, 35.9265],
+  "راس العين": [31.9435, 35.9315],
+  "طلوع المصدار": [31.9415, 35.9365],
+  "جبل النظيف": [31.9385, 35.9285],
+  "جاوا": [31.8695, 35.9615],
+  "نادي الجواد العربي": [31.8765, 35.9145],
+  "غمدان": [31.8645, 35.9045],
+  "منتزه عمان": [31.8585, 35.8965],
+  "وادي الرمم": [31.9395, 35.9465],
+  "القسطل": [31.7465, 35.9385],
+  "المدارس العالميه": [31.8825, 35.8945],
+  "ام العمد": [31.7865, 35.8845],
+  "ام الكندم": [31.8685, 35.8865],
+  "الاندلسيه": [31.8165, 35.8765]
+};
+
+let leafletMap = null;
+let mapMarkersLayer = null;
+let mapBranchesLayer = null;
+let selectedMapBranch = "الكل";
+let highlightedMapKey = "";
+
+function resolveAreaCoords(item, indexOffset = 0) {
+  if (item.lat !== undefined && item.lng !== undefined && !isNaN(Number(item.lat)) && !isNaN(Number(item.lng))) {
+    return { lat: Number(item.lat), lng: Number(item.lng), exact: true };
+  }
+  const norm = normalizeArabic(item.area);
+  if (KNOWN_AREA_COORDS[norm]) {
+    const [lat, lng] = KNOWN_AREA_COORDS[norm];
+    return { lat, lng, exact: true };
+  }
+  const bClean = cleanBranchName(item.branch);
+  const hub = BRANCH_COORDS[bClean] || { lat: 31.9539, lng: 35.9106 };
+  const angle = ((indexOffset * 137.5) % 360) * (Math.PI / 180);
+  const radius = 0.004 + ((indexOffset % 5) * 0.0018);
+  return {
+    lat: Number((hub.lat + Math.cos(angle) * radius).toFixed(5)),
+    lng: Number((hub.lng + Math.sin(angle) * radius).toFixed(5)),
+    exact: false
+  };
+}
+
+function initDeliveryMap() {
+  if (leafletMap) {
+    setTimeout(() => leafletMap.invalidateSize(), 120);
+    return;
+  }
+  if (typeof L === "undefined") return;
+
+  leafletMap = L.map("deliveryMap", {
+    center: [31.9539, 35.9106],
+    zoom: 12,
+    zoomControl: true
+  });
+
+  L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", {
+    attribution: "&copy; OpenStreetMap",
+    maxZoom: 19
+  }).addTo(leafletMap);
+
+  mapBranchesLayer = L.layerGroup().addTo(leafletMap);
+  mapMarkersLayer = L.layerGroup().addTo(leafletMap);
+
+  leafletMap.on("click", (e) => {
+    const latStr = e.latlng.lat.toFixed(6);
+    const lngStr = e.latlng.lng.toFixed(6);
+    if (document.getElementById("areaModal")?.classList.contains("open")) {
+      const latInp = document.getElementById("areaLatInput");
+      const lngInp = document.getElementById("areaLngInput");
+      if (latInp) latInp.value = latStr;
+      if (lngInp) lngInp.value = lngStr;
+      showToast(`تم التقاط الإحداثيات: ${latStr}, ${lngStr}`);
+    } else if (isAdminUnlocked) {
+      navigator.clipboard?.writeText(`${latStr}, ${lngStr}`);
+      showToast(`تم نسخ الإحداثيات: ${latStr}, ${lngStr}`);
+    }
+  });
+
+  renderMapBranchHubs();
+  renderMapChips();
+  renderMapMarkers();
+}
+
+function renderMapBranchHubs() {
+  if (!mapBranchesLayer || typeof L === "undefined") return;
+  mapBranchesLayer.clearLayers();
+  Object.entries(BRANCH_COORDS).forEach(([bName, coords]) => {
+    const color = getBranchColor(bName);
+    const icon = L.divIcon({
+      className: "",
+      html: `<div class="branch-hub-pin"><span class="chip-dot" style="background:${color}"></span><span>فرع ${bName}</span></div>`,
+      iconSize: [120, 30],
+      iconAnchor: [60, 15]
+    });
+    L.marker([coords.lat, coords.lng], { icon, zIndexOffset: 1000 }).addTo(mapBranchesLayer);
+  });
+}
+
+function renderMapChips() {
+  const bar = document.getElementById("mapFiltersBar");
+  if (!bar) return;
+  const branches = ["الكل", ...Object.keys(BRANCH_COORDS)];
+  bar.innerHTML = branches.map(b => {
+    const active = selectedMapBranch === b ? "active" : "";
+    const dot = b !== "الكل" ? `<span class="chip-dot" style="background:${getBranchColor(b)}"></span>` : "";
+    return `<button type="button" class="chip ${active}" onclick="selectMapBranch('${b}')">${dot}<span>${b}</span></button>`;
+  }).join("");
+}
+
+function selectMapBranch(branch) {
+  selectedMapBranch = branch;
+  renderMapChips();
+  renderMapMarkers();
+  if (branch !== "الكل" && BRANCH_COORDS[branch] && leafletMap) {
+    leafletMap.flyTo([BRANCH_COORDS[branch].lat, BRANCH_COORDS[branch].lng], 13, { duration: 0.9 });
+  }
+}
+
+function resetMapView() {
+  highlightedMapKey = "";
+  if (leafletMap) leafletMap.flyTo([31.9539, 35.9106], 12, { duration: 0.8 });
+  renderMapMarkers();
+}
+
+function clearMapSearch() {
+  const inp = document.getElementById("mapSearchInput");
+  if (inp) inp.value = "";
+  highlightedMapKey = "";
+  renderMapMarkers();
+}
+
+function renderMapMarkers(autoFocusMatch = false) {
+  if (!mapMarkersLayer || !leafletMap || typeof L === "undefined") return;
+  mapMarkersLayer.clearLayers();
+
+  const query = normalizeArabic(document.getElementById("mapSearchInput")?.value || "");
+  const grouped = new Map();
+
+  activeData.forEach((item, idx) => {
+    const bName = cleanBranchName(item.branch);
+    if (selectedMapBranch !== "الكل" && bName !== selectedMapBranch) return;
+    const key = normalizeArabic(item.area);
+    if (!grouped.has(key)) grouped.set(key, []);
+    grouped.get(key).push({ ...item, branchClean: bName, origIdx: idx });
+  });
+
+  let firstMatchCoords = null;
+  let firstMatchKey = "";
+
+  Array.from(grouped.entries()).forEach(([key, entries], groupIdx) => {
+    entries.sort((a, b) => Number(a.price) - Number(b.price));
+    const best = entries[0];
+    const coords = resolveAreaCoords(best, groupIdx);
+    const isMatch = query && (key.includes(query) || normalizeArabic(best.branchClean).includes(query));
+
+    if (isMatch && !firstMatchCoords) {
+      firstMatchCoords = coords;
+      firstMatchKey = key;
+    }
+
+    const isHighlighted = (query && isMatch && key === firstMatchKey) || highlightedMapKey === key;
+    const color = getBranchColor(best.branchClean);
+
+    const cardHtml = `
+      <div class="map-glass-card ${isHighlighted ? "highlighted" : ""}">
+        <div class="mgc-top">
+          <span class="mgc-branch"><span class="chip-dot" style="background:${color}"></span>${escapeHtml(best.branchClean)}</span>
+          <span class="mgc-price">${Number(best.price).toFixed(2)} د</span>
+        </div>
+        <div class="mgc-area">${escapeHtml(best.area)}</div>
+      </div>
+    `;
+
+    const icon = L.divIcon({
+      className: "",
+      html: cardHtml,
+      iconSize: [148, 52],
+      iconAnchor: [74, 26]
+    });
+
+    const allBranchesHtml = entries.map(e =>
+      `<div style="margin-top:4px;font-weight:700;">• فرع ${escapeHtml(e.branchClean)}: <strong>${Number(e.price).toFixed(2)} دينار</strong></div>`
+    ).join("");
+
+    const marker = L.marker([coords.lat, coords.lng], {
+      icon,
+      zIndexOffset: isHighlighted ? 800 : 100
+    });
+
+    marker.bindPopup(`
+      <div style="direction:rtl;text-align:right;font-family:'Cairo',sans-serif;min-width:170px;">
+        <div style="font-size:1rem;font-weight:900;margin-bottom:4px;">📍 ${escapeHtml(best.area)}</div>
+        ${allBranchesHtml}
+      </div>
+    `);
+
+    marker.on("click", () => {
+      highlightedMapKey = key;
+      leafletMap.flyTo([coords.lat, coords.lng], Math.max(leafletMap.getZoom(), 14), { duration: 0.7 });
+    });
+
+    marker.addTo(mapMarkersLayer);
+    if (isHighlighted && autoFocusMatch) {
+      setTimeout(() => marker.openPopup(), 650);
+    }
+  });
+
+  if (autoFocusMatch && firstMatchCoords) {
+    highlightedMapKey = firstMatchKey;
+    leafletMap.flyTo([firstMatchCoords.lat, firstMatchCoords.lng], 14, { duration: 0.85 });
+  }
+}
+
+document.getElementById("mapSearchInput")?.addEventListener("input", () => {
+  renderMapMarkers(true);
+});
 
   window.addEventListener("DOMContentLoaded", async () => {
     applySiteAppearance(siteAppearance);
